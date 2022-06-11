@@ -908,15 +908,11 @@ public class ArrayQuestions {
     }
 
     public static void main(String[] args) {
-
         ArrayQuestions questions = new ArrayQuestions();
-
 /*
         System.out.println(questions.countPrimes(1000));
         System.out.println(questions.countPrimes1(1000));
 */
-
-
         int[] array = {2, 1, -1};
         //int[] array = {1, 7, 3, 6, 5, 6};
 
