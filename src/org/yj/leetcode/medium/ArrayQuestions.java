@@ -904,7 +904,6 @@ public class ArrayQuestions {
                 return i + 1;
             }
         }
-
         return -1;
     }
 
