@@ -287,22 +287,21 @@ public class LInkedListQuestions {
         }
 
         ListNode midNode = getMiddleNode(head);
-        ListNode reversedNode=   reverseListNode(midNode.next);
-        midNode.next=null;
-        merge(head,reversedNode);
+        ListNode reversedNode = reverseListNode(midNode.next);
+        midNode.next = null;
+        merge(head, reversedNode);
     }
 
     private void merge(ListNode l1, ListNode l2) {
         ListNode node1 = l1;
-        ListNode node2= l2;
-        while(node1!=null && node2!=null)
-        {
-            ListNode next1= node1.next;
-            ListNode next2= node2.next;
-            node1.next= node2;
-            node2.next=next1;
+        ListNode node2 = l2;
+        while (node1 != null && node2 != null) {
+            ListNode next1 = node1.next;
+            ListNode next2 = node2.next;
+            node1.next = node2;
+            node2.next = next1;
             node1 = next1;
-            node2= next2;
+            node2 = next2;
         }
     }
 
@@ -310,9 +309,9 @@ public class LInkedListQuestions {
         if (head == null || head.next == null) {
             return head;
         }
-        ListNode reverseNode =reverseListNode(head.next);
+        ListNode reverseNode = reverseListNode(head.next);
         head.next.next = head;
-        head.next =null;
+        head.next = null;
         return reverseNode;
     }
 
@@ -372,6 +371,98 @@ public class LInkedListQuestions {
     }*/
 
 
+    private int getCount(ListNode head) {
+        ListNode node = head;
+        int count = 0;
+        while (node != null) {
+            node = node.next;
+            count++;
+        }
+        return count;
+    }
+
+   public ListNode rotateRight(ListNode head, int k) {
+        if (k == 0 || head == null || head.next == null) {
+            return head;
+        }
+        ListNode node = head;
+        int count = 1;
+        while (node.next != null) {
+            node = node.next;
+            count++;
+        }
+        //int count = getCount(head);
+        //int t = k;
+        int t = count - k % count;
+        if (t == count) {
+            return head;
+        }
+        node.next = head;
+        while (t > 0) {
+            node = node.next;
+            t--;
+        }
+
+        ListNode res = node.next;
+        node.next = null;
+        return res;
+    }
+
+  /*  public ListNode rotateRight(ListNode head, int k) {
+        if (k == 0 || head == null || head.next == null) {
+            return head;
+        }
+        int count = getCount(head);
+        int t = k;
+        t = t % count;
+        if (t == 0) {
+            return head;
+        }
+        ListNode fast = head;
+        ListNode slow = head;
+        ListNode dummyHead = new ListNode(-1);
+        ListNode currNode = dummyHead;
+        while (fast != null && t > 0) {
+            fast = fast.next;
+            t--;
+        }
+
+        while (fast != null) {
+            currNode.next = new ListNode(slow.val);
+            slow = slow.next;
+            fast = fast.next;
+            currNode = currNode.next;
+
+        }
+        union(slow, dummyHead.next);
+        return slow;
+    }*/
+
+    private void union(ListNode l1, ListNode l2) {
+        ListNode node = l1;
+        while (node.next != null) {
+            node = node.next;
+        }
+        node.next = l2;
+
+    }
+
+    /*        while (fast != null && t > 0) {
+                fast = fast.next;
+                t--;
+                count++;
+            }
+            if (t > 0) {
+                t = k % count;
+                if (t == 0) {
+                    return head;
+                }
+                fast = head;
+                while (fast != null && t > 0) {
+                    fast = fast.next;
+                    t--;
+                }
+            }*/
     public static void main(String[] args) {
         LInkedListQuestions questions = new LInkedListQuestions();
 
@@ -408,8 +499,11 @@ public class LInkedListQuestions {
         head.next.next = new ListNode(3);
         head.next.next.next = new ListNode(4);
         head.next.next.next.next = new ListNode(5);
-        questions.reorderList(head);
-        questions.print(head);
+        //questions.reorderList(head);
+        // questions.print(head);
+
+
+        questions.print(questions.rotateRight(head, 2));
         //questions.reverseList(head);
 
         //System.out.println(questions.hasCycle(head));

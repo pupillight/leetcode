@@ -316,9 +316,45 @@ public class OtherQuestions {
         return len;
     }
 
+
+    /*    public int fibonaci(int k){
+            if(k==1 || k==2)
+            {
+                return k;
+            }
+
+            int res =fibonaci(k-1)+fibonaci(k-2);
+            return res;
+
+        }*/
+    public int fib(int n) {
+        int[] dp = new int[n + 1];
+        return fib(n, dp);
+    }
+
+    public int fib(int k, int[] dp) {
+        if (k == 0 ) {
+            dp[0] =0;
+            return k;
+        }
+        if(k==1){
+            dp[1] =1;
+            return k;
+        }
+        if (dp[k] != 0) {
+            return dp[k];
+        }
+
+        dp[k] = fib(k - 1, dp) + fib(k - 2, dp);
+        dp[k] =(int)(dp[k] % (1e9+7));
+        return dp[k];
+
+    }
+
     public static void main(String[] args) {
         OtherQuestions questions = new OtherQuestions();
 
+        System.out.println(questions.fib(5));
 
         // questions.hammingWeight1(8);
         // System.out.println("-------------------------------");
@@ -347,7 +383,7 @@ public class OtherQuestions {
 
         //System.out.println(questions.lengthOfLongestSubstring("dvdf"));
         //System.out.println(questions.lengthOfLongestSubstring("abba"));
-        System.out.println(questions.isAnagram("aa","bb"));
+        //System.out.println(questions.isAnagram("aa","bb"));
 
     }
 }
