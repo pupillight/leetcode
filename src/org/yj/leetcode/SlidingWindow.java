@@ -118,7 +118,7 @@ public class SlidingWindow {
     }
 
 
-    public int minSubArrayLen(int target, int[] nums) {
+   /* public int minSubArrayLen(int target, int[] nums) {
         int sum = 0;
         int len = Integer.MAX_VALUE;
         int j = 0;
@@ -133,7 +133,7 @@ public class SlidingWindow {
 
         int ans = len == Integer.MAX_VALUE ? 0 : len;
         return ans;
-    }
+    }*/
 
 
     public int numSubarrayProductLessThanK(int[] nums, int k) {
@@ -193,15 +193,78 @@ public class SlidingWindow {
         return ans;
     }
 
+
+    public int minSubArrayLen(int target, int[] nums) {
+
+        int sum = 0, index = 0;
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            sum = sum + nums[i];
+            while (sum >= target) {
+                ans = Math.min(ans, i - index + 1);
+                sum = sum - nums[index];
+                index++;
+            }
+        }
+
+
+        return ans == Integer.MAX_VALUE ? 0 : ans;
+    }
+
+    public int lengthOfLongestSubstring1(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int ans = 1;
+        int index = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (map.containsKey(c)) {
+                index = Math.max(map.get(c) + 1, index);
+            }
+            map.put(c, i);
+            ans = Math.max(ans, i - index + 1);
+        }
+        return ans;
+    }
+
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int ans = 1;
+        int index = 0;
+        Set<Character> set = new HashSet<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            while (set.contains(c)) {
+                set.remove(s.charAt(index));
+                index++;
+            }
+            set.add(c);
+            ans = Math.max(ans, i - index + 1);
+        }
+        return ans;
+    }
+
+
     public static void main(String[] args) {
         SlidingWindow instance = new SlidingWindow();
-        int[] arr = {1,2,3};
-        int k = 0;
+        //int[] arr = {1, 2, 3};
+        //int k = 0;
         // System.out.println(instance.findMaxAverage(arr, k));
         // System.out.println(instance.divisorSubstrings(240, 2));
         //System.out.println(instance.isNiceSubStr("aAa"));
 
         // System.out.println(instance.longestNiceSubstring("c"));
-        System.out.println(instance.numSubarrayProductLessThanK(arr, k));
+        //System.out.println(instance.numSubarrayProductLessThanK(arr, k));
+        //int[] nums = {2,3,1,2,4,3};
+        int[] nums = {1, 1, 1, 1, 1, 1};
+        System.out.println(instance.minSubArrayLen(11, nums));
+
+        //String s="dvdf";
+        //String s = "bbba";
+        //System.out.println(instance.lengthOfLongestSubstring(s));
     }
 }

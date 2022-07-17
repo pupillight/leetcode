@@ -157,6 +157,7 @@ public class Bst<T extends Comparable<T>> {
         bTree.add(30);
         bTree.add(25);
         bTree.add(50);
+
         bTree.preOrder();
         System.out.println();
         //ystem.out.println(bTree.minNode().value);

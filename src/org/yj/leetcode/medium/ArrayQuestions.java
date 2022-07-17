@@ -907,17 +907,163 @@ public class ArrayQuestions {
         return -1;
     }
 
+    public int findLengthOfLCIS(int[] nums) {
+
+        int ans = 1, index = 0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > nums[i - 1]) {
+                ans = Math.max(ans, i - index + 1);
+            } else {
+                index = i;
+            }
+        }
+        return ans;
+    }
+
+    public int findLengthOfLCIS1(int[] nums) {
+        int[] diffArray = new int[nums.length];
+        diffArray[0] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            diffArray[i] = nums[i] - nums[i - 1];
+        }
+        int index = 0;
+        int ans = 1;
+        for (int i = 1; i < diffArray.length; i++) {
+            if (diffArray[i] > 0) {
+                ans = Math.max(ans, i - index + 1);
+            } else {
+                index = i;
+            }
+        }
+        return ans;
+
+    }
+
+
+    /*    public int maxSubArray(int[] nums) {
+            int ans = Integer.MIN_VALUE;
+            int[] dp = new int[nums.length];
+            dp[0] = nums[0];
+            for (int i = 1; i < nums.length; i++) {
+                if (dp[i - 1] > 0) {
+                    dp[i] = dp[i - 1] + nums[i];
+                } else {
+                    dp[i] = nums[i];
+                }
+            }
+
+            for (int i = 0; i < dp.length; i++) {
+                ans = Math.max(ans, dp[i]);
+            }
+            return ans;
+        }*/
+/*    public int maxSubArray(int[] nums) {
+
+        int ans = Integer.MIN_VALUE;
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (dp[i - 1] > 0) {
+                dp[i] = dp[i - 1] + nums[i];
+            } else {
+                dp[i] = nums[i];
+            }
+        }
+        ans = dp[0];
+        for (int i = 1; i < dp.length; i++) {
+            //ans = Math.max(ans, dp[i]);
+            if (dp[i] > ans) {
+                ans = dp[i];
+            }
+        }
+
+        return ans;
+    }*/
+    public int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length];
+        process(nums, 0, nums.length - 1, dp);
+        int ans = dp[0];
+        for (int i = 1; i < dp.length; i++) {
+            //ans = Math.max(ans, dp[i]);
+            if (dp[i] > ans) {
+                ans = dp[i];
+            }
+        }
+        return ans;
+    }
+
+    private int process(int[] nums, int start, int end, int[] dp) {
+        if (start == end) {
+            dp[start] = nums[start];
+            return dp[start];
+        }
+        int sum = 0;
+        for (int i = start; i <= end; i++) {
+            sum = sum + nums[i];
+        }
+        //dp[start] = sum;
+        dp[start] = Math.max(sum, process(nums, start + 1, end, dp));
+        //return Math.max(sum, process(nums, start + 1, end, dp));
+        return dp[start];
+    }
+
+    public List<String> summaryRanges(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return new ArrayList<>();
+        }
+        List<String> res = new ArrayList<>();
+        if (nums.length == 1) {
+            res.add(new StringBuilder().append(nums[0]).toString());
+            return res;
+        }
+
+        int l = 0;
+        int r = 0;
+        for (int i = 1; i < nums.length; i++) {
+
+            if (nums[i] - nums[i - 1] == 1) {
+                r = i;
+
+            } else {
+                StringBuilder builder = new StringBuilder();
+                builder.append(nums[l]);
+                if (l != r) {
+                    builder.append("->");
+                    builder.append(nums[r]);
+                }
+
+                res.add(builder.toString());
+                l = r = i;
+            }
+
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append(nums[l]);
+        if (l != r) {
+            builder.append("->").append(nums[r]);
+        }
+        res.add(builder.toString());
+        return res;
+    }
+
+
     public static void main(String[] args) {
         ArrayQuestions questions = new ArrayQuestions();
 /*
         System.out.println(questions.countPrimes(1000));
         System.out.println(questions.countPrimes1(1000));
 */
-        int[] array = {2, 1, -1};
+        int[] array = {0, 1, 2, 4, 5, 7};
+        //int[] array = {0, 2, 3, 4, 6, 8, 9};
+
+        //int[] array = {5, 4, -1, 7, 8};
         //int[] array = {1, 7, 3, 6, 5, 6};
 
-        System.out.println(questions.pivotIndex(array));
+        //System.out.println(questions.pivotIndex(array));
 
+        System.out.println(questions.summaryRanges(array));
+        //System.out.println(questions.maxSubArray(array));
+        //System.out.println(questions.findLengthOfLCIS(array));
 /*        //String[] strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
         //String[] strs = {"ddddddddddg", "dgggggggggg"};
         String[] strs = {""};

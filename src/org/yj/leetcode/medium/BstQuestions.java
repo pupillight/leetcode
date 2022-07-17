@@ -1,5 +1,7 @@
 package org.yj.leetcode.medium;
 
+import org.yj.application.data.structure.tree.TreeNode;
+
 import java.util.*;
 
 public class BstQuestions {
@@ -63,9 +65,90 @@ public class BstQuestions {
         return res;
     }
 
+
+    private void addNode(TreeNode node, int value) {
+        node.left = new TreeNode(value);
+
+    }
+
+  /*  public TreeNode createTree(String nodeStr) {
+        if (nodeStr == null || nodeStr.length() == 0) {
+            return null;
+        }
+
+       // TreeNode node = null;
+        Deque<Character> deque = new LinkedList<>();
+        for (char c : nodeStr.toCharArray()) {
+        *//*    if (Character.isDigit(c)) {
+                node =new TreeNode(Integer.parseInt(String.valueOf(c)));
+            } else if (c == '(') {
+                node = node.left;
+            } else if (c == ')') {
+
+            }*//*
+            if (c != ')') {
+                if (Character.isDigit(c)) {
+//                    if (root == null) {
+//                        root = new TreeNode(c);
+//                    } else {
+//                        root.left = new TreeNode(Integer.parseInt(String.valueOf(c)));
+//                        root = root.left;
+//                        addNode();
+//                    }
+
+                }
+                deque.add(c);
+            } else {
+                char topCharacter = ' ';
+                while (!deque.isEmpty() && deque.poll() != '(') {
+                    topCharacter = deque.pop();
+                }
+                deque.pop();
+                TreeNode node = new TreeNode(Integer.parseInt(String.valueOf(topCharacter)));
+
+
+            }
+
+        }
+    }*/
+
+
+    public int hammingDistance(int x, int y) {
+        int ans = 0;
+        int v = x ^ y;
+        for (int i = 0; i < 32/**/; i++) {
+            int bit = v >> i & 1;
+            if (bit == 1) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    public String convertToBase7(int num) {
+        if (num == 0) {
+            return "0";
+        }
+        StringBuilder ans = new StringBuilder();
+        int sign = 1;
+        if (num < 0) {
+            sign = -1;
+            num = Math.abs(num);
+        }
+        while (num > 0) {
+            ans.append(num % 7);
+            num = num / 7;
+        }
+        if (sign == -1) {
+            ans.append("-");
+        }
+        return ans.reverse().toString();
+    }
+
+
     public static void main(String[] args) {
         BstQuestions questions = new BstQuestions();
-        Node root = new Node(1);
+   /*     Node root = new Node(1);
         root.left = new Node(2);
         root.left.left = new Node(4);
         root.left.right = new Node(5);
@@ -74,7 +157,10 @@ public class BstQuestions {
         root.right.right = new Node(7);
         // questions.connect(root);
 
-        questions.zigzagLevelOrder(root);
+        questions.zigzagLevelOrder(root);*/
+
+        //ystem.out.println(questions.hammingDistance(3, 1));
+        System.out.println(questions.convertToBase7(-1));
     }
 }
 
