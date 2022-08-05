@@ -1,5 +1,7 @@
 package org.yj.leetcode.elementary;
 
+import org.yj.leetcode.TreeNode;
+
 import java.util.*;
 
 public class OtherQuestions {
@@ -333,12 +335,12 @@ public class OtherQuestions {
     }
 
     public int fib(int k, int[] dp) {
-        if (k == 0 ) {
-            dp[0] =0;
+        if (k == 0) {
+            dp[0] = 0;
             return k;
         }
-        if(k==1){
-            dp[1] =1;
+        if (k == 1) {
+            dp[1] = 1;
             return k;
         }
         if (dp[k] != 0) {
@@ -346,16 +348,67 @@ public class OtherQuestions {
         }
 
         dp[k] = fib(k - 1, dp) + fib(k - 2, dp);
-        dp[k] =(int)(dp[k] % (1e9+7));
+        dp[k] = (int) (dp[k] % (1e9 + 7));
         return dp[k];
+
+    }
+
+
+    private int count(int num) {
+        int ans = 0;
+        for (int i = 0; i < 32; i++) {
+            if (((num >> i) & 1) == 1) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    public int[] countBits(int n) {
+        int[] arr = new int[n + 1];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = i;
+            arr[i] = count(arr[i]);
+        }
+        return arr;
+    }
+
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+
+        Set<Integer> set = new HashSet<>();
+        List<Integer> res = new ArrayList<>();
+        for (int i : nums) {
+            set.add(i);
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (!set.contains(i + 1)) {
+                res.add(i + 1);
+            }
+        }
+        return res;
+       /* Arrays.sort(nums);
+
+        int length = nums.length;
+        // int[] arr = new int[length];
+        for (int i = 0; i < length; i++) {
+            // arr[i] = i + 1;
+            int val = i + 1;
+            if (val != nums[i]) {
+                res.add(val);
+            }
+        }*/
 
     }
 
     public static void main(String[] args) {
         OtherQuestions questions = new OtherQuestions();
 
-        System.out.println(questions.fib(5));
+        // System.out.println(questions.fib(5));
 
+        //Arrays.stream(questions.countBits(3)).forEach(System.out::println);
+        int[] nums = {4, 3, 2, 7, 8, 2, 3, 1};
+        System.out.println(questions.findDisappearedNumbers(nums));
         // questions.hammingWeight1(8);
         // System.out.println("-------------------------------");
         // questions.hammingWeight(8);

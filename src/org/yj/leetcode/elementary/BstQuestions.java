@@ -1,7 +1,8 @@
 package org.yj.leetcode.elementary;
 
+import org.yj.leetcode.TreeNode;
+
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BstQuestions {
 
@@ -332,27 +333,6 @@ public class BstQuestions {
         backTrack(root.left, path);
         backTrack(root.right, path);
     }*/
-
-
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-
-        List<Integer> pathP = new ArrayList<>();
-        List<Integer> pathQ = new ArrayList<>();
-        commonAncestor(root, p, q);
-        return null;
-
-    }
-
-
-    private void commonAncestor(TreeNode node, TreeNode p, TreeNode q) {
-
-        if (node.left.val == p.val || node.right.val == p.val) {
-            return;
-        }
-        commonAncestor(node.left, p, q);
-        commonAncestor(node.right, p, q);
-
-    }
 
 
    /* public boolean isBalanced(TreeNode root) {
@@ -1002,11 +982,212 @@ public class BstQuestions {
         leafSimilarDfs(node.right, list);
     }
 
+    List<TreeNode> nodePath = new ArrayList<>();
 
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        lowestCommonAncestorDfs(root, p, q);
+        TreeNode res = findFirstParent(q);
+        return res;
+    }
+
+    private TreeNode findFirstParent(TreeNode q) {
+        int t = nodePath.size();
+        for (int i = t - 1; i >= 0; i--) {
+            TreeNode node = nodePath.get(i);
+            boolean isParent = findFirstParentDfs(node, q);
+            if (isParent) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    private boolean findFirstParentDfs(TreeNode node, TreeNode q) {
+        if (node == null) {
+            return false;
+        }
+        if (node.val == q.val) {
+            return true;
+        } else if (node.val > q.val) {
+            return findFirstParentDfs(node.left, q);
+        } else {
+            return findFirstParentDfs(node.right, q);
+        }
+    }
+
+    private void lowestCommonAncestorDfs(TreeNode node, TreeNode p, TreeNode q) {
+        if (node == null) {
+            return;
+        }
+        nodePath.add(node);
+        if (node.val == p.val) {
+            return;
+        } else if (node.val > p.val) {
+            lowestCommonAncestorDfs(node.left, p, q);
+        } else {
+            lowestCommonAncestorDfs(node.right, p, q);
+        }
+
+    }
+
+    public int deepestLeavesSum(TreeNode root) {
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        int ans = 0;
+        while (!queue.isEmpty()) {
+
+            int size = queue.size();
+            ans = 0;
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                ans += node.val;
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            //System.out.println(ans);
+        }
+
+        return ans;
+
+    }
+
+
+    public void dfsParents(TreeNode node, Map<Integer, TreeNode> parents) {
+        if (node == null) {
+            return;
+        }
+        if (node.left != null) {
+            parents.put(node.left.val, node);
+            dfsParents(node.left, parents);
+        }
+        if (node.right != null) {
+            parents.put(node.right.val, node);
+            dfsParents(node.right, parents);
+        }
+    }
+
+    public TreeNode lowestCommonAncestorBtree(TreeNode root, TreeNode p, TreeNode q) {
+        Map<Integer, TreeNode> parents = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
+        dfsParents(root, parents);
+        while (p != null) {
+            set.add(p.val);
+            p = parents.get(p.val);
+        }
+        while (q != null) {
+            if (set.contains(q.val)) {
+                return q;
+            }
+            q = parents.get(q.val);
+        }
+        return null;
+    }
+
+    public boolean isCousins(TreeNode root, int x, int y) {
+
+        Map<Integer, TreeNode> map = new HashMap<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int xHeight = 0;
+        int yHeight = 0;
+        int index = 0;
+        while (!queue.isEmpty()) {
+            index++;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                if (node.val == x) {
+                    xHeight = index;
+                }
+                if (node.val == y) {
+                    yHeight = index;
+                }
+                if (node.left != null) {
+                    if (node.left.val == x) {
+                        map.put(x, node);
+                    }
+                    if (node.left.val == y) {
+                        map.put(y, node);
+                    }
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    if (node.right.val == x) {
+                        map.put(x, node);
+                    }
+                    if (node.right.val == y) {
+                        map.put(y, node);
+                    }
+                    queue.add(node.right);
+                }
+            }
+        }
+        TreeNode xNode = map.get(x);
+        TreeNode yNode = map.get(y);
+        if (xHeight == yHeight && xNode.val != yNode.val) {
+            return true;
+        }
+        return false;
+
+
+       /* Map<Integer, TreeNode> map = new HashMap<>();
+        isCousinsDfs(root, x, y, map);
+        TreeNode nodeX = map.get(x);
+        TreeNode nodeY = map.get(y);
+        int xLength = nodeHeight(nodeX);
+        int yLength = nodeHeight(nodeY);
+        if (nodeX != nodeY) {
+            if (xLength == yLength) {
+                return true;
+            }
+        }
+        return false;*/
+    }
+
+
+    /*private int nodeHeight(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        return Math.max(nodeHeight(node.left), nodeHeight(node.right)) + 1;
+    }
+
+    private void isCousinsDfs(TreeNode node, int x, int y, Map<Integer, TreeNode> map) {
+        if (node == null) {
+            return;
+        }
+        if (node.left != null) {
+            if (node.left.val == x) {
+                map.put(x, node);
+                return;
+            }
+            if (node.left.val == y) {
+                map.put(y, node);
+                return;
+            }
+            isCousinsDfs(node.left, x, y, map);
+        }
+        if (node.right != null) {
+            if (node.right.val == x) {
+                map.put(x, node);
+                return;
+            }
+            if (node.right.val == y) {
+                map.put(y, node);
+                return;
+            }
+            isCousinsDfs(node.right, x, y, map);
+        }
+    }
+*/
     public static void main(String[] args) {
         BstQuestions questions = new BstQuestions();
-        //TreeNode root = null;
-
 /*        TreeNode leftnode2 = new TreeNode(2);
         TreeNode rightnode2 = new TreeNode(2);
 
@@ -1019,25 +1200,25 @@ public class BstQuestions {
         //System.out.println(questions.maxDepth(root));
         //System.out.println(questions.isValidBST(root));
         System.out.println(questions.isSymmetric(root));*/
-//        int[] preOrder = {3, 9, 20, 15, 7};
-//        int[] inOrder = {9, 3, 15, 20, 7};
-//
-//        TreeNode node = questions.buildTree(preOrder, inOrder);
-//
-//        System.out.println();
+/*        int[] preOrder = {3, 9, 20, 15, 7};
+        int[] inOrder = {9, 3, 15, 20, 7};
 
-//
-//        TreeNode r1 = new TreeNode(1);
-//        r1.left = new TreeNode(3);
-//        r1.left.left = new TreeNode(5);
-//        r1.right = new TreeNode(2);
-//
-//
-//        TreeNode r2 = new TreeNode(2);
-//        r2.left = new TreeNode(1);
-//        r2.left.right = new TreeNode(4);
-//        r2.right = new TreeNode(3);
-//        r2.right.right = new TreeNode(7);
+        TreeNode node = questions.buildTree(preOrder, inOrder);
+
+        System.out.println();
+
+
+        TreeNode r1 = new TreeNode(1);
+        r1.left = new TreeNode(3);
+        r1.left.left = new TreeNode(5);
+        r1.right = new TreeNode(2);
+
+
+        TreeNode r2 = new TreeNode(2);
+        r2.left = new TreeNode(1);
+        r2.left.right = new TreeNode(4);
+        r2.right = new TreeNode(3);
+        r2.right.right = new TreeNode(7);*/
 /*
         TreeNode r1 = new TreeNode(1);
         r1.left = new TreeNode(2);
@@ -1057,58 +1238,51 @@ public class BstQuestions {
         TreeNode r2 = new TreeNode(1);
         r2.left = new TreeNode(2);
         r2.right = new TreeNode(3);*/
-        // TreeNode node = questions.mergeTrees(r1, r2);
-        //questions.dfs(node);
+/*        int[] array = {1, 2, 3, 4, 5};
+        TreeNode node = questions.sortedArrayToBST(array);
+        System.out.println();
+        ListNode head = new ListNode(10);
+        head.next = new ListNode(-3);
+        head.next.next = new ListNode(0);
+        head.next.next.next = new ListNode(5);
+        head.next.next.next.next = new ListNode(9);
 
-
-//        int[] array = {1, 2, 3, 4, 5};
-//        TreeNode node = questions.sortedArrayToBST(array);
-//        System.out.println();
-//        ListNode head = new ListNode(10);
-//        head.next = new ListNode(-3);
-//        head.next.next = new ListNode(0);
-//        head.next.next.next = new ListNode(5);
-//        head.next.next.next.next = new ListNode(9);
-//
-//        TreeNode root=questions.sortedListToBST(head);
-//        System.out.println();
+        TreeNode root=questions.sortedListToBST(head);
+        System.out.println();*/
         TreeNode r1 = new TreeNode(1);
-        r1.left = new TreeNode(0);
-        r1.left.left = new TreeNode(0);
-        r1.left.right = new TreeNode(1);
+        r1.left = new TreeNode(2);
+        r1.left.left = new TreeNode(3);
+        r1.left.left.left = new TreeNode(4);
+        //r1.left.right = new TreeNode(4);
 
-        r1.right = new TreeNode(1);
-        r1.right.left = new TreeNode(0);
-        r1.right.right = new TreeNode(1);
-        // r1.right.right.right = new TreeNode(4);
-        // r1.right = new TreeNode(3);
-        //r1.right = new TreeNode(2);
-        //questions.binaryTreePaths(r1).stream().forEach(System.out::println);
-        //System.out.println();
+        r1.right = new TreeNode(5);
+        //r1.right.left = new TreeNode(6);
+        r1.right.right = new TreeNode(6);
 
-
-        // questions.lowestCommonAncestor(r1, new TreeNode(4), new TreeNode(3));
-        //System.out.println(questions.isBalanced(r1));
-        //System.out.println(questions.minDepth(r1));
-
-        //System.out.println(questions.findTilt(r1));
-        //System.out.println(questions.minDepth1(r1));
-
-        //System.out.println(questions.invertTree(r1));
-        // System.out.println(questions.binaryTreePaths1(r1));
-        //System.out.println(questions.sumOfLeftLeaves(r1));
-
-        //Arrays.stream(questions.findMode(r1)).forEach(System.out::println);
-        System.out.println(questions.sumRootToLeaf(r1));
-        //System.out.println(questions.str2int("111"));
-//        System.out.println(questions.nodeSum(r1.left));
-//        System.out.println(questions.nodeSum(r1.right));
-
-
+        //System.out.println(questions.lowestCommonAncestor(r1, new TreeNode(2), new TreeNode(8)).val);
+        //System.out.println(questions.deepestLeavesSum(r1));
+        //System.out.println(questions.lowestCommonAncestorBtree(r1, new TreeNode(3), new TreeNode(7)).val);
+        System.out.println(questions.isCousins(r1, 4, 6));
+/*         r1.right.right.right = new TreeNode(4);
+         r1.right = new TreeNode(3);
+        r1.right = new TreeNode(2);
+        questions.binaryTreePaths(r1).stream().forEach(System.out::println);
+        System.out.println();
+         questions.lowestCommonAncestor(r1, new TreeNode(4), new TreeNode(3));
+        System.out.println(questions.isBalanced(r1));
+        System.out.println(questions.minDepth(r1));
+        System.out.println(questions.findTilt(r1));
+        System.out.println(questions.minDepth1(r1));
+        System.out.println(questions.invertTree(r1));
+         System.out.println(questions.binaryTreePaths1(r1));
+        System.out.println(questions.sumOfLeftLeaves(r1));
+        Arrays.stream(questions.findMode(r1)).forEach(System.out::println);*/
+        //System.out.println(questions.sumRootToLeaf(r1));
     }
 }
 
 
+/*
 class TreeNode {
     int val;
     TreeNode left;
@@ -1127,3 +1301,4 @@ class TreeNode {
         this.right = right;
     }
 }
+*/
