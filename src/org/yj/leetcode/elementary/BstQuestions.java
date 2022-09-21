@@ -1186,6 +1186,31 @@ public class BstQuestions {
         }
     }
 */
+
+
+    int maxDepth = Integer.MIN_VALUE;
+    int result = -1;
+    public int findBottomLeftValue(TreeNode root) {
+        this.findBottomLeftValue(root, 0);
+        return result;
+    }
+    public void findBottomLeftValue(TreeNode node, int depth) {
+        if (node == null) {
+            return;
+        }
+        if (node.left == null && node.right == null) {
+            if (depth > maxDepth) {
+                maxDepth = depth;
+                System.out.println(depth);
+                result = node.val;
+            }
+            return;
+        }
+        findBottomLeftValue(node.left, depth+1);
+        findBottomLeftValue(node.right, depth+1);
+
+    }
+
     public static void main(String[] args) {
         BstQuestions questions = new BstQuestions();
 /*        TreeNode leftnode2 = new TreeNode(2);
@@ -1249,35 +1274,23 @@ public class BstQuestions {
 
         TreeNode root=questions.sortedListToBST(head);
         System.out.println();*/
-        TreeNode r1 = new TreeNode(1);
-        r1.left = new TreeNode(2);
-        r1.left.left = new TreeNode(3);
-        r1.left.left.left = new TreeNode(4);
+        TreeNode r1 = new TreeNode(2);
+       // r1.left = new TreeNode(1);
+        // r1.left.left = new TreeNode(3);
+        //r1.left.left.left = new TreeNode(4);
         //r1.left.right = new TreeNode(4);
 
-        r1.right = new TreeNode(5);
+        //r1.right = new TreeNode(3);
         //r1.right.left = new TreeNode(6);
-        r1.right.right = new TreeNode(6);
+        //r1.right.right = new TreeNode(6);
 
         //System.out.println(questions.lowestCommonAncestor(r1, new TreeNode(2), new TreeNode(8)).val);
         //System.out.println(questions.deepestLeavesSum(r1));
         //System.out.println(questions.lowestCommonAncestorBtree(r1, new TreeNode(3), new TreeNode(7)).val);
-        System.out.println(questions.isCousins(r1, 4, 6));
-/*         r1.right.right.right = new TreeNode(4);
-         r1.right = new TreeNode(3);
-        r1.right = new TreeNode(2);
-        questions.binaryTreePaths(r1).stream().forEach(System.out::println);
-        System.out.println();
-         questions.lowestCommonAncestor(r1, new TreeNode(4), new TreeNode(3));
-        System.out.println(questions.isBalanced(r1));
-        System.out.println(questions.minDepth(r1));
-        System.out.println(questions.findTilt(r1));
-        System.out.println(questions.minDepth1(r1));
-        System.out.println(questions.invertTree(r1));
-         System.out.println(questions.binaryTreePaths1(r1));
-        System.out.println(questions.sumOfLeftLeaves(r1));
-        Arrays.stream(questions.findMode(r1)).forEach(System.out::println);*/
-        //System.out.println(questions.sumRootToLeaf(r1));
+        //System.out.println(questions.isCousins(r1, 4, 6));
+
+        System.out.println(questions.findBottomLeftValue(r1));
+
     }
 }
 

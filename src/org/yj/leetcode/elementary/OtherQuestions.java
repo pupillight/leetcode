@@ -401,14 +401,62 @@ public class OtherQuestions {
 
     }
 
+    public int secondHighest(String s) {
+
+        int first = Integer.MIN_VALUE;
+        int second = Integer.MIN_VALUE;
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                int t = c - '0';
+                if (t > first) {
+                    second = first;
+                    first = t;
+                } else if (t == first) {
+                    //do nothing
+                } else if (t > second) {
+                    second = t;
+                }
+            }
+        }
+        if (second == Integer.MIN_VALUE || second == first) {
+            return -1;
+        }
+        return second;
+    }
+
+    public List<String> stringMatching(String[] words) {
+
+        Arrays.sort(words, (e1, e2) -> e1.length() - e2.length());
+
+        Arrays.stream(words).forEach(System.out::println);
+
+        List<String> res =new ArrayList<>();
+        for (int i = 0; i < words.length; i++) {
+            for (int j = i + 1; j < words.length; j++) {
+                int index = words[j].indexOf(words[i]);
+                if (index > -1) {
+                    res.add(words[i]);
+                    break;
+                }
+            }
+        }
+
+
+        return res;
+
+    }
+
     public static void main(String[] args) {
         OtherQuestions questions = new OtherQuestions();
 
+        //System.out.println(questions.secondHighest("abc1111"));
+        String[] words = {"mass", "as", "hero", "superhero"};
+        System.out.println(questions.stringMatching(words));
         // System.out.println(questions.fib(5));
 
         //Arrays.stream(questions.countBits(3)).forEach(System.out::println);
-        int[] nums = {4, 3, 2, 7, 8, 2, 3, 1};
-        System.out.println(questions.findDisappearedNumbers(nums));
+        // int[] nums = {4, 3, 2, 7, 8, 2, 3, 1};
+        //System.out.println(questions.findDisappearedNumbers(nums));
         // questions.hammingWeight1(8);
         // System.out.println("-------------------------------");
         // questions.hammingWeight(8);

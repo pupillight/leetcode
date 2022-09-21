@@ -1,11 +1,10 @@
 package org.yj.lambda;
 
+import org.yj.stream.Employee;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class Demo {
 
@@ -32,10 +31,10 @@ public class Demo {
     }*/
 
     public static void main(String[] args) {
-        Employee employee1 = new Employee("zhangsan", 29, 9000.53f);
-        Employee employee2 = new Employee("lisi", 45, 10000.00f);
-        Employee employee3 = new Employee("zhaoliu", 31, 12000);
-        Employee employee4 = new Employee("tianqi", 20, 7000.50f);
+        Employee employee1 = new Employee("zhangsan", 29, "male", 9000.53f);
+        Employee employee2 = new Employee("lisi", 45, "female", 10000.00f);
+        Employee employee3 = new Employee("zhaoliu", 31, "female", 12000);
+        Employee employee4 = new Employee("tianqi", 20, "male", 7000.50f);
 
         List<Employee> employees = new ArrayList<>();
         employees.add(employee1);
