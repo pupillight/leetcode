@@ -12,10 +12,10 @@ public class StreamTest {
     List<Employee> employees2 = new ArrayList<>();
 
     public void init() {
-        Employee employee1 = new Employee("zhangsan", 29, "male", 9000.53f);
-        Employee employee2 = new Employee("lisi", 45, "female", 10000.00f);
-        Employee employee3 = new Employee("zhaoliu", 31, "female", 12000);
-        Employee employee4 = new Employee("tianqi", 20, "male", 7000.50f);
+        Employee employee1 = new Employee("zhangsan", 29, Gender.MALE, 9000.53f);
+        Employee employee2 = new Employee("lisi", 45, Gender.FEMALE.MALE, 10000.00f);
+        Employee employee3 = new Employee("zhaoliu", 31, Gender.FEMALE.MALE, 12000);
+        Employee employee4 = new Employee("tianqi", 20, Gender.MALE, 7000.50f);
 
         employees1.add(employee1);
         employees1.add(employee2);

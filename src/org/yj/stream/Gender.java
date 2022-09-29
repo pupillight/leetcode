@@ -3,7 +3,7 @@ package org.yj.stream;
 import java.util.Arrays;
 
 public enum Gender {
-    MALE(1, "man"), FEMALE(2, "women");
+    MALE(1, "man"), FEMALE(2, "woman");
     int code;
     String desc;
 

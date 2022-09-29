@@ -31,7 +31,7 @@ public class Demo {
     }*/
 
     public static void main(String[] args) {
-        Employee employee1 = new Employee("zhangsan", 29, "male", 9000.53f);
+      /*  Employee employee1 = new Employee("zhangsan", 29, "male", 9000.53f);
         Employee employee2 = new Employee("lisi", 45, "female", 10000.00f);
         Employee employee3 = new Employee("zhaoliu", 31, "female", 12000);
         Employee employee4 = new Employee("tianqi", 20, "male", 7000.50f);
@@ -45,15 +45,15 @@ public class Demo {
 
         //Collections.sort(employees);
 
-/*        Collections.sort(employees, new Comparator<Employee>() {
+*//*        Collections.sort(employees, new Comparator<Employee>() {
             @Override
             public int compare(Employee o1, Employee o2) {
                 return (int) (o1.getSalary()-o2.getSalary());
             }
-        });*/
+        });*//*
 
-/*        Collections.sort(employees, (e1, e2) -> e1.getAge() - e2.getAge());
-        System.out.println(employees);*/
+*//*        Collections.sort(employees, (e1, e2) -> e1.getAge() - e2.getAge());
+        System.out.println(employees);*//*
 
         Demo demo = new Demo();
         demo.filterEmployees(employees,e->{
@@ -64,7 +64,7 @@ public class Demo {
         });
 
         System.out.println(employees);
-
+*/
        // Thread thread = new Thread(()->System.out.println("--------"));
         //thread.start();
 

@@ -1,20 +1,19 @@
 package org.yj.stream;
 
-import java.security.IdentityScope;
 
 public class Employee implements Comparable<Employee> {
 
     private String name;
     private int age;
     private float salary;
-    private String gender;
+    private Gender gender;
 
 
 
     public Employee() {
     }
 
-    public Employee(String name, int age,String gender, float salary) {
+    public Employee(String name, int age,Gender gender, float salary) {
         this.name = name;
         this.age = age;
         this.gender= gender;
@@ -44,11 +43,12 @@ public class Employee implements Comparable<Employee> {
     public void setSalary(float salary) {
         this.salary = salary;
     }
-    public String getGender() {
+
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -66,6 +66,31 @@ public class Employee implements Comparable<Employee> {
                 ", gender='" + gender + '\'' +
                 '}';
     }
+
+    public  void modify(Employee employee)
+    {
+        employee.setName("Peter");
+    }
+    public  void modify(String name)
+    {
+        name="Peter";
+    }
+    public static void main(String[] args) {
+        Employee employee = new Employee();
+
+        employee.setName("Jian");
+        employee.setAge(45);
+        System.out.println(employee);
+        employee.modify(employee);
+        System.out.println(employee);
+
+        String name="yinjian";
+        System.out.println(name);
+        employee.modify(name);
+        System.out.println(name);
+    }
+
+
 }
 
 

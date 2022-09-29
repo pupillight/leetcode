@@ -1,5 +1,6 @@
 package org.yj.leetcode;
 
+import javax.sound.midi.Soundbank;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -80,6 +81,25 @@ public class LeetCode654 {
     }
 
 
+    public static String reverse(String text)
+    {
+        char[] array=text.toCharArray();
+        int left=0;
+        int right=array.length-1;
+        while(left<right){
+            char tmp=array[left];
+            array[left]=array[right];
+            array[right]= tmp;
+            left++;
+            right--;
+
+        }
+        return new String(array);
+    }
+
+
+
+
     public static void main(String[] args) {
         LeetCode654 leetCode654 = new LeetCode654();
         int[] nums = {3, 2, 1};
@@ -88,8 +108,8 @@ public class LeetCode654 {
 
 
         //System.out.println(leetCode654.countPrimes(10));
-        String[] array ={"flower","flow","flight"};
-        System.out.println(leetCode654.longestCommonPrefix(array));
-
+       // String[] array ={"flower","flow","flight"};
+        ///System.out.println(leetCode654.longestCommonPrefix(array));
+        System.out.println(leetCode654.reverse("ab"));
     }
 }
