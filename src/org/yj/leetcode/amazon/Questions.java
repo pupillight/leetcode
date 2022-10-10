@@ -654,8 +654,8 @@ public class Questions {
         TreeNode newRoot = new TreeNode(subfixSums[index]);
         TreeNode leftNode = convertArray2Bst(subfixSums, 0, index - 1);
         TreeNode rightNode = convertArray2Bst(subfixSums, index + 1, subfixSums.length - 1);
-        newRoot.left= leftNode;
-        newRoot.right= rightNode;
+        newRoot.left = leftNode;
+        newRoot.right = rightNode;
         return newRoot;
     }
 
@@ -679,9 +679,45 @@ public class Questions {
         dfs(node.right, nums);
     }
 
+    public List<String> letterCombinations(String digits) {
+        List<String> res = new ArrayList<>();
+        if (digits == null || digits.length() == 0) {
+            return res;
+        }
+        Map<Character, String> map = new HashMap<>();
+        map.put('2', "abc");
+        map.put('3', "def");
+        map.put('4', "ghi");
+        map.put('5', "jkl");
+        map.put('6', "mno");
+        map.put('7', "pqrs");
+        map.put('8', "tuv");
+        map.put('9', "wxyz");
+        StringBuilder builder = new StringBuilder();
+        backTrack(map, digits, builder, res, 0);
+        return res;
+    }
+
+
+    private void backTrack(Map<Character, String> map, String digits, StringBuilder builder, List<String> res, int i) {
+        if (builder.length() == digits.length()) {
+            res.add(builder.toString());
+            return;
+        }
+        char c = digits.charAt(i);
+        String text = map.get(c);
+        for (int j = 0; j < text.length(); j++) {
+            builder.append(text.charAt(j));
+            backTrack(map, digits, builder, res, i + 1);
+            builder.deleteCharAt(builder.length() - 1);
+        }
+
+    }
 
     public static void main(String[] args) {
         Questions instance = new Questions();
+
+        System.out.println(instance.letterCombinations("23"));
        /* ListNode l1 = new ListNode(9);
         l1.next = new ListNode(9);
         l1.next.next = new ListNode(9);
@@ -692,10 +728,8 @@ public class Questions {
 
  /*       String s = "abba";
         System.out.println(instance.lengthOfLongestSubstring(s));*/
-
 //        String s = "-91283472332";
 //        System.out.println(instance.myAtoi(s));
-
        /* List<List<Integer>> connections = new ArrayList<>();
         List<Integer> list = new ArrayList<>();
         list.add(0);
@@ -715,7 +749,6 @@ public class Questions {
         connections.add(list);
 
         instance.criticalConnections(4, connections);*/
-
   /*      ListNode l1 = new ListNode(1);
         l1.next = new ListNode(2);
         l1.next.next = new ListNode(4);
@@ -723,7 +756,6 @@ public class Questions {
         l2.next = new ListNode(3);
         l2.next.next = new ListNode(4);
         System.out.println(instance.mergeTwoLists(l1, l2));*/
-
         //System.out.println(instance.generateParenthesis(2));
 
         //int[] num = {-1, 0, 1, 2, -1, -4};
@@ -734,7 +766,6 @@ public class Questions {
 
         //int[] nums = {1, 2, 3};
         //System.out.println(instance.permute(nums));
-
        /* TreeNode root = new TreeNode(5);
         root.left = new TreeNode(4);
         root.left.left = new TreeNode(11);
@@ -747,9 +778,7 @@ public class Questions {
         root.right.right.left = new TreeNode(5);
         root.right.right.right = new TreeNode(1);
         System.out.println(instance.pathSum(root, 22));*/
-
         //System.out.println(instance.getRow(3));
-
         //String[] products = {"mobile", "mouse", "moneypot", "monitor", "mousepad"};
 /*        String[] products = {"bags", "baggage", "banner", "box", "cloths"};
         String searchWord = "bags";
@@ -768,14 +797,13 @@ public class Questions {
         // System.out.println(instance.maximumUniqueSubarray(nums));
 
         // System.out.println(instance.reformatNumber("9964-"));
-
        /* String[] strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
         //String[] strs = {"ac", "c"};
         instance.groupAnagrams(strs);*/
-        TreeNode node = new TreeNode(3);
+/*        TreeNode node = new TreeNode(3);
         node.left = new TreeNode(2);
         node.left.left = new TreeNode(1);
         node.right = new TreeNode(4);
-        instance.bstToGst(node);
+        instance.bstToGst(node);*/
     }
 }

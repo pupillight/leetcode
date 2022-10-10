@@ -1,8 +1,10 @@
 package org.yj.leetcode.elementary;
 
+import org.yj.application.data.structure.stack.Node;
 import org.yj.leetcode.TreeNode;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BstQuestions {
 
@@ -464,30 +466,6 @@ public class BstQuestions {
         return false;
     }
 
-    private boolean isBalance = true;
-
-    public boolean isBalanced(TreeNode root) {
-        if (root == null) {
-            return true;
-        }
-
-        return height(root) >= 0;
-     /*   dfs1(root);
-        return isBalance;*/
-    }
-
-    private void dfs1(TreeNode node) {
-        if (node == null) {
-            return;
-        }
-        dfs1(node.left);
-        dfs1(node.right);
-        int diff = treeDiff(node);
-        if (diff > 1) {
-            isBalance = false;
-            return;
-        }
-    }
 
     private int height(TreeNode node) {
         if (node == null) {
@@ -1190,10 +1168,12 @@ public class BstQuestions {
 
     int maxDepth = Integer.MIN_VALUE;
     int result = -1;
+
     public int findBottomLeftValue(TreeNode root) {
         this.findBottomLeftValue(root, 0);
         return result;
     }
+
     public void findBottomLeftValue(TreeNode node, int depth) {
         if (node == null) {
             return;
@@ -1206,9 +1186,97 @@ public class BstQuestions {
             }
             return;
         }
-        findBottomLeftValue(node.left, depth+1);
-        findBottomLeftValue(node.right, depth+1);
+        findBottomLeftValue(node.left, depth + 1);
+        findBottomLeftValue(node.right, depth + 1);
 
+    }
+
+    public boolean isBalanced(TreeNode root) {
+
+        int height = getHeight(root);
+        if (height > -1) {
+            return true;
+        }
+        return false;
+    }
+
+    private int getHeight(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        int lHeight = getHeight(node.left);
+        if (lHeight == -1) {
+            return -1;
+        }
+        int rHeight = getHeight(node.right);
+        if (rHeight == -1) {
+            return -1;
+        }
+        if (Math.abs(lHeight - rHeight) > 1) {
+            return -1;
+        } else {
+            return Integer.max(lHeight, rHeight) + 1;
+        }
+    }
+
+    //private LinkedList<TreeNode> list = new LinkedList<>();
+
+    private Map<Integer, TreeNode> map = new LinkedHashMap<>();
+
+    public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
+        findParents(root, p);
+        List<Map.Entry<Integer, TreeNode>> list = map.entrySet().stream().collect(Collectors.toList());
+        for(int i =list.size()-1;i>=0;i--){
+            TreeNode node= list.get(i).getValue();
+            if (findChild(node, q)) {
+                return node;
+            }
+        }
+        return null;
+       /* while (iterator.hasNext()) {
+            TreeNode node = iterator.next().getValue();
+            if (findChild(node, q)) {
+                return node;
+            }
+        }
+*/
+/*        while (!list.isEmpty()) {
+            TreeNode node = list.pop();
+            if (findChild(node, q)) {
+                return node;
+            }
+        }*/
+
+    }
+
+    public void findParents(TreeNode root, TreeNode p) {
+
+        if (root == null) {
+            return;
+        }
+  /*      if (!list.contains(root) && !list.contains(p)) {
+            list.push(root);
+        }*/
+
+        if ((root.left!=null || root.right!=null ) && !map.containsKey(root.val) && !map.containsKey(p.val)) {
+            map.put(root.val, root);
+        }
+
+        if (root.val == p.val) {
+            return;
+        }
+        findParents(root.left, p);
+        findParents(root.right, p);
+    }
+
+    public boolean findChild(TreeNode root, TreeNode p) {
+        if (root == null) {
+            return false;
+        }
+        if (root.val == p.val) {
+            return true;
+        }
+        return findChild(root.left, p) || findChild(root.right, p);
     }
 
     public static void main(String[] args) {
@@ -1274,8 +1342,15 @@ public class BstQuestions {
 
         TreeNode root=questions.sortedListToBST(head);
         System.out.println();*/
-        TreeNode r1 = new TreeNode(2);
-       // r1.left = new TreeNode(1);
+        TreeNode root = new TreeNode(3);
+        root.left = new TreeNode(5);
+        //root.left.left = new TreeNode(6);
+
+        //root.left.right = new TreeNode(2);
+        //root.left.right.left = new TreeNode(7);
+        //root.left.right.right = new TreeNode(4);
+        root.right = new TreeNode(1);
+        // r1.left = new TreeNode(1);
         // r1.left.left = new TreeNode(3);
         //r1.left.left.left = new TreeNode(4);
         //r1.left.right = new TreeNode(4);
@@ -1289,7 +1364,8 @@ public class BstQuestions {
         //System.out.println(questions.lowestCommonAncestorBtree(r1, new TreeNode(3), new TreeNode(7)).val);
         //System.out.println(questions.isCousins(r1, 4, 6));
 
-        System.out.println(questions.findBottomLeftValue(r1));
+        //System.out.println(questions.isBalanced(root));
+        System.out.println(questions.lowestCommonAncestor1(root, new TreeNode(1), new TreeNode(5)).val);
 
     }
 }
