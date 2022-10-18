@@ -381,7 +381,7 @@ public class LInkedListQuestions {
         return count;
     }
 
-   public ListNode rotateRight(ListNode head, int k) {
+    public ListNode rotateRight(ListNode head, int k) {
         if (k == 0 || head == null || head.next == null) {
             return head;
         }
@@ -437,6 +437,25 @@ public class LInkedListQuestions {
         union(slow, dummyHead.next);
         return slow;
     }*/
+
+    public int[] reversePrint(ListNode head) {
+        List<Integer> list = new ArrayList<>();
+        reversPrint(head, list);
+        int[] ans = new int[list.size()];
+        for (int i = 0; i < ans.length; i++) {
+            ans[i] = list.get(i);
+        }
+        return ans;
+    }
+
+    private void reversPrint(ListNode node, List<Integer> list) {
+        if (node == null) {
+            return;
+        }
+        reversPrint(node.next, list);
+        list.add(node.val);
+    }
+
 
     private void union(ListNode l1, ListNode l2) {
         ListNode node = l1;

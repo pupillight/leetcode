@@ -1,13 +1,11 @@
 package org.yj.leetcode;
 
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class LeetCode235 {
     Map<Integer, TreeNode> map = new HashMap<>();
+
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         Set<Integer> set = new HashSet<>();
 
@@ -40,35 +38,47 @@ public class LeetCode235 {
             dfs(node.right);
         }
     }
-/*    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+    boolean isValid = true;
+/*
+
+    public boolean isValidBST1(TreeNode root) {
+        isValidBST(root, new LinkedList<>());
+        return isValid;
+    }
+
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, null);
+    }
+
+    public boolean isValidBST(TreeNode root, TreeNode pre) {
         if (root == null) {
-            return null;
+            return true;
         }
-        if (root.val > p.val && root.val > q.val) {
-            return lowestCommonAncestor(root.left, p, q);
-        } else if (root.val < p.val && root.val < q.val) {
-            return lowestCommonAncestor(root.right, p, q);
-        } else {
-            return root;
+        boolean left = isValidBST(root.left, pre);
+        if (pre != null && pre.val > root.val) {
+            return false;
         }
+        boolean right = isValidBST(root.right, pre);
+        pre = root;
+        return left && right;
+    }
+*/
+
+  /*  private void isValidBST(TreeNode node, LinkedList<Integer> list) {
+        if (node == null) {
+            return;
+        }
+        isValidBST(node.left, list);
+        if (!list.isEmpty()) {
+            int t = list.pollLast();
+            if (node.val <= t) {
+                isValid = false;
+                return;
+            }
+        }
+        list.push(node.val);
+        isValidBST(node.right, list);
     }*/
-
 }
-/*class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
 
-    TreeNode() {
-    }
-
-    TreeNode(int val) {
-        this.val = val;
-    }
-
-    TreeNode(int val, TreeNode left, TreeNode right) {
-        this.val = val;
-        this.left = left;
-        this.right = right;
-    }
-}*/

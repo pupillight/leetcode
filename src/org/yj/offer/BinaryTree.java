@@ -498,6 +498,40 @@ public class BinaryTree {
         return Math.max(leftHeight, rightHeight);
     }
 
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new ArrayList<>();
+        dfs(root, res, "");
+        return res;
+    }
+
+    private void dfs(TreeNode node, List<String> list, String path) {
+        if (node == null) {
+            return;
+        }
+        path = path + node.value;
+        if (node.left == null && node.right == null) {
+            list.add(path);
+        }
+
+        dfs(node.left, list, path + "->");
+        dfs(node.right, list, path + "->");
+
+    }
+
+    private void dfs1(TreeNode node, List<String> list, String path) {
+        if (node == null) {
+            return;
+        }
+        path = path + node.value;
+        if (node.left == null && node.right == null) {
+            list.add(path);
+        }
+
+        dfs(node.left, list, path + "->");
+        dfs(node.right, list, path + "->");
+
+    }
+
     public static void main(String[] args) {
         BinaryTree bTree = new BinaryTree();
         TreeNode root = new TreeNode(5);
@@ -516,9 +550,10 @@ public class BinaryTree {
 //
 //        System.out.println(bTree.res);
 
+        System.out.println(bTree.binaryTreePaths(root));
 
-        System.out.println(bTree.treeHeight(root));
-        System.out.println(bTree.treeHeight2(root));
+        // System.out.println(bTree.treeHeight(root));
+        //  System.out.println(bTree.treeHeight2(root));
 
         // bTree.invertBst(root);
 

@@ -31,9 +31,9 @@ public class DepthFirstPath {
         List<Integer> list = graph.adj(s);
         for (int a : list) {
             if (!marked[a]) {
-                fromPath[a] = s;
+                //fromPath[a] = s;
                 dfs(graph, a);
-
+                fromPath[a] = s;
             }
         }
     }
@@ -68,7 +68,7 @@ public class DepthFirstPath {
         g.addEdge(0, 1);
         g.addEdge(0, 2);
         g.addEdge(2, 1);
-        // g.addEdge(2, 3);
+        g.addEdge(2, 3);
         g.addEdge(2, 4);
         // g.addEdge(3, 5);
         //g.addEdge(3, 4);
@@ -76,9 +76,10 @@ public class DepthFirstPath {
 
         DepthFirstPath instance = new DepthFirstPath(g, 0);
         //instance.dfs(g, 0);
-        System.out.println(instance.hasPathTo(3));
-        System.out.println(instance.paths(5));
+        System.out.println(instance.hasPathTo(4));
+        System.out.println(instance.paths(4));
 
+        //0->1->2->3
 
     }
 }

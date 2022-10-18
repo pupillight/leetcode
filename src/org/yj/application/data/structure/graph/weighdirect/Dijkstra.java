@@ -25,14 +25,19 @@ public class Dijkstra {
         while (!queue.isEmpty()) {
             DirectedEdge currentEdge = queue.poll();
             int v = currentEdge.to;
-            //int v = queue.poll();
+            //v= currentEdge.from;
             for (DirectedEdge edge : graph.adj[v]) {
                 int w = edge.to;
                 int sum = dist[v] + edge.weigh;
                 if (sum < dist[w]) {
                     dist[w] = sum;
                     path[w] = v;
-                    queue.add(new DirectedEdge(v, w, sum));
+                    DirectedEdge newEdge = new DirectedEdge(v, w, sum);
+                    if (queue.contains(newEdge)) {
+                        queue.remove(newEdge);
+                    }
+                    queue.add(newEdge);
+
                 }
             }
         }
@@ -54,18 +59,18 @@ public class Dijkstra {
     public static void main(String[] args) {
 
         DirectedWeightedGraph graph = new DirectedWeightedGraph(4);
-        DirectedEdge edge = new DirectedEdge(0,1,2);
+        DirectedEdge edge = new DirectedEdge(0, 1, 2);
         graph.addEdge(edge);
-        edge = new DirectedEdge(0,2,1);
+        edge = new DirectedEdge(0, 2, 1);
         graph.addEdge(edge);
-        edge = new DirectedEdge(1,2,3);
+        edge = new DirectedEdge(1, 2, 3);
         graph.addEdge(edge);
-        edge = new DirectedEdge(1,3,10);
+        edge = new DirectedEdge(1, 3, 10);
         graph.addEdge(edge);
-        edge = new DirectedEdge(2,3,2);
+        edge = new DirectedEdge(2, 3, 2);
         graph.addEdge(edge);
 
-        Dijkstra dijkstra = new Dijkstra(graph,0);
+        Dijkstra dijkstra = new Dijkstra(graph, 0);
         dijkstra.cal(graph);
 
         System.out.println(dijkstra.edges(3));
