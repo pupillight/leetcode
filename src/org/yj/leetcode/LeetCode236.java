@@ -67,7 +67,7 @@ public class LeetCode236 {
             return right;
         } else if (left != null && right == null) {
             return left;
-        } else {
+        }else{
             return null;
         }
     }
@@ -76,10 +76,10 @@ public class LeetCode236 {
     public static void main(String[] args) {
         TreeNode r1 = new TreeNode(6);
         r1.left = new TreeNode(2);
-        r1.left.left = new TreeNode(0);
+       /* r1.left.left = new TreeNode(0);
         r1.left.right = new TreeNode(4);
 
-        r1.right = new TreeNode(8);
+        r1.right = new TreeNode(8);*/
         // r1.right.left = new TreeNode(7);
         // r1.right.right = new TreeNode(9);
 
