@@ -37,6 +37,7 @@ public class LinkedListLeetCode {
     }
 
 
+
     public void mergeSortedLinkedList(LinkList l1, LinkList l2) {
         if (l1 == null || l2 == null) {
             return;

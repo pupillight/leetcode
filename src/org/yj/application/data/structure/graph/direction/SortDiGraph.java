@@ -21,9 +21,10 @@ public class SortDiGraph {
         visited[v] = true;
         for (Integer w : graph.adj[v]) {
             System.out.println("w=" + w);
-            //if (!visited[w]) {
-            dfs(graph, w);
-            //}
+            if (!visited[w]) {
+                dfs(graph, w);
+
+            }
         }
         //位置
         stack.push(v);
@@ -32,9 +33,10 @@ public class SortDiGraph {
 
     public static void main(String[] args) {
         DiGraph graph = new DiGraph(3);
+        graph.addEdge(0, 2);
         graph.addEdge(0, 1);
         graph.addEdge(1, 2);
-        graph.addEdge(1, 0);
+
         CycledDiGraph cycledDiGraph = new CycledDiGraph(graph);
         System.out.println(cycledDiGraph.isCycled);
         if (!cycledDiGraph.isCycled) {

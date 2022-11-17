@@ -325,50 +325,6 @@ public class LInkedListQuestions {
         }
         return slow;
     }
-   /* public void reorderList(ListNode head) {
-        ListNode node = head;
-        List<ListNode> list = new ArrayList<>();
-        while (node != null) {
-            list.add(node);
-            node = node.next;
-        }
-        int i = 0, j = list.size() - 1;
-        while (i < j) {
-            list.get(i).next = list.get(j);
-            i++;
-            if (i == j) {
-                break;
-            }
-            list.get(j).next = list.get(i);
-            j--;
-        }
-        list.get(i).next=null;
-
-        print(head);
-    }*/
-   /* public void reorderList(ListNode head) {
-        ListNode node = head;
-        List<Integer> list = new ArrayList<>();
-        while (node != null) {
-            list.add(node.val);
-            node = node.next;
-        }
-        int i = 0, j = list.size() - 1;
-        ListNode dummyHead = new ListNode();
-        ListNode currNode = dummyHead;
-        while (i <= j) {
-            currNode.next = new ListNode(list.get(i));
-            if (i == j) {
-                break;
-            }
-            currNode.next.next = new ListNode(list.get(j));
-            currNode = currNode.next.next;
-            i++;
-            j--;
-        }
-        head = dummyHead.next;
-        print(head);
-    }*/
 
 
     private int getCount(ListNode head) {
@@ -381,33 +337,73 @@ public class LInkedListQuestions {
         return count;
     }
 
-    public ListNode rotateRight(ListNode head, int k) {
-        if (k == 0 || head == null || head.next == null) {
+    public ListNode rotateRight1(ListNode head, int k) {
+        if (head == null || head.next == null || k == 0) {
             return head;
         }
-        ListNode node = head;
-        int count = 1;
-        while (node.next != null) {
-            node = node.next;
+        ListNode currNode = head;
+        int count = 0;
+        while (currNode != null) {
+            currNode = currNode.next;
             count++;
         }
-        //int count = getCount(head);
-        //int t = k;
-        int t = count - k % count;
-        if (t == count) {
+        k = k % count;
+        if (k == 0) {
             return head;
         }
-        node.next = head;
-        while (t > 0) {
-            node = node.next;
-            t--;
+        int i = 0;
+        currNode = head;
+        while (currNode != null && i < k) {
+            currNode = currNode.next;
+            i++;
+        }
+        ListNode node1 = head;
+        ListNode node2 = new ListNode(-1);
+        ListNode node3 = node2;
+        while (node1 != null && currNode != null) {
+            node2.next = new ListNode(node1.val);
+            node2 = node2.next;
+            currNode = currNode.next;
+            node1 = node1.next;
         }
 
-        ListNode res = node.next;
-        node.next = null;
+        ListNode res = node1;
+        while (node1.next != null) {
+            node1 = node1.next;
+        }
+        node1.next = node3.next;
         return res;
     }
 
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null || k == 0) {
+            return head;
+        }
+        ListNode currNode = head;
+        LinkedList<Integer> list = new LinkedList<>();
+        int count = 0;
+        while (currNode != null) {
+            list.add(currNode.val);
+            currNode = currNode.next;
+            count++;
+        }
+        k = k % count;
+        if (k == 0) {
+            return head;
+        }
+        while (k > 0) {
+            int v=list.pollLast();
+            list.push(v);
+            k--;
+        }
+        ListNode res = new ListNode(-1);
+        ListNode node = res;
+        while(!list.isEmpty()){
+           node.next= new ListNode(list.pop());
+           node = node.next;
+        }
+        return res.next;
+    }
   /*  public ListNode rotateRight(ListNode head, int k) {
         if (k == 0 || head == null || head.next == null) {
             return head;
@@ -466,22 +462,7 @@ public class LInkedListQuestions {
 
     }
 
-    /*        while (fast != null && t > 0) {
-                fast = fast.next;
-                t--;
-                count++;
-            }
-            if (t > 0) {
-                t = k % count;
-                if (t == 0) {
-                    return head;
-                }
-                fast = head;
-                while (fast != null && t > 0) {
-                    fast = fast.next;
-                    t--;
-                }
-            }*/
+
     public static void main(String[] args) {
         LInkedListQuestions questions = new LInkedListQuestions();
 
@@ -516,8 +497,8 @@ public class LInkedListQuestions {
         ListNode head = new ListNode(1);
         head.next = new ListNode(2);
         head.next.next = new ListNode(3);
-        head.next.next.next = new ListNode(4);
-        head.next.next.next.next = new ListNode(5);
+         head.next.next.next = new ListNode(4);
+         head.next.next.next.next = new ListNode(5);
         //questions.reorderList(head);
         // questions.print(head);
 

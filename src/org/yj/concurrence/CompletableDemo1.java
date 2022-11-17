@@ -1,91 +1,93 @@
 package org.yj.concurrence;
 
+import org.yj.stream.Employee;
+import org.yj.stream.Gender;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 public class CompletableDemo1 {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        /* Runnable runnable = () -> {
-         *//*   try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*//*
-            System.out.println(Thread.currentThread().getName() );
-            System.out.println("-------------");
-        };
+//        CompletableFuture<String> f1 = CompletableFuture.completedFuture("message");
+//        System.out.println(f1.join());
+//
+//        CompletableFuture<Void> f2 = CompletableFuture.runAsync(() -> {
+//            Random random = new Random();
+//            int i = 0;
+//            while (i < 10) {
+//                System.out.println(random.nextInt(10));
+//                i++;
+//            }
+//        });
 
-        CompletableFuture<Void> future1 = CompletableFuture.runAsync(runnable, executorService);
-        future1.whenCompleteAsync((res, e) -> {
-            System.out.println(Thread.currentThread().getName() );
-            System.out.println(res);
-            System.out.println(e);
+        //------------------------------------ compose and combine-----------------------------------
+/*
+        CompletableFuture<String> f = supplyAsync(() -> {
+            return "the chef  ";
+        }, executorService).thenCompose(dish -> CompletableFuture.supplyAsync(() -> dish + "the waiter"));
+        System.out.println(f.join());
+
+        CompletableFuture<String> f2 = supplyAsync(() -> {
+            return "the waiter ";
         }, executorService);*/
 
+      /*  CompletableFuture<String> f1 = supplyAsync(() -> {
+            return "the chef  ";
+        }, executorService).thenComposeAsync(r -> {
+            return CompletableFuture.supplyAsync(() -> {
+                return r + "the waiter";
+            });
+        });
 
-        //System.out.println("-----------------------------------------------");
-       /* CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> {
-            int a = 10;
-            int b = 0;
-            return a / b;
-        }, executorService)
-                .whenComplete((res, e) ->
-                        System.out.println("......."))
-                .exceptionally((error) -> {
-                    return -1;
-                });
 
-        System.out.println(future1.join());*/
+        System.out.println(f1.join());
+        //System.out.println(f2.join());
+        System.out.println("food is ready.");*/
 
-        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> {
-            int a = 10;
-            int b = 2;
-            return a / b;
-        }, executorService)
-                .whenComplete((res, error) -> System.out.println(res))
-                .exceptionally(e -> -1);
 
-        System.out.println(future1.join());
-        /*CompletableFuture<Integer> future2 = future1.whenComplete((res, e) ->
-                System.out.println(".......")).
-                exceptionally((error) -> {
-                    return -1;
-                });
+        //-----------------------------------thenApply thenAccept thenRun----------------------------------
+        //System.out.println(supplyAsync(() -> "the chef").thenCompose(r -> supplyAsync(() -> r + " the waiter")).join());
+/*        supplyAsync(() -> 15)
+                .thenApplyAsync(r -> r / 0)
+                .thenApplyAsync(r -> r * 3)
+                .handle((r, e) -> {
+                    return Optional.ofNullable(e).isPresent() ? -1 : r;
+                }).join();
 
-        System.out.println(future2.join());*/
 
-      /*  CompletableFuture<Integer> future2 = CompletableFuture.supplyAsync(() -> {
-            int a = 10;
-            int b = 0;
-            return a / b;
-        }, executorService).handleAsync((res, error) -> {
-            System.out.println(res);
-            System.out.println(error);
-            return 55;
-        }, executorService);
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> new Employee("Jian", 45, Gender.MALE, 1000.0f)).thenApply(employee -> employee.getName());
+        System.out.println(future.join());*/
+        //CompletableFuture.supplyAsync(() -> 3).thenRun(()->System.out.println(Thread.currentThread().getName()));
 
-        System.out.println(future2.join());*/
+        //CompletableFuture f2=CompletableFuture.supplyAsync(()->"the chef").thenApplyAsync(r->CompletableFuture.runAsync(()->System.out.println(r+"the waiter")));
+        //f2.join();
 
-        /*CompletableFuture<Integer> future3 =future2.handleAsync((res, exception) -> {
-            //System.out.println(res);
-            //System.out.println(exception);
-            return Integer.MIN_VALUE;
-        });*/
-       /* future2.whenCompleteAsync((result, error) -> {
-            System.out.println(Thread.currentThread().getName());
-            System.out.println(result);
-            System.out.println(error);
-        }, executorService);
-        future2.whenComplete((result, error) -> {
-            System.out.println(Thread.currentThread().getName());
-            System.out.println(result);
-            System.out.println(error);
-        });*/
+        //-----------------------------------allOf anyOf----------------------------------
+
+
+        CompletableFuture<String> f1 = CompletableFuture.supplyAsync(() -> "hello");
+        CompletableFuture<String> f2 = CompletableFuture.supplyAsync(() -> "beautiful");
+        CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "world");
+
+       CompletableFuture future= CompletableFuture.allOf(f1, f2, f3);
+        System.out.println(future.get());
+
+        //List<String> list =
+        //System.out.println(Stream.of(f1, f2, f3).map(future -> future.join()).collect(Collectors.joining(" ")));
+        //  System.out.println(list);
+
+
         executorService.shutdown();
-
 
     }
 }
