@@ -3,11 +3,24 @@ package org.yj.leetcode.elementary;
 import org.yj.application.data.structure.stack.Node;
 import org.yj.leetcode.TreeNode;
 
+import java.beans.JavaBean;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class BstQuestions {
 
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        } else if (p == null && q != null) {
+            return false;
+        } else if (p != null && q == null) {
+            return false;
+        } else if (p.val != q.val) {
+            return false;
+        }
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
 
     public boolean isSymmetric(TreeNode root) {
         if (root == null) {
@@ -22,15 +35,612 @@ public class BstQuestions {
             return true;
         } else if (leftNode == null || rightNode == null) {
             return false;
+        } else if (leftNode.val != rightNode.val) {
+            return false;
         } else {
-            if (leftNode.val == rightNode.val) {
-                return isNodeSymmetric(leftNode.left, rightNode.right) && isNodeSymmetric(leftNode.right, rightNode.left);
-            }
+            return isNodeSymmetric(leftNode.left, rightNode.right) && isNodeSymmetric(leftNode.right, rightNode.left);
         }
-        return false;
     }
 
-    public boolean isValidBST(TreeNode root) {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> list = new ArrayList<>();
+        dfs(root, list, "");
+        return list;
+    }
+
+    private void dfs(TreeNode node, List<String> list, String s) {
+        if (node == null) {
+            return;
+        }
+        s = s + node.val;
+        if (node.left == null && node.right == null) {
+            list.add(s);
+            return;
+        }
+        s = s + "->";
+        dfs(node.left, list, s);
+        dfs(node.right, list, s);
+
+    }
+
+    /*public int minDepth(TreeNode root) {
+        int result = 0;
+        if (root == null) {
+            return 0;
+        }
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        int size =0;
+        while (!queue.isEmpty()) {
+
+            result++;
+            size= queue.size();
+            for (int i=0;i<size;i++){
+                TreeNode node = queue.poll();
+                if (node.left == null && node.right == null) {
+                    return result;
+                }
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+
+        }
+        return result;
+    }*/
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = minDepth(root.left);
+        int right = minDepth(root.right);
+
+        int answer = 0;
+        if (root.left == null && root.right != null) {
+            return right + 1;
+
+        }
+        if (root.left != null && root.right == null) {
+            return left + 1;
+        }
+        answer = Integer.min(left, right) + 1;
+        return answer;
+    }
+
+    /*    public int countNodes(TreeNode root) {
+            if (root == null) {
+                return 0;
+            }
+            int l = countNodes(root.left);
+            int r = countNodes(root.right);
+            int count = l + r + 1;
+            return count;
+        }*/
+    int nodeCount = 0;
+
+    public int countNodes(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        countNodes1(root);
+        return nodeCount;
+    }
+
+    public void countNodes1(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        nodeCount++;
+        countNodes1(root.left);
+        countNodes1(root.right);
+    }
+    /*public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int l = maxDepth(root.left);
+        int r = maxDepth(root.right);
+        int result = Integer.max(l, r) + 1;
+        return result;
+    }
+*/
+
+/*    public int maxDepth1(TreeNode root) {
+        return maxDepth(root, 0);
+    }
+
+    private int maxDepth(TreeNode root, int i) {
+        if (root == null) {
+            return i;
+        }
+        if (root.left == null && root.right == null) {
+            return i + 1;
+        }
+        int left = maxDepth(root.left, i + 1);
+        int right = maxDepth(root.right, i + 1);
+        return Math.max(left, right);
+    }*/
+
+    int height = 0;
+
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        return maxDepthByPreOrder(root, 0);
+
+    }
+
+    public int maxDepthByPreOrder(TreeNode root, int i) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.left == null && root.right == null) {
+            return i + 1;
+        }
+        //if (root.left != null || root.right != null) {
+        //height++;
+        //}
+        int left = maxDepthByPreOrder(root.left, i + 1);
+        int right = maxDepthByPreOrder(root.right, i + 1);
+        return Math.max(left, right);
+
+    }
+
+    public boolean isBalanced(TreeNode root) {
+        int height = isBalancedDfs(root);
+        if (height == -1) {
+            return false;
+        }
+        return true;
+    }
+
+    int isBalancedDfs(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+
+        int l = isBalancedDfs(node.left);
+        if (l == -1) {
+            return -1;
+        }
+        int r = isBalancedDfs(node.right);
+        if (r == -1) {
+            return -1;
+        }
+        if (Math.abs(l - r) > 1) {
+            return -1;
+        } else {
+            return Integer.max(l, r) + 1;
+        }
+
+    }
+
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+
+        if (preorder == null || preorder.length == 0 || inorder == null || inorder.length == 0) {
+            return null;
+        }
+        int value = preorder[0];
+        TreeNode root = new TreeNode(value);
+        int index = -1;
+        for (int i = 0; i < inorder.length; i++) {
+            if (value == inorder[i]) {
+                index = i;
+                break;
+            }
+        }
+        int[] leftPreOrder = Arrays.copyOfRange(preorder, 1, index + 1);
+        int[] leftInOrder = Arrays.copyOfRange(inorder, 0, index);
+        root.left = buildTree(leftPreOrder, leftInOrder);
+
+        int[] rightPreOrder = Arrays.copyOfRange(preorder, index + 1, preorder.length);
+        int[] rightInOrder = Arrays.copyOfRange(inorder, index + 1, inorder.length);
+        root.right = buildTree(rightPreOrder, rightInOrder);
+        return root;
+    }
+
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
+    /*int minDiff = Integer.MAX_VALUE;
+    TreeNode pre = null;
+    public int minDiffInBST(TreeNode root) {
+
+        minDiffInBSTDfs(root);
+        return minDiff;
+    }
+
+    private void minDiffInBSTDfs(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        minDiffInBSTDfs(node.left);
+        if (pre != null) {
+            int diff = node.val - pre.val;
+            System.out.println(diff);
+            System.out.println(minDiff);
+            minDiff = Math.min(minDiff, diff);
+
+        }
+        pre = node;
+        minDiffInBSTDfs(node.right);
+    }*/
+ /*   int minDiff = Integer.MAX_VALUE;
+    TreeNode pre = null;
+
+    public int getMinimumDifference(TreeNode root) {
+        minDiffInBSTDfs(root);
+        return minDiff;
+    }
+
+
+    public int minDiffInBST(TreeNode root) {
+
+        minDiffInBSTDfs(root);
+        return minDiff;
+    }*/
+
+   /* private void minDiffInBSTDfs(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        minDiffInBSTDfs(node.left);
+        if (pre != null) {
+            int diff = node.val - pre.val;
+            minDiff = Integer.min(minDiff, diff);
+        }
+        pre = node;
+        minDiffInBSTDfs(node.right);
+    }
+*/
+    /* public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+         if (root == null) {
+             return null;
+         }
+         if (root.val == p.val || root.val == q.val) {
+             return root;
+         }
+         TreeNode lResult = lowestCommonAncestor(root.left, p, q);
+         TreeNode rResult = lowestCommonAncestor(root.right, p, q);
+         if (lResult == null && rResult == null) return null;
+         else if (lResult != null && rResult == null) {
+             return lResult;
+         } else if (lResult == null && rResult != null) {
+             return rResult;
+         } else if (lResult.val != rResult.val) {
+             return root;
+         } else {
+             return lResult;
+         }
+
+     }*/
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        Map<Integer, TreeNode> map = new HashMap<>();
+        lowestCommonAncestorDfs(root, map);
+        Set<TreeNode> set = new HashSet<>();
+        while (p != null) {
+            set.add(p);
+            p = map.get(p.val);
+        }
+        while (q != null) {
+            if (set.contains(q)) {
+                return q;
+            }
+            set.add(q);
+            q = map.get(q.val);
+        }
+        return null;
+    }
+
+    private void lowestCommonAncestorDfs(TreeNode root, Map<Integer, TreeNode> map) {
+        if (root == null) {
+            return;
+        }
+        if (root.left != null) {
+            map.put(root.left.val, root);
+            lowestCommonAncestorDfs(root.left, map);
+        }
+        if (root.right != null) {
+            map.put(root.right.val, root);
+            lowestCommonAncestorDfs(root.right, map);
+        }
+    }
+
+    TreeNode preNode = null;
+
+    public int[] findMode(TreeNode root) {
+        Map<Integer, Integer> map = new HashMap<>();
+        findModeDfs(root, map);
+
+        List<Map.Entry> list = map.entrySet().stream().sorted((e1, e2) -> e2.getValue() - e1.getValue()).collect(Collectors.toList());
+        System.out.println(list);
+        return null;
+    }
+
+    private void findModeDfs(TreeNode root, Map<Integer, Integer> map) {
+        if (root == null) {
+            return;
+        }
+        findModeDfs(root.left, map);
+        if (preNode != null) {
+            if (preNode.val == root.val) {
+                map.put(root.val, map.get(root.val) + 1);
+            } else {
+                map.put(root.val, 1);
+            }
+        } else {
+            map.put(root.val, 1);
+        }
+        preNode = root;
+        findModeDfs(root.right, map);
+    }
+
+    boolean isPathSum = false;
+
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        dfs(root, targetSum, 0);
+        return isPathSum;
+    }
+
+    private void dfs(TreeNode node, int targetSum, int sum) {
+        if (node == null) {
+            return;
+        }
+        sum += node.val;
+        if (node.left == null && node.right == null) {
+            if (targetSum == sum) {
+                isPathSum = true;
+            }
+            return;
+        }
+        dfs(node.left, targetSum, sum);
+        dfs(node.right, targetSum, sum);
+    }
+
+    int leftSum = 0;
+
+    public int sumOfLeftLeaves(TreeNode root) {
+
+        if (root == null) {
+            return 0;
+        }
+        sumOfLeftLeaves(root.left);
+        if (root.left != null && root.left.left == null && root.left.right == null) {
+            leftSum += root.left.val;
+        }
+        sumOfLeftLeaves(root.right);
+        return leftSum;
+    }
+
+
+    public int[] findMode1(TreeNode root) {
+        findModeDfs(root);
+        int[] res = map.entrySet().stream().filter(entry -> entry.getValue() == max).mapToInt(entry -> entry.getKey()).toArray();
+        return res;
+    }
+
+    int preVal = Integer.MIN_VALUE;
+    int max = Integer.MIN_VALUE;
+    int count = 0;
+    Map<Integer, Integer> map = new HashMap<>();
+
+    public void findModeDfs(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        findModeDfs(node.left);
+        if (preVal == Integer.MIN_VALUE) {
+            count = 1;
+            max = count;
+        } else if (preVal == node.val) {
+            count++;
+            if (count > max) {
+                max = count;
+                map.clear();
+            }
+        } else if (preVal != node.val) {
+            count = 1;
+        }
+        preVal = node.val;
+        map.put(node.val, count);
+        findModeDfs(node.right);
+    }
+
+
+    int minDiffValue = 0;
+    TreeNode previousNode = null;
+
+    private void miniDiffDfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        miniDiffDfs(root.left);
+        if (previousNode != null) {
+            int diff = Math.abs(root.val - previousNode.val);
+            if (minDiffValue == 0) {
+                minDiffValue = diff;
+            } else if (minDiffValue > diff) {
+                minDiffValue = diff;
+            }
+        }
+        previousNode = root;
+        miniDiffDfs(root.right);
+    }
+
+    public int getMinimumDifference(TreeNode root) {
+        miniDiffDfs(root);
+        return minDiffValue;
+    }
+
+    StringBuilder ans = new StringBuilder();
+
+    public void tree2str(TreeNode node, String leftBracket, String rightBracket) {
+        if (node == null) {
+            return;
+        }
+        ans.append(leftBracket);
+        ans.append(node.val);
+        tree2str(node.left, "(", ")");
+        if (node.left == null && node.right != null) {
+            ans.append("()");
+        }
+        tree2str(node.right, "(", ")");
+        ans.append(rightBracket);
+    }
+
+    public String tree2str(TreeNode root) {
+        tree2str(root, "", "");
+        return ans.toString();
+    }
+
+
+    int maxDiameter = -1;
+
+    private int diameterOfBinaryTreeDfs(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        int l = diameterOfBinaryTreeDfs(node.left);
+        int r = diameterOfBinaryTreeDfs(node.right);
+        int result = Integer.max(l, r) + 1;
+        if (l + r + 1 > maxDiameter) {
+            maxDiameter = l + r + 1;
+        }
+        return result;
+    }
+
+    public int diameterOfBinaryTree(TreeNode root) {
+        diameterOfBinaryTreeDfs(root);
+        return maxDiameter - 1;
+    }
+
+    boolean isChildNode = false;
+
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        isChildNode = isSubtreeDfs(root, subRoot);
+        return isChildNode;
+    }
+
+    private boolean isSubtreeDfs(TreeNode root, TreeNode subRoot) {
+        if (root == null && subRoot == null) {
+            return true;
+        } else if (root == null || subRoot == null) {
+            return false;
+        }
+
+        if (root.val == subRoot.val) {
+            boolean lResult = isSubtreeDfs(root.left, subRoot.left);
+            boolean rResult = isSubtreeDfs(root.right, subRoot.right);
+
+            return lResult && rResult;
+        } else {
+            return isSubtreeDfs(root.left, subRoot) || isSubtreeDfs(root.right, subRoot);
+        }
+    }
+
+    public List<Double> averageOfLevels(TreeNode root) {
+
+        if (root == null) {
+            return null;
+        }
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        List<Double> list = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            double sum = 0;
+            double avg = 0;
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                sum += node.val;
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+            avg = sum / size;
+            list.add(avg);
+        }
+        return list;
+    }
+   /* Map<Integer, Integer> map = new HashMap<>();
+    public boolean findTarget(TreeNode root, int k) {
+        if (root == null) {
+            return false;
+        }
+
+        boolean l = findTarget(root.left, k);
+        if (!map.containsKey(k - root.val)) {
+            map.put(root.val, map.getOrDefault(root.val, 0) + 1);
+        } else {
+            return true;
+        }
+        boolean r = findTarget(root.right, k);
+        return l == true || r == true;
+    }*/
+
+    public static void main(String[] args) {
+        BstQuestions questions = new BstQuestions();
+
+/*        TreeNode root = new TreeNode(2);
+        root.left = new TreeNode(2);
+        root.left.left = new TreeNode(5);
+        root.left.right = new TreeNode(2);
+        root.right = new TreeNode(2);*/
+        //root.right.left = new TreeNode(2);
+        TreeNode root = new TreeNode(5);
+        root.left = new TreeNode(3);
+        root.left.left = new TreeNode(2);
+        root.left.right = new TreeNode(4);
+        root.right = new TreeNode(6);
+        root.right.right = new TreeNode(7);
+
+        TreeNode subRoot = new TreeNode(1);
+      /*  subRoot.left = new TreeNode(1);
+        //subRoot.left.left = new TreeNode(1);
+        //subRoot.left.right = new TreeNode(2);
+        subRoot.right = new TreeNode(2);*/
+
+
+        //System.out.println(questions.binaryTreePaths(root));
+        // System.out.println(questions.countNodes(root));
+        //System.out.println(questions.lowestCommonAncestor(root, new TreeNode(6), new TreeNode(2)).val);
+
+        //System.out.println(questions.isSubtree(root, subRoot));
+        //System.out.println(questions.isUnivalTree(root));
+
+        //System.out.println(questions.findTarget(root, 9));
+
+
+        //System.out.println(questions.getMinimumDifference(root));
+        //Arrays.stream(questions.findMode1(root)).forEach(System.out::println);
+
+        //System.out.println(questions.findMode1(root));
+    }
+}
+
+
+
+  /*  public boolean isValidBST(TreeNode root) {
         if (root == null) {
             return true;
         }
@@ -167,7 +777,7 @@ public class BstQuestions {
     }
 
 
-    /* public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+    *//* public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
          TreeNode root =null;
          return mergeTrees(root1, root2, root);
      }
@@ -185,7 +795,7 @@ public class BstQuestions {
          root.left = mergeTrees(root1.left, root2.left, root.left);
          root.right = mergeTrees(root1.right, root2.right, root.right);
          return root;
-     }*/
+     }*//*
     public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
 
         TreeNode root = null;
@@ -222,7 +832,7 @@ public class BstQuestions {
     }
 
 
-   /* public TreeNode mergeTrees(TreeNode root1, TreeNode root2, TreeNode root) {
+   *//* public TreeNode mergeTrees(TreeNode root1, TreeNode root2, TreeNode root) {
 
         if (root1 == null && root2 == null) {
             return null;
@@ -236,7 +846,7 @@ public class BstQuestions {
         root.right = mergeTrees(root1.right, root2.right, root.right);
 
         return root;
-    }*/
+    }*//*
 
 
     public TreeNode sortedListToBST(ListNode head) {
@@ -280,7 +890,7 @@ public class BstQuestions {
         root.right = sortedArrayToBST(nums, mid + 1, right);
         return root;
     }
-  /*
+  *//*
     List<String> res = new ArrayList<>();
 
   public List<String> binaryTreePaths(TreeNode root) {
@@ -302,7 +912,7 @@ public class BstQuestions {
             constructPaths(root.left, pathSB.toString(), paths);
             constructPaths(root.right, pathSB.toString(), paths);
         }
-    }*/
+    }*//*
 
     List<String> res = new ArrayList<>();
 
@@ -314,7 +924,7 @@ public class BstQuestions {
     }
 
 
-/*    List<String> res = new ArrayList<>();
+*//*    List<String> res = new ArrayList<>();
     public List<String> binaryTreePaths(TreeNode root) {
         String builder = "";
         backTrack(root, builder);
@@ -334,10 +944,10 @@ public class BstQuestions {
         path = path + "->";
         backTrack(root.left, path);
         backTrack(root.right, path);
-    }*/
+    }*//*
 
 
-   /* public boolean isBalanced(TreeNode root) {
+ *//* public boolean isBalanced(TreeNode root) {
         if (calculateHeight(root) == -1) return false;
         return true;
     }
@@ -352,9 +962,9 @@ public class BstQuestions {
             return -1;
         }
         return Math.max(leftHeight, rightHeight);
-    }*/
+    }*//*
 
-   /* public int minDepth(TreeNode root) {
+ *//* public int minDepth(TreeNode root) {
         if (root == null) {
             return 0;
         }
@@ -381,7 +991,7 @@ public class BstQuestions {
         }
         System.out.println(height);
         return ans;
-    }*/
+    }*//*
 
     public int minDepth(TreeNode root) {
         if (root == null) {
@@ -452,7 +1062,7 @@ public class BstQuestions {
 
     }
 
-    public boolean isSameTree(TreeNode p, TreeNode q) {
+    *//*public boolean isSameTree(TreeNode p, TreeNode q) {
 
         if (p == null && q == null) {
             return true;
@@ -464,7 +1074,7 @@ public class BstQuestions {
             }
         }
         return false;
-    }
+    }*//*
 
 
     private int height(TreeNode node) {
@@ -480,7 +1090,7 @@ public class BstQuestions {
         return Math.max(leftHeight, rightHeight) + 1;
     }
 
-   /* public boolean isBalanced(TreeNode root) {
+   *//* public boolean isBalanced(TreeNode root) {
         if (root == null) {
             return true;
         }
@@ -491,7 +1101,7 @@ public class BstQuestions {
             return isBalanced(root.left) && isBalanced(root.right);
         }
         return false;
-    }*/
+    }*//*
 
     public int treeHeight(TreeNode node) {
         if (node == null) {
@@ -512,7 +1122,7 @@ public class BstQuestions {
     }
 
 
-    /* public boolean isSameTree(TreeNode p, TreeNode q) {
+    *//* public boolean isSameTree(TreeNode p, TreeNode q) {
          return isSameNode(p, q);
      }
 
@@ -571,7 +1181,7 @@ public class BstQuestions {
         root.right = sortedArrayToBST1(nums, middle + 1, right);
         return root;
     }
-*/
+*//*
     public int minDepth1(TreeNode root) {
 
         if (root == null) {
@@ -627,18 +1237,18 @@ public class BstQuestions {
         TreeNode leftNode = invertTree(root.left);
         TreeNode rightNode = invertTree(root.right);
 
-  /*      System.out.println(leftNode == null ? "null" : leftNode.val);
+  *//*      System.out.println(leftNode == null ? "null" : leftNode.val);
         System.out.println(rightNode == null ? "null" : rightNode.val);
 
         System.out.println(root.val);
-        System.out.println("----------");*/
+        System.out.println("----------");*//*
 
         root.right = leftNode;
         root.left = rightNode;
 
-        /*TreeNode tmp = root.left;
+        *//*TreeNode tmp = root.left;
         root.left = root.right;
-        root.right = tmp;*/
+        root.right = tmp;*//*
 
         return root;
     }
@@ -736,7 +1346,7 @@ public class BstQuestions {
             array[i] = modeList.get(i);
         }
         return array;
-    /*    List<Map.Entry<Integer, Integer>> list = new ArrayList<>(map.entrySet());
+    *//*    List<Map.Entry<Integer, Integer>> list = new ArrayList<>(map.entrySet());
         Collections.sort(list, (e1, e2) -> e2.getValue() - e1.getValue());
         int ans = list.get(0).getValue();
         List<Integer> res = new ArrayList<>();
@@ -751,7 +1361,7 @@ public class BstQuestions {
         int[] array = new int[res.size()];
         for (int i = 0; i < array.length; i++) {
             array[i] = res.get(i);
-        }*/
+        }*//*
 
     }
 
@@ -845,10 +1455,10 @@ public class BstQuestions {
             return;
         }
         treeStr += node.val;
-        /*if(node.left ==null && node.right ==null){
+        *//*if(node.left ==null && node.right ==null){
             //treeStr+=")";
             return;
-        }*/
+        }*//*
         treeStr += left;
         tree2strDfs(node.left, "(", ")");
         treeStr += right;
@@ -863,12 +1473,12 @@ public class BstQuestions {
     public int sumRootToLeaf(TreeNode root) {
         List<String> list = new ArrayList<>();
         sumRootToLeafDfs(root, list, "");
-      /*  System.out.println(list);
+      *//*  System.out.println(list);
         int ans = 0;
         for (String s : list) {
             ans = ans + str2int(s);
         }
-        return ans;*/
+        return ans;*//*
         return sumValue;
     }
 
@@ -1114,7 +1724,7 @@ public class BstQuestions {
         return false;
 
 
-       /* Map<Integer, TreeNode> map = new HashMap<>();
+       *//* Map<Integer, TreeNode> map = new HashMap<>();
         isCousinsDfs(root, x, y, map);
         TreeNode nodeX = map.get(x);
         TreeNode nodeY = map.get(y);
@@ -1125,11 +1735,11 @@ public class BstQuestions {
                 return true;
             }
         }
-        return false;*/
+        return false;*//*
     }
 
 
-    /*private int nodeHeight(TreeNode node) {
+    *//*private int nodeHeight(TreeNode node) {
         if (node == null) {
             return 0;
         }
@@ -1163,7 +1773,7 @@ public class BstQuestions {
             isCousinsDfs(node.right, x, y, map);
         }
     }
-*/
+*//*
 
 
     int maxDepth = Integer.MIN_VALUE;
@@ -1226,26 +1836,26 @@ public class BstQuestions {
     public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
         findParents(root, p);
         List<Map.Entry<Integer, TreeNode>> list = map.entrySet().stream().collect(Collectors.toList());
-        for(int i =list.size()-1;i>=0;i--){
-            TreeNode node= list.get(i).getValue();
+        for (int i = list.size() - 1; i >= 0; i--) {
+            TreeNode node = list.get(i).getValue();
             if (findChild(node, q)) {
                 return node;
             }
         }
         return null;
-       /* while (iterator.hasNext()) {
+       *//* while (iterator.hasNext()) {
             TreeNode node = iterator.next().getValue();
             if (findChild(node, q)) {
                 return node;
             }
         }
-*/
-/*        while (!list.isEmpty()) {
+*//*
+ *//*        while (!list.isEmpty()) {
             TreeNode node = list.pop();
             if (findChild(node, q)) {
                 return node;
             }
-        }*/
+        }*//*
 
     }
 
@@ -1254,11 +1864,11 @@ public class BstQuestions {
         if (root == null) {
             return;
         }
-  /*      if (!list.contains(root) && !list.contains(p)) {
+  *//*      if (!list.contains(root) && !list.contains(p)) {
             list.push(root);
-        }*/
+        }*//*
 
-        if ((root.left!=null || root.right!=null ) && !map.containsKey(root.val) && !map.containsKey(p.val)) {
+        if ((root.left != null || root.right != null) && !map.containsKey(root.val) && !map.containsKey(p.val)) {
             map.put(root.val, root);
         }
 
@@ -1279,96 +1889,30 @@ public class BstQuestions {
         return findChild(root.left, p) || findChild(root.right, p);
     }
 
-    public static void main(String[] args) {
-        BstQuestions questions = new BstQuestions();
-/*        TreeNode leftnode2 = new TreeNode(2);
-        TreeNode rightnode2 = new TreeNode(2);
 
-
-        leftnode2.right = new TreeNode(3);
-        rightnode2.right = new TreeNode(3);
-        TreeNode root = new TreeNode(1, leftnode2, rightnode2);
-        //TreeNode root = new TreeNode(3, new TreeNode(1), new TreeNode(2));
-
-        //System.out.println(questions.maxDepth(root));
-        //System.out.println(questions.isValidBST(root));
-        System.out.println(questions.isSymmetric(root));*/
-/*        int[] preOrder = {3, 9, 20, 15, 7};
-        int[] inOrder = {9, 3, 15, 20, 7};
-
-        TreeNode node = questions.buildTree(preOrder, inOrder);
-
-        System.out.println();
-
-
-        TreeNode r1 = new TreeNode(1);
-        r1.left = new TreeNode(3);
-        r1.left.left = new TreeNode(5);
-        r1.right = new TreeNode(2);
-
-
-        TreeNode r2 = new TreeNode(2);
-        r2.left = new TreeNode(1);
-        r2.left.right = new TreeNode(4);
-        r2.right = new TreeNode(3);
-        r2.right.right = new TreeNode(7);*/
-/*
-        TreeNode r1 = new TreeNode(1);
-        r1.left = new TreeNode(2);
-        r1.left.left = new TreeNode(3);
-        //r1.right = new TreeNode(2);
-
-
-        TreeNode r2 = new TreeNode(1);
-        r2.right = new TreeNode(2);
-        r2.right.right = new TreeNode(3);*/
-/*        TreeNode r1 = new TreeNode(1);
-        r1.left = new TreeNode(2);
-        r1.right = new TreeNode(3);
-        //r1.right = new TreeNode(2);
-
-
-        TreeNode r2 = new TreeNode(1);
-        r2.left = new TreeNode(2);
-        r2.right = new TreeNode(3);*/
-/*        int[] array = {1, 2, 3, 4, 5};
-        TreeNode node = questions.sortedArrayToBST(array);
-        System.out.println();
-        ListNode head = new ListNode(10);
-        head.next = new ListNode(-3);
-        head.next.next = new ListNode(0);
-        head.next.next.next = new ListNode(5);
-        head.next.next.next.next = new ListNode(9);
-
-        TreeNode root=questions.sortedListToBST(head);
-        System.out.println();*/
-        TreeNode root = new TreeNode(3);
-        root.left = new TreeNode(5);
-        //root.left.left = new TreeNode(6);
-
-        //root.left.right = new TreeNode(2);
-        //root.left.right.left = new TreeNode(7);
-        //root.left.right.right = new TreeNode(4);
-        root.right = new TreeNode(1);
-        // r1.left = new TreeNode(1);
-        // r1.left.left = new TreeNode(3);
-        //r1.left.left.left = new TreeNode(4);
-        //r1.left.right = new TreeNode(4);
-
-        //r1.right = new TreeNode(3);
-        //r1.right.left = new TreeNode(6);
-        //r1.right.right = new TreeNode(6);
-
-        //System.out.println(questions.lowestCommonAncestor(r1, new TreeNode(2), new TreeNode(8)).val);
-        //System.out.println(questions.deepestLeavesSum(r1));
-        //System.out.println(questions.lowestCommonAncestorBtree(r1, new TreeNode(3), new TreeNode(7)).val);
-        //System.out.println(questions.isCousins(r1, 4, 6));
-
-        //System.out.println(questions.isBalanced(root));
-        System.out.println(questions.lowestCommonAncestor1(root, new TreeNode(1), new TreeNode(5)).val);
-
+    public boolean isSymmetric2(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return isSymmetric2(root.left, root.right);
     }
-}
+
+    private boolean isSymmetric2(TreeNode left, TreeNode right) {
+
+        if (left == null && right == null) {
+            return true;
+        } else if (left != null && right == null) {
+            return false;
+        } else if (left == null && right != null) {
+            return false;
+        } else if (left.val != right.val) {
+            return false;
+        }
+        boolean lResult = isSymmetric2(left.left, right.right);
+        boolean rResult = isSymmetric2(left.right, right.left);
+        return lResult && rResult;
+    }*/
+
 
 
 /*

@@ -3,6 +3,7 @@ package org.yj.leetcode;
 import org.yj.application.data.collections.MaxHeap;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SlidingWindow {
 
@@ -23,17 +24,19 @@ public class SlidingWindow {
     }
 
     public double findMaxAverage(int[] nums, int k) {
-        double ans = 0.00;
-        double sum = 0;
-        for (int i = 0; i < k; i++) {
-            sum += nums[i];
+        int sum = 0;
+        int max = Integer.MIN_VALUE;
+        for (int j = 0; j < k; j++) {
+            sum += nums[j];
         }
-        ans = sum / k;
-        for (int i = k; i < nums.length; i++) {
-            sum = sum - nums[i - k] + nums[i];
-            ans = Math.max(ans, sum / k);
+        max = sum;
+        for (int j = k; j < nums.length; j++) {
+            sum = sum - nums[j - k] + nums[j];
+            // double average=sum / k;
+            max = Math.max(max, sum);
         }
-        return ans;
+
+        return max / (k * 1.0);
     }
 
     public int divisorSubstrings(int num, int k) {
@@ -139,18 +142,7 @@ public class SlidingWindow {
     public int numSubarrayProductLessThanK(int[] nums, int k) {
         int ans = 0;
         List<List<Integer>> res = new ArrayList<>();
-/*        for (int i = 0; i < nums.length; i++) {
-            int value = 1;
-            for (int j = i; j < nums.length; j++) {
-                List<Integer> list = new ArrayList<>();
 
-                value = value * nums[j];
-                if (value < k) {
-                    list.add(nums[j]);
-                }
-                res.add(list);
-            }
-        }*/
         int i = 0, j = 0;
         while (i <= j && j < nums.length) {
             int value = 1;
@@ -167,27 +159,6 @@ public class SlidingWindow {
                 i++;
                 j = i;
             }
-       /*     if (i == j) {
-                value = nums[i];
-                list.add(value);
-            } else {
-                int t = i;
-                while (t <= j) {
-                    value = value * nums[t];
-                    list.add(nums[t]);
-                    t++;
-                }
-            }
-            j++;
-            if (value < k) {
-                res.add(list);
-                if (j == nums.length - 1) {
-                    j = i;
-                }
-            } else {
-                i++;
-                j = i;
-            }*/
         }
         ans = res.size();
         return ans;
@@ -299,87 +270,18 @@ public class SlidingWindow {
         for (int i = 0; i < s1.length(); i++) {
             array[s1.charAt(i) - 'a']++;
         }
-        for (int i = 0; i < s2.length(); i++) {
-            if (i + k > s2.length()) {
-                break;
-            }
-            String tmp = s2.substring(i, i + k);
-            ans = isAnagram2(array, tmp);
-            if (ans) {
-                return true;
+        int j = 0;
+        for (int i = 0; i < s2.length() && j <= i; i++) {
+            if (i - j + 1 == k) {
+                String tmp = s2.substring(j, i + 1);
+                ans = isAnagram2(array, tmp);
+                j++;
+                if (ans) return true;
             }
         }
         return false;
     }
 
-   /* private boolean isContained(String s1, String s2) {
-        int ans = 0;
-        int k = s1.length();
-        for (int i = 0; i < k; i++) {
-            int val1 = s1.charAt(i) - 'a';
-            int val2 = s2.charAt(i) - 'a';
-            ans = ans ^ val1 ^ val2;
-        }
-        if (ans == 0) {
-            return true;
-        }
-        return false;
-    }*/
-
-    /* private void backTrack(String str, LinkedList<Character> path, List<String> list, String text) {
-
-         if (path.size() == str.length()) {
-             StringBuilder builder = new StringBuilder();
-             for (int i = 0; i < path.size(); i++) {
-                 builder.append(path.get(i));
-             }
-             if (text.indexOf(builder.toString()) > -1) {
-                 this.isContained = true;
-                 //return;
-             }
-             list.add(builder.toString());
-             return;
-         }
-
-         for (int i = 0; i < str.length(); i++) {
-             char c = str.charAt(i);
-             if (path.contains(c)) {
-                 continue;
-             }
-             path.add(c);
-             backTrack(str, path, list, text);
-             path.removeLast();
-         }
-
-
-     }*/
-    /*private void backTrack(String str, LinkedList<Character> path, List<String> list, String text, int index) {
-
-        if (path.size() == str.length()) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < path.size(); i++) {
-                builder.append(path.get(i));
-            }
-            if (text.indexOf(builder.toString()) > -1) {
-                this.isContained = true;
-                //return;
-            }
-            list.add(builder.toString());
-            return;
-        }
-
-        for (int i = index; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (path.contains(c)) {
-                continue;
-            }
-            path.add(c);
-            backTrack(str, path, list, text, index);
-            path.removeLast();
-        }
-
-
-    }*/
     public boolean isAnagram2(int[] array, String t) {
         int[] array2 = new int[26];
         for (int i = 0; i < t.length(); i++) {
@@ -388,65 +290,7 @@ public class SlidingWindow {
         return Arrays.equals(array, array2);
     }
 
-    public boolean isAnagram1(String s, String t) {
-        if (s.length() != t.length()) {
-            return false;
-        }
-
-        int[] array1 = new int[26];
-        int[] array2 = new int[26];
-        for (int i = 0; i < s.length(); i++) {
-            array1[s.charAt(i) - 'a']++;
-            array2[t.charAt(i) - 'a']++;
-        }
-
-        return Arrays.equals(array1, array2);
-
-
-      /* Map<Character, Integer> map = new HashMap<>();
-       for (int i = 0; i < s.length(); i++) {
-           char c = s.charAt(i);
-           map.put(c, map.getOrDefault(c, 0) + 1);
-       }
-       for (int i = 0; i < t.length(); i++) {
-           char c = t.charAt(i);
-           if (!map.containsKey(c)) {
-               return false;
-           } else {
-               map.replace(c, map.getOrDefault(c, 0) - 1);
-               if (map.getOrDefault(c, 0) == 0) {
-                   map.remove(c);
-               }
-           }
-       }
-       return map.size() == 0;*/
-    }
-
-    public boolean isAnagram(String s, String t) {
-        if (s.length() != t.length()) {
-            return false;
-        }
-        Map<Character, Integer> map = new HashMap<>();
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            map.put(c, map.getOrDefault(c, 0) + 1);
-        }
-        for (int i = 0; i < t.length(); i++) {
-            char c = t.charAt(i);
-            if (!map.containsKey(c)) {
-                return false;
-            } else {
-                map.replace(c, map.getOrDefault(c, 0) - 1);
-                if (map.getOrDefault(c, 0) == 0) {
-                    map.remove(c);
-                }
-            }
-        }
-        return map.size() == 0;
-    }
-
     public boolean increasingTriplet(int[] nums) {
-
         int first = Integer.MAX_VALUE;
         int second = Integer.MAX_VALUE;
         int i = 0;
@@ -464,47 +308,431 @@ public class SlidingWindow {
         }
         return false;
     }
-       /* int left = 0, right = 0, k = 3;
-        right = k - 1;
 
-        for (int j = 0; j <= nums.length-k; j++) {
-            //for (int i = j; i < k - 1; i++) {
-                if (nums[j] < nums[j + 1] &&nums[j + 1] <nums[j+2] ) {
-                    return true;
-                }
-           // }
-        }
+    public int minimumRecolors(String blocks, int k) {
 
-        return false;*/
-       /* while (right < nums.length && left < right) {
-            if (nums[left] < nums[left + 1] && nums[left + 1] < nums[left + 2]) {
-
+        int count = 0;
+        int min = 0;
+        for (int i = 0; i < k; i++) {
+            if (blocks.charAt(i) == 'W') {
+                count++;
             }
         }
-        return false;*/
+        min = count;
+        for (int i = k; i < blocks.length(); i++) {
+            if (blocks.charAt(i - k) == 'W') {
+                count--;
+            }
+            if (blocks.charAt(i) == 'W') {
+                count++;
+            }
+            if (min > count) {
+                min = count;
+            }
+        }
+        return min;
+    }
 
+    public int minimumRecolors1(String blocks, int k) {
+
+        int ans = -1;
+        int len = blocks.length();
+        int i = 0, j = 0, count = 0;
+        int min = Integer.MAX_VALUE;
+        while (j < len && i <= j) {
+            char c = blocks.charAt(j);
+            if (c == 'W') {
+                count++;
+            }
+            if (j - i + 1 == k) {
+                if (min > count) {
+                    min = count;
+                }
+                if (blocks.charAt(i) == 'W') {
+                    count--;
+                }
+                i++;
+            }
+            j++;
+        }
+        ans = min;
+        return ans;
+    }
+
+    public int minimumDifference(int[] nums, int k) {
+        if (k == 1) return 0;
+        Arrays.sort(nums);
+        int minDiff = Integer.MAX_VALUE;
+        int i = 0, j = 0;
+        while (i < nums.length) {
+            if (i - j + 1 == k) {
+                int diff = nums[i] - nums[j];
+                minDiff = Math.min(minDiff, diff);
+                j++;
+            }
+            i++;
+        }
+
+        return minDiff;
+    }
+
+    public int numSubarrayProductLessThanK1(int[] nums, int k) {
+
+        if (k <= 0) return 0;
+        int len = nums.length;
+        int i = 0, j = 0;
+        int ans = 1;
+        int count = 0;
+        while (i < len && j <= i) {
+            ans = ans * nums[i];
+            while (j <= i && ans >= k) {
+                ans = ans / nums[j];
+                j++;
+
+            }
+
+            count += i - j + 1;
+            i++;
+        }
+
+        return count;
+    }
+
+    public List<Integer> findAnagrams(String s, String p) {
+        int[] arr = new int[26];
+
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < p.length(); i++) {
+            arr[p.charAt(i) - 'a']++;
+        }
+
+        int j = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (i - j + 1 == p.length()) {
+                String tmp = s.substring(j, i + 1);
+                if (isAnagram2(arr, tmp)) {
+                    list.add(j);
+                }
+                j++;
+            }
+        }
+        return list;
+    }
+
+    public int lengthOfLongestSubstring2(String s) {
+
+        int i = 0, j = 0;
+        int k = s.length();
+        Set<Character> set = new HashSet<>();
+        int ans = 0;
+        while (i < k && j <= i) {
+            char c = s.charAt(i);
+            while (set.contains(c) && j <= i) {
+                set.remove(s.charAt(j));
+                j++;
+            }
+            set.add(c);
+            ans = Math.max(ans, i - j + 1);
+            i++;
+        }
+        return ans;
+    }
+
+    public int maxSatisfied(int[] customers, int[] grumpy, int minutes) {
+
+
+        int len = customers.length;
+        int total = 0;
+        for (int i = 0; i < len; i++) {
+            if (grumpy[i] == 0) {
+                total += customers[i];
+            }
+        }
+        int sum = 0;
+        for (int i = 0; i < minutes; i++) {
+            if (grumpy[i] == 1) {
+                sum += customers[i];
+            }
+        }
+        int increase = sum;
+        for (int i = minutes; i < len; i++) {
+            if (grumpy[i - minutes] == 1) {
+                sum -= customers[i - minutes];
+            }
+            if (grumpy[i] == 1) {
+                sum += customers[i];
+            }
+            increase = Math.max(increase, sum);
+        }
+
+        return total + increase;
+    }
+
+    private boolean isDuplicate(int[] arr) {
+
+        Arrays.sort(arr);
+        for (int i = 1; i < arr.length; i++) {
+            int diff = arr[i] - arr[i - 1];
+            if (diff == 0) return true;
+        }
+        return false;
+    }
+
+    public long maximumSubarraySum(int[] nums, int k) {
+
+        int len = nums.length;
+        int curSum = 0;
+        int max = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        boolean isRepeat = false;
+        for (int i = 0; i < k; i++) {
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+            if (map.get(nums[i]) > 1) {
+                isRepeat = true;
+            }
+            curSum += nums[i];
+        }
+        if (!isRepeat) max = curSum;
+        for (int i = k; i < len; i++) {
+            isRepeat = false;
+            curSum = curSum - nums[i - k] + nums[i];
+            map.put(nums[i - k], map.getOrDefault(nums[i - k], 0) - 1);
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+            for (Integer value : map.values()) {
+                if (value > 1) {
+                    isRepeat = true;
+                    break;
+                }
+            }
+            if (!isRepeat) max = Math.max(max, curSum);
+        }
+        return max;
+    }
+
+
+    public List<String> findRepeatedDnaSequences(String s) {
+        if (s.length() < 10) {
+            return new ArrayList<>();
+        }
+        Map<String, Integer> map = new HashMap<>();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            builder.append(s.charAt(i));
+        }
+        map.put(builder.toString(), 1);
+        for (int i = 10; i < s.length(); i++) {
+            builder.deleteCharAt(0);
+            builder.append(s.charAt(i));
+            String tmp = builder.toString();
+            map.put(tmp, map.getOrDefault(tmp, 0) + 1);
+        }
+        List<String> list = map.entrySet().stream().filter(e -> e.getValue() > 1).map(e -> e.getKey()).collect(Collectors.toList());
+        return list;
+
+    }
+
+    public int bSearch(int[] arr, int x) {
+        int len = arr.length;
+        int l = 0;
+        int r = len - 1;
+        int mid = 0;
+        while (l <= r) {
+            mid = l + (r - l) / 2;
+            if (arr[mid] > x) {
+                r = mid - 1;
+            } else if (arr[mid] <= x) {
+                l = mid + 1;
+            } else {
+                return mid;
+            }
+
+        }
+        return mid;
+    }
+
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+
+        List<Integer> list = new ArrayList<>();
+        //binary search
+        int index = bSearch(arr, x);
+
+        int l = index;
+        int r = index;
+        if (index == 0) {
+
+            l = index;
+            r = index + k - 1;
+        } else {
+            l = index;
+            r = index;
+            while (l >= 0 && r < arr.length && r - l + 1 < k) {
+                l--;
+                r++;
+            }
+            while (l == 0 && r - l + 1 < k) {
+                r++;
+            }
+            while (r == arr.length - 1 && r - l + 1 < k) {
+                l--;
+            }
+        }
+
+        for (int i = l; i <= r; i++) {
+            list.add(arr[i]);
+        }
+
+        return list;
+    }
+
+    public int characterReplacement(String s, int k) {
+        char[] chars = s.toCharArray();
+        int slow = 0;
+        int fast = 0;
+        int res = 0;
+        int[] frequence = new int[26];
+        int max = 0;
+        while (fast < chars.length) {
+            frequence[chars[fast] - 'A']++;
+            max = Math.max(max, frequence[chars[fast] - 'A']);
+            fast++;
+            while (fast - slow > max + k) {
+                frequence[chars[slow] - 'A']--;
+                slow++;
+            }
+            res = Math.max(res, fast - slow);
+        }
+        return res;
+    }
+
+    public int longestOnes1(int[] nums, int k) {
+        int l = 0, r = 0, count = 0;
+        int len = nums.length;
+        int res = 0;
+        while (r < len) {
+            if (nums[r] == 0) {
+                count++;
+            }
+            if (count > k) {
+                if (nums[l] == 0) {
+                    count--;
+                }
+                l++;
+            }
+            r++;
+            res = Math.max(res, r - l);
+        }
+        return res;
+    }
+
+    public int longestOnes(int[] nums, int k) {
+        int l = 0, r = 0, count = 0;
+        int len = nums.length;
+        int res = 0;
+        while (r < len) {
+            if (nums[r] == 1) {
+                count++;
+            }
+            r++;
+            while (r - l > count + k) {
+                if (nums[l] == 1) {
+                    count--;
+                }
+                l++;
+            }
+            res = Math.max(res, r - l);
+        }
+        return res;
+    }
+
+
+    public int longestSubarray(int[] nums) {
+
+        int l = 0, r = 0, count = 0;
+        int len = nums.length;
+        int res = 0;
+
+        while (r < len) {
+            if (nums[r] == 0) {
+                count++;
+            }
+            r++;
+            while (count > 1) {
+                if (nums[l] == 0) {
+                    count--;
+                }
+                l++;
+            }
+            res = Math.max(res, r - l);
+        }
+        return res - 1;
+    }
+
+    public int lengthOfLongestSubstring4(String s) {
+        int l = 0, r = 0, len = s.length();
+        Set<Character> set = new HashSet<>();
+        int res = 0;
+        while (r < len) {
+            while (set.contains(s.charAt(r))) {
+                set.remove(s.charAt(l));
+                l++;
+            }
+            set.add(s.charAt(r));
+            r++;
+            res = Math.max(res, r - l);
+        }
+
+        return res;
+    }
+
+    public int equalSubstring(String s, String t, int maxCost) {
+        int res = 0;
+        int l = 0, r = 0, len = s.length();
+        int diff = 0;
+        while (r < len) {
+            char c1 = s.charAt(r);
+            char c2 = t.charAt(r);
+            diff += Math.abs(c2 - c1);
+            while (diff > maxCost) {
+                diff -=Math.abs(t.charAt(l) - s.charAt(l));
+                l++;
+            }
+            r++;
+            res = Math.max(res, r - l);
+        }
+
+
+        return res;
+    }
 
 
     public static void main(String[] args) {
         SlidingWindow instance = new SlidingWindow();
+        String s="krrgw";
+        String t="zjxss";
+        System.out.println(instance.equalSubstring(s, t, 19));
+        //System.out.println(instance.lengthOfLongestSubstring4("pwwkew"));
+        //int[] nums = {0, 1, 1, 1, 0, 1, 1, 0, 1};
+        //System.out.println(instance.longestSubarray(nums));
+        //int[] nums = {1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0};
+        //System.out.println(instance.longestOnes(nums, 2));
+        //int[] arr = {1, 2, 3, 4, 5};
+        //int x = 3;
+//        System.out.println(instance.characterReplacement("AABCABBB", 2));
+        //System.out.println(instance.bSearch(arr, 0));
+        //System.out.println(instance.findClosestElements(arr, 4, 3));
+        //System.out.println(instance.findRepeatedDnaSequences("AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"));
+        //int[] nums = {5, 3, 3, 1, 1};
+        //int[] nums = {9, 9, 9, 1, 2, 3};
+        //int k = 3;
+        //System.out.println(instance.maximumSubarraySum(nums, k));
+
+        //System.out.println(instance.checkInclusion("ab", "eidbaooo"));
+        //System.out.println(instance.minimumRecolors("WBWBBBW", 2));
         //int[] arr = {1, 2, 3};
         //int k = 0;
-        // System.out.println(instance.findMaxAverage(arr, k));
-        // System.out.println(instance.divisorSubstrings(240, 2));
-        //System.out.println(instance.isNiceSubStr("aAa"));
+        // int[] nums = {10, 5, 2, 6};
+        //int k = 100;
+        //System.out.println(instance.numSubarrayProductLessThanK1(nums, k));
 
-        // System.out.println(instance.longestNiceSubstring("c"));
-        //System.out.println(instance.numSubarrayProductLessThanK(arr, k));
-        //int[] nums = {2,3,1,2,4,3};
-        //int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
-        int[] nums = {1, 1, 1, 1, 1};
-        //System.out.println(instance.minSubArrayLen(11, nums));
-
-        //instance.maxSlidingWindow(nums, 1);
-        //System.out.println(instance.checkInclusion("ab", "eidboaoo"));
-        System.out.println(instance.increasingTriplet(nums));
-        //String s="dvdf";
-        //String s = "bbba";
-        //System.out.println(instance.lengthOfLongestSubstring(s));
     }
 }

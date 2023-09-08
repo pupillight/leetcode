@@ -77,9 +77,11 @@ public class CompletableDemo1 {
 
         CompletableFuture<String> f1 = CompletableFuture.supplyAsync(() -> "hello");
         CompletableFuture<String> f2 = CompletableFuture.supplyAsync(() -> "beautiful");
-        CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "world");
+        CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "world")
+                .thenCombine(CompletableFuture.supplyAsync(()->"!"),(r1,r2)->r1+r2);
 
-       CompletableFuture future= CompletableFuture.allOf(f1, f2, f3);
+        System.out.println(f3.join());
+        CompletableFuture future= CompletableFuture.allOf(f1, f2, f3);
         System.out.println(future.get());
 
         //List<String> list =

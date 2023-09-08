@@ -1,7 +1,9 @@
 package org.yj.leetcode;
 
 import javax.swing.table.TableRowSorter;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Leetcode1315 {
 
@@ -65,7 +67,7 @@ public class Leetcode1315 {
 
         if (root == null) {
             return 0;
-        }
+        }findMode
         int left = maxDepth(root.left);
         int right = maxDepth(root.right);
         return Integer.max(left, right) + 1;
@@ -90,4 +92,81 @@ public class Leetcode1315 {
         maxDepth(node.left, index + 1);
         maxDepth(node.right, index + 1);
     }*/
+
+    public boolean findWhetherExistsPath(int n, int[][] graph, int start, int target) {
+        boolean[] visited = new boolean[n];
+        List<Integer>[] adj = new List[n];
+        for (int i = 0; i < n; i++) {
+            adj[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < graph.length; i++) {
+            int a = graph[i][0];
+            int b = graph[i][1];
+            adj[a].add(b);
+        }
+        dfs(visited, adj, start);
+        return visited[target];
+    }
+
+    private void dfs(boolean[] visited, List<Integer>[] adj, int start) {
+        visited[start] = true;
+        for (Integer v : adj[start]) {
+            if (!visited[v]) {
+                dfs(visited, adj, v);
+            }
+        }
+    }
+
+
+
+
+
+  /*  public boolean findWhetherExistsPath(int n, int[][] graph, int start, int target) {
+        UF uf = new UF(n);
+        for (int i = 0; i < graph.length; i++) {
+            int p = graph[i][0];
+            int q = graph[i][1];
+           uf.union(p,q);
+        }
+
+        return uf.isConnected(start,target);
+    }*/
+
 }
+
+/*class UF {
+    int n = 0;
+    int[] parent;
+
+    public UF(int n) {
+        this.n = n;
+        parent = new int[n];
+        for (int i = 0; i < parent.length; i++) {
+            parent[i] = i;
+        }
+    }
+
+
+    public int find(int p) {
+        while (p != parent[p])
+        {
+            p = parent[p];
+        }
+        return p;
+    }
+
+    public boolean isConnected(int p,int q)
+    {
+        return find(p)==find(q);
+    }
+
+    public void union(int p, int q)
+    {
+        int pRoot=find(p);
+        int qRoot=find(q);
+        if(pRoot==qRoot) return;
+
+        parent[pRoot] =q;
+
+    }
+}*/
