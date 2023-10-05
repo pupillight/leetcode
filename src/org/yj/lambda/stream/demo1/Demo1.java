@@ -3,6 +3,7 @@ package org.yj.lambda.stream.demo1;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -20,9 +21,16 @@ class Printer {
 
 public class Demo1 {
 
+    public static <T> Predicate<T> distinctByKey(Function<? super T, String> keyExtractor) {
+        Map<Object, Boolean> map = new HashMap();
+        return t -> {
+            System.out.println(t);
+            boolean res = map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+            return res;
+        };
+    }
 
     public static void main(String[] args) {
-
  /*       print(new Printable() {
             @Override
             public void print(String s) {
@@ -40,11 +48,24 @@ public class Demo1 {
                 new Employee("George", "george@gmail.com", 32),
                 new Employee("John", "john123@gmail.com", 45),
                 new Employee("Liam", "liam123@gmail.com", 45),
-                new Employee("Noah", "noah@outlook.com", 30),
+                new Employee("Oliver", "noah@outlook.com", 30),
                 new Employee("Oliver", "oliver@yahoo.com", 30)
         };
 
 
+        // Arrays.stream(employees).distinct().forEach(System.out::println);
+        Map<String, Boolean> map = new HashMap();
+   /*     List<Employee> distinctPeople = Arrays.stream(employees).filter(employee -> {
+            Object t = map.putIfAbsent(employee.getName(), Boolean.TRUE);
+            System.out.println(t);
+            boolean res = t == null ? true : false;
+
+            return res;
+        }).collect(Collectors.toList());*/
+
+        List<Employee> distinctPeople = Arrays.stream(employees).filter(distinctByKey(Employee::getName)).collect(Collectors.toList());
+        //System.out.println(map);
+        System.out.println(distinctPeople.size());
         // Arrays.stream(employees).sorted(Comparator.comparing(Employee::getAge).thenComparing(Employee::getName)).forEach(System.out::println);
         // Optional<Employee> res =Arrays.stream(employees).max(Comparator.comparing(Employee::getAge));
         // System.out.println(res.orElse(null));
@@ -69,12 +90,14 @@ public class Demo1 {
 
         list.forEach(System.out::println);*/
 
+/*
         int res = Stream.of(1, 2, 3, 4, 5).reduce(0, (a, b) -> {
             System.out.println(a);
             System.out.println(b);
             System.out.println("--------");
             return b;
         });
+*/
 
       /* Optional<Integer> res =Stream.of(1, 2, 3, 4, 5).reduce(0,(a,b)->a+b).reduce((a,b)->{
            System.out.println(a);
@@ -82,15 +105,15 @@ public class Demo1 {
            System.out.println("--------");
            return  b;
         });*/
-        System.out.println(res);
+        //  System.out.println(res);
 
-        ArrayList<Integer> numbersList
-                = new ArrayList<>(Arrays.asList(1, 1, 2, 3, 3, 3, 4, 5, 6, 6, 6, 7, 8));
-        Map<Integer, Long> elementCountMap = Arrays.asList(1, 1, 2, 3, 3, 3, 4, 5, 6, 6, 6, 7, 8).stream().collect(Collectors.toMap(Function.identity(),v->1l, Long::sum));
+        /*   ArrayList<Integer> numbersList*/
+        /*           = new ArrayList<>(Arrays.asList(1, 1, 2, 3, 3, 3, 4, 5, 6, 6, 6, 7, 8));*/
+     /*   Map<Integer, Long> elementCountMap = Arrays.asList(1, 1, 2, 3, 3, 3, 4, 5, 6, 6, 6, 7, 8).stream().collect(Collectors.toMap(Function.identity(), v-> 1l, Long::sum));
        /* Map<Integer, Long> elementCountMap = numbersList.stream()
                 .collect(Collectors.toMap(Function.identity(), v -> 1l, Long::sum));*/
 
-        System.out.println(elementCountMap);
+        //  System.out.println(elementCountMap);
     }
 
     public static void print(String s, Printable printable) {

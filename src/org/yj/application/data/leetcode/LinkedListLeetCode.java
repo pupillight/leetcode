@@ -3,6 +3,7 @@ package org.yj.application.data.leetcode;
 
 import org.yj.application.data.structure.linked.LinkList;
 import org.yj.application.data.structure.linked.LinkNode;
+import org.yj.leetcode.amazon.ListNode;
 
 import javax.annotation.processing.SupportedSourceVersion;
 
@@ -35,7 +36,6 @@ public class LinkedListLeetCode {
 
         return res;
     }
-
 
 
     public void mergeSortedLinkedList(LinkList l1, LinkList l2) {
@@ -169,6 +169,16 @@ public class LinkedListLeetCode {
     }
 
 
+    public ListNode reverseList(ListNode root) {
+        if (root == null || root.next == null) {
+            return root;
+        }
+        ListNode reversedNode = reverseList(root.next);
+        root.next.next = root;
+        root.next = null;
+        return reversedNode;
+    }
+
     public static void main(String[] args) {
         LinkedListLeetCode leetCode = new LinkedListLeetCode();
 /*        LinkList l1 = new LinkList();
@@ -201,19 +211,19 @@ public class LinkedListLeetCode {
 
         LinkNode node = leetCode.sumNodes(l1.head, l2.head);*/
 
-        LinkList l1 = new LinkList();
-        l1.add(9);
-        l1.add(8);
-        l1.add(7);
+  /*      LinkList l1 = new LinkList();
+        l1.add(1);
+        l1.add(2);
+        l1.add(3);*/
 
-        LinkNode node1=new LinkNode(1);
-        LinkNode node2=new LinkNode(1);
+        //LinkNode node1=new LinkNode(1);
+        // LinkNode node2=new LinkNode(1);
 
-        node1.next = node2;
-        node2.next =node1;
+        //node1.next = node2;
+        //node2.next =node1;
 
         //LinkNode node3=new LinkNode(1);
-       // LinkNode node4=new LinkNode(1);
+        // LinkNode node4=new LinkNode(1);
 
 //        LinkNode node = leetCode.reverse1(l1.head);
 //
@@ -222,7 +232,10 @@ public class LinkedListLeetCode {
 //            node = node.next;
 //        }
 
-        System.out.println(leetCode.isCircleLinkedList(node1));
+        //System.out.println(leetCode.isCircleLinkedList(node1));
+
+
+
     }
 }
 
