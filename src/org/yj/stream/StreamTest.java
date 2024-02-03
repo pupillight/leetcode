@@ -127,9 +127,7 @@ public class StreamTest {
 */
 
 
-        List<Integer> nums = Arrays.asList(1, 3, 4, 5);
-        Map<Boolean, List<Integer>> map = nums.stream().collect(Collectors.partitioningBy(num -> num % 2 == 0));
-        System.out.println(map);
+
         //nums.stream().peek(e -> System.out.println(e)).map(e -> e * 2).forEach(System.out::println);
 
 /*

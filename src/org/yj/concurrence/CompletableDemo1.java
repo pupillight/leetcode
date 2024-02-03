@@ -80,9 +80,9 @@ public class CompletableDemo1 {
         CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "world")
                 .thenCombine(CompletableFuture.supplyAsync(()->"!"),(r1,r2)->r1+r2);
 
-        System.out.println(f3.join());
-        CompletableFuture future= CompletableFuture.allOf(f1, f2, f3);
-        System.out.println(future.get());
+        //System.out.println(f3.join());
+        CompletableFuture future= CompletableFuture.allOf(f1, f2);
+        System.out.println(future.join());
 
         //List<String> list =
         //System.out.println(Stream.of(f1, f2, f3).map(future -> future.join()).collect(Collectors.joining(" ")));

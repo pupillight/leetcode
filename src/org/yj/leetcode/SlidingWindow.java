@@ -309,6 +309,29 @@ public class SlidingWindow {
         return false;
     }
 
+    public int minimumRecolors2(String blocks, int k) {
+
+        int l = 0, r = 0;
+        int len = blocks.length();
+        int res = Integer.MAX_VALUE;
+        //Map<Character, Integer> map = new HashMap<>();
+        int count = 0;
+        for (r = 0; r < len; r++) {
+            char c = blocks.charAt(r);
+            if (c == 'W') {
+                count++;
+            }
+            if (r - l + 1 == k) {
+                res = Math.min(res, count);
+                System.out.println(blocks.charAt(l));
+                if (blocks.charAt(l) == 'W') count--;
+                l++;
+            }
+        }
+
+        return res;
+    }
+
     public int minimumRecolors(String blocks, int k) {
 
         int count = 0;
@@ -693,7 +716,7 @@ public class SlidingWindow {
             char c2 = t.charAt(r);
             diff += Math.abs(c2 - c1);
             while (diff > maxCost) {
-                diff -=Math.abs(t.charAt(l) - s.charAt(l));
+                diff -= Math.abs(t.charAt(l) - s.charAt(l));
                 l++;
             }
             r++;
@@ -705,11 +728,237 @@ public class SlidingWindow {
     }
 
 
+    public int binaryGap(int n) {
+
+        String str = Integer.toBinaryString(n);
+        int j = 0;
+        int max = -1;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '1') {
+                max = Math.max(max, i - j);
+                j = i;
+            }
+        }
+        return max;
+    }
+
+    public int maximumGap(int[] nums) {
+        if (nums.length < 2) {
+            return 0;
+        }
+        Arrays.sort(nums);
+        int[] diff = new int[nums.length];
+        diff[0] = nums[0];
+        int res = -1;
+        for (int i = 1; i < nums.length; i++) {
+            diff[i] = nums[i] - nums[i - 1];
+            if (i == 1) {
+                res = diff[i];
+                continue;
+            }
+            if (diff[i] > res) {
+                res = diff[i];
+            }
+        }
+        return res;
+    }
+
+    public int longestAlternatingSubarray(int[] nums, int threshold) {
+
+        int res = 0;
+        int l = 0;
+        int r = 0;
+        while (l <= r && r < nums.length - 1) {
+            if (nums[r] % 2 == 0 && nums[r + 1] % 2 == 1 && nums[r] <= threshold && nums[r + 1] <= threshold) {
+                res = Math.max(res, r + 1 - l);
+                r += 2;
+            } else if (nums[r] % 2 == 0 && nums[r + 1] % 2 == 1 && nums[r] <= threshold && nums[r + 1] > threshold) {
+                r++;
+                l = r;
+                continue;
+            }
+            //r += 2;
+        }
+        if (r == nums.length - 1 && nums[r] % 2 == 0 && nums[r] <= 5) {
+            res = Math.max(res, r - l);
+        }
+        return res + 1;
+    }
+
+
+    public int maximumStrongPairXor(int[] nums) {
+
+        int k = 2;
+        int j = 0;
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i - j + 1 == k) {
+                int diff = Math.abs(nums[i] - nums[j]);
+                if (diff <= Math.min(nums[i], nums[j])) {
+                    int oxr = nums[i] ^ nums[j];
+                    System.out.println(oxr);
+                    res = Math.max(res, nums[i] ^ nums[j]);
+                }
+                j++;
+            }
+        }
+        return res;
+    }
+
+    public int minSubArrayLen1(int target, int[] nums) {
+        int res = Integer.MAX_VALUE;
+        int j = 0;
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            while (sum >= target) {
+                System.out.println(i - j + 1);
+                res = Math.min(res, i - j + 1);
+                sum = sum - nums[j];
+                j++;
+            }
+        }
+
+
+        return res == Integer.MAX_VALUE ? 0 : res;
+    }
+
+    public int maxSumTwoNoOverlap(int[] nums, int firstLen, int secondLen) {
+
+        int l1 = 0, l2 = 0;
+        int len = nums.length;
+        int r1 = len - 1, r2 = len - 1;
+        int lSum = 0;
+        int rSum = 0;
+        int sum = 0;
+
+        for (int i = 0; i < firstLen; i++) {
+            lSum += nums[i];
+            l1++;
+        }
+        for (int i = len - 1; i >= len - secondLen; i--) {
+            rSum += nums[i];
+            r1--;
+        }
+
+        while (l1 < len || r1 >= 0) {
+
+            sum = Math.max(sum, lSum + rSum);
+            if (l1 < len) {
+                lSum += nums[l1];
+                lSum -= nums[l2];
+                l1++;
+                l2++;
+            }
+
+            if (r1 >= 0) {
+                rSum += nums[r1];
+                rSum -= nums[r2];
+
+                r1--;
+                r2--;
+            }
+
+
+        }
+
+
+        return sum;
+    }
+
+    public int maxAscendingSum(int[] nums) {
+
+        if (nums.length == 1) return nums[0];
+        int i = 0;
+        int j = 1;
+        int len = nums.length;
+        int max = nums[0];
+        int sum = nums[0];
+        while (i < j && j < len) {
+            if (nums[i] < nums[j]) {
+                sum += nums[j];
+                i++;
+            } else {
+                i = j;
+                sum = nums[i];
+            }
+            max = Math.max(max, sum);
+            j++;
+        }
+
+
+        return max;
+    }
+
+    public int maxAscendingSumDfs(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+
+        int res = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + nums[i]);
+                }
+
+                res = Math.max(res, dp[i]);
+            }
+
+
+        }
+        return res;
+    }
+
+    public int maxAscendingSumDfs1(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+
+        int res = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > nums[i - 1]) {
+                dp[i] = dp[i - 1] + nums[i];
+            } else {
+                dp[i] = nums[i];
+            }
+
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+
+
     public static void main(String[] args) {
         SlidingWindow instance = new SlidingWindow();
-        String s="krrgw";
-        String t="zjxss";
-        System.out.println(instance.equalSubstring(s, t, 19));
+
+        int[] nums = {1, 7, 3, 5, 9, 4, 8};
+        //System.out.println(instance.maxAscendingSum(nums));
+        System.out.println(instance.maxAscendingSumDfs(nums));
+
+        /*String s = "krrgw";
+        String t = "zjxss";
+        System.out.println(instance.equalSubstring(s, t, 19));*/
+
+        //System.out.println(instance.binaryGap(2));
+       /* int[] nums = {10};
+        System.out.println(instance.maximumGap(nums));*/
+
+
+      /*  int[] nums = {2, 3, 4, 5};
+        int threshold = 4;
+
+        System.out.println(instance.longestAlternatingSubarray(nums, threshold));
+*/
+        // int[] nums = {1, 2, 3, 4, 5};
+        //System.out.println(instance.maximumStrongPairXor(nums));
+
+
+        /*int[] nums = {2, 3, 1, 2, 4, 3};
+        System.out.println(instance.minSubArrayLen1(7, nums));
+        */
+        /*int[] nums = {0, 6, 5, 2, 2, 5, 1, 9, 4};
+        int firstLen = 1, secondLen = 2;
+        System.out.println(instance.maxSumTwoNoOverlap(nums, firstLen, secondLen));*/
+        //System.out.println(instance.minimumRecolors2("BB", 1));
         //System.out.println(instance.lengthOfLongestSubstring4("pwwkew"));
         //int[] nums = {0, 1, 1, 1, 0, 1, 1, 0, 1};
         //System.out.println(instance.longestSubarray(nums));

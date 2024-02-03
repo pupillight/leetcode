@@ -1,5 +1,10 @@
 package org.yj.leetcode;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class TreeQuestions {
 
     public int maxDepth1(TreeNode root) {
@@ -168,6 +173,59 @@ public class TreeQuestions {
         return -1;
     }
 
+
+
+    List<Integer> list = new ArrayList<>();
+    private void treeDfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        treeDfs(root.left);
+        int curValue = root.val;
+        list.add(curValue);
+        treeDfs(root.right);
+    }
+
+    public boolean findTarget(TreeNode root, int k) {
+        treeDfs(root);
+        return exisits(list, k);
+    }
+
+    private boolean exisits(List<Integer> list, int k) {
+        int i = 0;
+        int j = list.size() - 1;
+
+        while (i != j) {
+            if (list.get(i) + list.get(j) == k) {
+                return true;
+            } else if (list.get(i) + list.get(j) < k) {
+                i++;
+            } else {
+                j--;
+            }
+        }
+        return false;
+    }
+
+    /*Set<Integer> set = new HashSet<>();
+
+    private boolean treeDfs(TreeNode node, int k) {
+        if (node == null) {
+            return false;
+        }
+
+        boolean leftValue = treeDfs(node.left, k);
+        boolean rightValue = treeDfs(node.right, k);
+
+        int value = node.val;
+        if (set.contains(k - value)) {
+            return true;
+        }
+        set.add(value);
+        return leftValue || rightValue;
+
+    }*/
+
     public static void main(String[] args) {
         TreeQuestions instance = new TreeQuestions();
         TreeNode root = new TreeNode(1);
@@ -179,7 +237,7 @@ public class TreeQuestions {
         //int[] preorder = {3, 9, 20, 15, 7};
         //int[] inorder = {9, 3, 15, 20, 7};
         int[] preorder = {1, 2, 3};
-        int[] inorder = {3,2,1};
+        int[] inorder = {3, 2, 1};
         TreeNode node = instance.buildTree(preorder, inorder);
         System.out.println(node);
 

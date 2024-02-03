@@ -136,14 +136,26 @@ public class LeetCode1971 {
         }
     }*/
 
+    public int fib(int n) {
+        int[] dp=new int[n+1];
+        if (n==0) return 0;
+        dp[0]=0;
+        dp[1]=1;
+
+        for (int i = 2; i <=n ; i++) {
+            dp[i] = dp[i-1]+dp[i-2];
+        }
+        return dp[n];
+    }
 
     public static void main(String[] args) {
         LeetCode1971 instance = new LeetCode1971();
+        System.out.println(instance.fib(5));
        /* int[][] edges= {{0,1},{0,2},{3,5},{5,4},{4,3}};
         System.out.println(instance.validPath(6, edges, 0, 5));*/
         /*int[][] edges = {{0, 1}, {1, 2}, {2, 0}};
         System.out.println(instance.validPath(3, edges, 0, 2));*/
         int[][] edges = {{1, 2}, {2, 3}, {4, 2}};
-        System.out.println(instance.findCenter1(edges));
+        //System.out.println(instance.findCenter1(edges));
     }
 }

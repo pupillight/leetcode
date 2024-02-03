@@ -180,33 +180,45 @@ public class Leetcode200 {
 //        }
 //    }
 
-//    public int numIslands(char[][] grid) {
-//        int m = grid.length;
-//        int n = grid[0].length;
-//        int ans = 0;
-//        for (int i = 0; i < m; i++) {
-//            for (int j = 0; j < n; j++) {
-//                if (grid[i][j] == '1') {
-//                    dfs(grid, i, j);
-//                    ans++;
-//                }
-//            }
-//        }
-//        return ans;
-//    }
-//
-//    private void dfs(char[][] grid, int i, int j) {
-//        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] == '0') {
-//            return;
-//        }
-//        grid[i][j] = '0';
-//        dfs(grid, i - 1, j);
-//        dfs(grid, i + 1, j);
-//        dfs(grid, i, j - 1);
-//        dfs(grid, i, j + 1);
-//    }
-
     public int numIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int ans = 0;
+        boolean[][] visited = new boolean[m][n];
+        //dfs(grid, 0, 0, visited);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if ( grid[i][j] == '1') {
+                    dfs(grid, i, j);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+
+    private void dfs(char[][] grid, int i, int j) {
+    /*    if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] == '0' || visited[i][j]) {
+            return;
+        }*/
+        grid[i][j] = '0';
+        //visited[i][j] = true;
+        int[] dx = {0, 1, 0, -1};
+        int[] dy = {1, 0, -1, 0};
+
+        int res = 1;
+        for (int k = 0; k < 4; k++) {
+            int x = i + dx[k];
+            int y = j + dy[k];
+            if (x >= 0 && x < grid.length && y >= 0 && y < grid[0].length && grid[x][y] == '1') {
+                //visited[x][y] = true;
+                dfs(grid, x, y);
+                // visited[x][y] = false;
+            }
+        }
+    }
+
+    /*public int numIslands(char[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
         int ans = 0;
@@ -245,7 +257,7 @@ public class Leetcode200 {
             }
         }
         return ans;
-    }
+    }*/
 
 
     public static void main(String[] args) {
