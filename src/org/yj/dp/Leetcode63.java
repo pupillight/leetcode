@@ -25,5 +25,6 @@ public class Leetcode63 {
     }
     public static void main(String[] args) {
 
+        Leetcode63 instance = new Leetcode63() ;
     }
 }
