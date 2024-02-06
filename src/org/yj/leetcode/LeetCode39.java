@@ -1,8 +1,6 @@
 package org.yj.leetcode;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class LeetCode39 {
 
@@ -57,7 +55,7 @@ public class LeetCode39 {
         if (n < 0) {
             return null;
         }
-        int max=calculatePow(10,n);
+        int max = calculatePow(10, n);
         //int max = (int) Math.pow(10, n);
 
         for (int i = 1; i < max; i++) {
@@ -66,15 +64,57 @@ public class LeetCode39 {
         return null;
     }
 
+    public int[] distinctDifferenceArray(int[] nums) {
+
+        int[] res = new int[nums.length];
+
+        int len = nums.length;
+        Set<Integer> set = new HashSet<>();
+        int[] arr= new int[len+1];
+        for (int i = len - 1; i > 0; i--) {
+            set.add(nums[i]);
+
+            arr[i]=set.size();
+        }
+
+        set.clear();
+        for (int i = 0; i < len; i++) {
+            set.add(nums[i]);
+            res[i] = set.size()-arr[i+1];
+        }
+
+        return res;
+    }
+
+    public int[] distinctDifferenceArray1(int[] nums) {
+
+        int[] res = new int[nums.length];
+        Set<Integer> set1 = new HashSet<>();
+        Map<Integer, Integer> map = new HashMap<>();
+
+        Set<Integer> set2 = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            set1.add(nums[i]);
+            for (int j = i + 1; j < nums.length; j++) {
+                set2.add(nums[j]);
+            }
+            res[i] = set1.size() - set2.size();
+            set2.clear();
+        }
+        return res;
+    }
 
     public static void main(String[] args) {
         LeetCode39 leetCode = new LeetCode39();
 //        int[] array = {2, 3, 5};
 //        leetCode.combinationSum(array, 8);
 
-        System.out.println();
 
         //System.out.println(leetCode.calculatePow(10,3));
-        leetCode.printNumbers(3);
+        // leetCode.printNumbers(3);
+        //int[] nums = {1, 2, 3, 4, 5};
+        int[] nums = {3, 2, 3, 4, 2};
+        Arrays.stream(leetCode.distinctDifferenceArray(nums)).forEach(System.out::println);
+
     }
 }

@@ -24,7 +24,6 @@ public class Leetcode63 {
         return res;
     }
     public static void main(String[] args) {
-        //this is a line from master and dev
-        Software Developer, Clearing
+
     }
 }
