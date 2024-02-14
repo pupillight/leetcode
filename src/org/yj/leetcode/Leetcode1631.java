@@ -179,21 +179,7 @@ public class Leetcode1631 {
         }
         return -1;
     }
-    public int minEatingSpeed(int[] piles, int h) {
-        Arrays.sort(piles);
-        int l = 1;
-        int r = piles[piles.length - 1];
-        while (l <= r) {
-            int mid = l + (r - l) / 2;
-            if (takeHours(piles, mid, h) <= h) {
 
-                r = mid - 1;
-            } else {
-                l = mid + 1;
-            }
-        }
-        return l;
-    }
 
     private int takeHours(int[] piles, int speed, int h) {
         if (speed == 0) {

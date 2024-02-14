@@ -9,7 +9,7 @@ import java.util.Set;
 public class LeetCode236 {
 
 
-    Map<Integer, TreeNode> parent = new HashMap<Integer, TreeNode>();
+/*    Map<Integer, TreeNode> parent = new HashMap<Integer, TreeNode>();
     Set<Integer> visited = new HashSet<Integer>();
 
     public void dfs(TreeNode root) {
@@ -21,7 +21,7 @@ public class LeetCode236 {
             parent.put(root.right.val, root);
             dfs(root.right);
         }
-    }
+    }*/
 /*
     public void dfs(TreeNode root) {
         if (root == null) {
@@ -52,7 +52,7 @@ public class LeetCode236 {
 }*/
 
 
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+   /* public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null) {
             return null;
         }
@@ -67,24 +67,110 @@ public class LeetCode236 {
             return right;
         } else if (left != null && right == null) {
             return left;
-        }else{
+        } else {
             return null;
+        }
+    }*/
+
+
+    public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return root;
+        }
+        if (root.val == p.val || root.val == q.val) {
+            return root;
+        }
+
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if (left != null && right != null) {
+            return root;
+        } else if (left == null && right != null) {
+            return right;
+        } else if (left != null && right == null) {
+            return left;
+        } else {
+            return null;
+        }
+
+    }
+
+    Map<Integer, TreeNode> map = new HashMap<>();
+    Set<Integer> set = new HashSet<>();
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+        dfs(root);
+        while (p != null) {
+            set.add(p.val);
+            p = map.get(p.val);
+        }
+        while (q != null) {
+            if (set.contains(q.val)) {
+                return q;
+            } else {
+                q = map.get(q.val);
+            }
+        }
+
+        return null;
+    }
+
+    private void dfs(TreeNode node) {
+        if (node != null && node.left != null) {
+            map.put(node.left.val, node);
+            dfs(node.left);
+        }
+        if (node != null && node.right != null) {
+            map.put(node.right.val, node);
+            dfs(node.right);
         }
     }
 
 
+    public int countNodes(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        TreeNode left = root.left;
+        int lDepth = 0;
+        while (left != null) {
+            lDepth++;
+            left = left.left;
+        }
+
+        TreeNode right = root.right;
+        int rDepth = 0;
+        while (right != null) {
+            rDepth++;
+            right = right.right;
+        }
+
+        if (lDepth == rDepth) {
+            return (2 << lDepth) - 1;
+        }
+        int l = countNodes(root.left);
+        int r = countNodes(root.right);
+        int res = l + r + 1;
+        return res;
+    }
+
     public static void main(String[] args) {
         TreeNode r1 = new TreeNode(6);
         r1.left = new TreeNode(2);
-       /* r1.left.left = new TreeNode(0);
+        r1.left.left = new TreeNode(0);
         r1.left.right = new TreeNode(4);
 
-        r1.right = new TreeNode(8);*/
-        // r1.right.left = new TreeNode(7);
-        // r1.right.right = new TreeNode(9);
+        r1.right = new TreeNode(8);
+        r1.right.left = new TreeNode(7);
+        //r1.right.right = new TreeNode(9);
 
         LeetCode236 question = new LeetCode236();
-        System.out.println(question.lowestCommonAncestor(r1, new TreeNode(6), new TreeNode(2)).val);
+        //System.out.println(question.lowestCommonAncestor(r1, new TreeNode(7), new TreeNode(8)).val);
+
+        System.out.println(question.countNodes(r1));
 
     }
 }

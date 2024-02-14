@@ -1,5 +1,8 @@
 package org.yj.dp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Leetcode63 {
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
 
@@ -23,7 +26,40 @@ public class Leetcode63 {
         int res = dp[n - 1][m - 1];
         return res;
     }
+
+
+    public boolean validPalindrome(String s) {
+
+        int i = 0;
+        int j = s.length() - 1;
+
+        while (i < j) {
+            if (s.charAt(i) == s.charAt(j)) {
+            } else {
+                return isPalindrome(s, i + 1, j) || isPalindrome(s, i, j - 1);
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    private boolean isPalindrome(String s, int start, int end) {
+        int i = start;
+        int j = end;
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
-            
+        Leetcode63 instance = new Leetcode63();
+        String s = "deeee";
+        System.out.println(instance.validPalindrome(s));
     }
 }
