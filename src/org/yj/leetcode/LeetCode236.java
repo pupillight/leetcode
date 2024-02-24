@@ -139,7 +139,6 @@ public class LeetCode236 {
         if (node.right != null) map.put(node.right.val, node);
     }
 
-
    /* public int countNodes1(TreeNode root) {
         if (root == null) {
             return 0;
@@ -232,8 +231,6 @@ public class LeetCode236 {
             return Math.min(left, right) + 1;
         }
     }
-
-    ////
 
 
     public List<String> binaryTreePaths(TreeNode root) {
@@ -702,7 +699,9 @@ public class LeetCode236 {
 
         //r1.left.left = new TreeNode(0);
         r1.left.right = new TreeNode(4);
-
+        r1.left.left = new TreeNode(0);
+        r1.left.left.left = new TreeNode(4);
+        //r1.left.right = new TreeNode(4);
 
         //r1.right = new TreeNode(8);
         //r1.right.left = new TreeNode(7);
@@ -711,6 +710,25 @@ public class LeetCode236 {
         LeetCode236 question = new LeetCode236();
 
 
+
+        System.out.println(question.isIsomorphic("badc", "baba"));
+       /* int[] nums = {2, 2};
+        //int[] nums = {1, 2, 3, 1};
+        int k = 2;
+        System.out.println(question.containsNearbyDuplicate(nums, k));*/
+
+        // System.out.println(question.maximumOddBinaryNumber("0101"));
+        // int[] nums = {1, 2, 1, 10};
+        //System.out.println(question.largestPerimeter(nums));
+        // System.out.println(question.diStringMatch("IDID"));
+       /* int[] g = {1, 2, 3};
+        int[] s = {1, 1};
+        System.out.println(question.findContentChildren1(g, s));*/
+       /* int[] bills = {5, 5, 10, 10, 20};
+        System.out.println(question.lemonadeChange(bills));*/
+        //int[] nums = {1, 4, 3, 2};
+        //System.out.println(question.arrayPairSum(nums));
+        //System.out.println(question.maximum69Number(9669));
     }
 }
 
