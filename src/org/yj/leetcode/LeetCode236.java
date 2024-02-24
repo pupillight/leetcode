@@ -230,6 +230,7 @@ public class LeetCode236 {
     }
 >>>>>>> 5c4b557 (git rebase main)
 
+    ////
 
     public List<String> binaryTreePaths(TreeNode root) {
         List<String> paths = new ArrayList<>();
