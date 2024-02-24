@@ -29,12 +29,12 @@ public class StreamTest {
     public void execute() {
         init();
         //employees1.stream().filter(e -> e.getAge()<=20).forEach(e->System.out.println(e));
-       // employees1.stream().filter(e -> e.getAge() > 20).forEach(System.out::println);
+        // employees1.stream().filter(e -> e.getAge() > 20).forEach(System.out::println);
         //String str = "hello world";
 
         list.stream().flatMap(employeeList -> employeeList.stream()).collect(Collectors.toList()).forEach(System.out::println);
 
-        list.stream().flatMapToInt(employeeList -> employeeList.stream().mapToInt(e->e.getAge())).forEach(System.out::println);
+        list.stream().flatMapToInt(employeeList -> employeeList.stream().mapToInt(e -> e.getAge())).forEach(System.out::println);
     }
 
     public static void main(String[] args) {
@@ -57,11 +57,6 @@ public class StreamTest {
         String[] names =stream.map(employee -> employee.getName()).toArray(size->new String[size]);*/
 
 
-
-
-
-
-
 //        stream.collect(Collectors.toMap(employee -> employee.getName(),employee -> employee.getSalary()))
 //                .forEach((k,v)->System.out.println(k+"="+v));
         //Map<String,List<Employee>> map=stream.collect(Collectors.groupingBy(employee -> employee.getGender()));
@@ -78,7 +73,7 @@ public class StreamTest {
 //        Map<String, Double> map3 = stream.collect(Collectors.groupingBy(employee -> employee.getGender(), Collectors.averagingDouble(e -> e.getAge())));
 //        System.out.println(map3);
 
-       // System.out.println(stream.mapToInt(employee -> employee.getAge()).reduce(0, (n1, n2) -> Integer.max(n1, n2)));
+        // System.out.println(stream.mapToInt(employee -> employee.getAge()).reduce(0, (n1, n2) -> Integer.max(n1, n2)));
 
 
 /*        IntSummaryStatistics stats = stream.mapToInt(employee -> employee.getAge()).summaryStatistics();
@@ -118,14 +113,22 @@ public class StreamTest {
         // .map(employee -> employee.getName())
         //.toArray(size->new String[size]);
 
+        List<String> words = Arrays.asList("hello", "world", "stream");
+        ;
+        Optional<String> str = words.stream().reduce((acc, word) ->{
+            System.out.println(acc);
+            System.out.println(word);
+            System.out.println("-------");
+            return  acc.isEmpty() ? word : acc + "," + word;
+        });
 
+        System.out.println(str.get());
 
 /*
 
         String text = "Perter ,Alex ,Bob,Eric";
         String[] names =Stream.of(text.split(",")).map(name -> name.trim().toUpperCase()).toArray(size -> new String[size]);
 */
-
 
 
         //nums.stream().peek(e -> System.out.println(e)).map(e -> e * 2).forEach(System.out::println);

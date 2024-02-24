@@ -117,7 +117,7 @@ public class LeetCode236 {
         return null;
     }
 
-    private void dfs(TreeNode node) {
+    private void dfs1(TreeNode node) {
         if (node != null && node.left != null) {
             map.put(node.left.val, node);
             dfs(node.left);
@@ -128,8 +128,18 @@ public class LeetCode236 {
         }
     }
 
+    private void dfs(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        dfs(node.left);
+        dfs(node.right);
+        if (node.left != null) map.put(node.left.val, node);
+        if (node.right != null) map.put(node.right.val, node);
+    }
 
-    public int countNodes(TreeNode root) {
+
+   /* public int countNodes1(TreeNode root) {
         if (root == null) {
             return 0;
         }
@@ -156,21 +166,92 @@ public class LeetCode236 {
         int res = l + r + 1;
         return res;
     }
+*/
+
+    int count = 0;
+
+    public int removePalindromeSub(String s) {
+        int res = removePalindromeSub(s, 0, s.length() - 1);
+        return res;
+    }
+
+    private boolean isPalind(String s, int l, int r) {
+        while (l < r) {
+            if (s.charAt(l) != s.charAt(r)) {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+
+
+    public int removePalindromeSub(String s, int l, int r) {
+        if (l > r) {
+            return 0;
+        }
+        if (isPalind(s, l, r)) {
+            count++;
+            return 1;
+        }
+
+        int left = 0;
+        int right = 0;
+        left = removePalindromeSub(s, l + 1, r);
+        right = removePalindromeSub(s, l, r - 1);
+        return Math.max(left, right);
+
+/*        boolean res = isPalind(s, l + 1, r) || isPalind(s, l, r - 1);
+
+        if (res) {
+            count = count + 2;
+            return 2;
+        } else {
+            int left = 0;
+            int right = 0;
+            left += removePalindromeSub(s, l + 1, r);
+            right += removePalindromeSub(s, l, r - 1);
+            return Math.max(left, right)+1;
+        }*/
+
+
+    }
+
+
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = minDepth(root.left);
+        int right = minDepth(root.right);
+        if (root.left == null || root.right == null) {
+            return Math.max(left, right) + 1;
+        } else {
+            return Math.min(left, right) + 1;
+        }
+    }
+
 
     public static void main(String[] args) {
         TreeNode r1 = new TreeNode(6);
         r1.left = new TreeNode(2);
         r1.left.left = new TreeNode(0);
-        r1.left.right = new TreeNode(4);
+        r1.left.left.left = new TreeNode(4);
+        //r1.left.right = new TreeNode(4);
 
-        r1.right = new TreeNode(8);
-        r1.right.left = new TreeNode(7);
+        //r1.right = new TreeNode(8);
+        //r1.right.left = new TreeNode(7);
         //r1.right.right = new TreeNode(9);
 
         LeetCode236 question = new LeetCode236();
+        System.out.println(question.minDepth(r1));
         //System.out.println(question.lowestCommonAncestor(r1, new TreeNode(7), new TreeNode(8)).val);
 
-        System.out.println(question.countNodes(r1));
+        // System.out.println(question.countNodes(r1));
+
+
+        //System.out.println(question.removePalindromeSub("ababb"));
 
     }
 }
