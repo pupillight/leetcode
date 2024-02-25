@@ -1,11 +1,7 @@
 package org.yj.leetcode;
 
-
 import java.util.*;
-import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class LeetCode236 {
 
@@ -263,7 +259,6 @@ public class LeetCode236 {
             path.removeLast();
         }
         if (node.right != null) {
-
             findPaths(node.right, paths, path);
             path.removeLast();
         }
@@ -303,6 +298,7 @@ public class LeetCode236 {
         int res = (int) list.stream().filter(item -> item.getValue() != 0).count();
         return res;
     }
+
 
 
     int leftSum = 0;
@@ -696,13 +692,21 @@ public class LeetCode236 {
 /*        TreeNode r1 = new TreeNode(6);
         r1.left = new TreeNode(2);
 <<<<<<< HEAD
+<<<<<<< HEAD
         //r1.left.left = new TreeNode(0);
         r1.left.right = new TreeNode(4);
 =======
+=======
+
+>>>>>>> f177965 (pull)
         r1.left.left = new TreeNode(0);
         r1.left.left.left = new TreeNode(4);
         //r1.left.right = new TreeNode(4);
 >>>>>>> 130e6cc (kkkk)
+
+        //r1.left.left = new TreeNode(0);
+        r1.left.right = new TreeNode(4);
+
 
         //r1.right = new TreeNode(8);
         //r1.right.left = new TreeNode(7);
@@ -733,6 +737,7 @@ public class LeetCode236 {
         System.out.println(question.minDepth(r1));
 >>>>>>> 130e6cc (kkkk)
         //System.out.println(question.lowestCommonAncestor(r1, new TreeNode(7), new TreeNode(8)).val);
+<<<<<<< HEAD
         //int[] arr = {4, 3, 1, 1, 3, 3, 2};
         //int k = 3;
         //System.out.println(question.findLeastNumOfUniqueInts(arr, k));
@@ -750,6 +755,7 @@ public class LeetCode236 {
 
         //System.out.println(question.removePalindromeSub("ababb"));
 >>>>>>> 130e6cc (kkkk)*/
+
 
     }
 }
