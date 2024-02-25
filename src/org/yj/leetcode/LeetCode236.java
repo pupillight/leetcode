@@ -1,10 +1,8 @@
 package org.yj.leetcode;
 
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class LeetCode236 {
 
@@ -157,10 +155,77 @@ public class LeetCode236 {
         return res;
     }
 
+
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> paths = new ArrayList<>();
+        //findPaths(root, paths, new LinkedList<>());
+        findPaths(root, paths, "");
+        return paths;
+    }
+
+    private void findPaths(TreeNode node, List<String> paths, LinkedList<Integer> path) {
+        if (node == null) {
+            return;
+        }
+        path.add(node.val);
+        if (node.left == null && node.right == null) {
+            StringBuilder builder = new StringBuilder();
+            for (Integer v : path) {
+                builder.append(v);
+            }
+            paths.add(builder.toString());
+            return;
+        }
+        if (node.left != null) {
+            findPaths(node.left, paths, path);
+            path.removeLast();
+        }
+        if (node.right != null) {
+            findPaths(node.right, paths, path);
+            path.removeLast();
+        }
+    }
+
+    private void findPaths(TreeNode node, List<String> paths, String path) {
+        if (node == null) {
+            return;
+        }
+        //path+=path;
+        path += node.val;
+        //path+="->";
+
+        if (node.left == null && node.right == null) {
+            paths.add(path);
+            return;
+        }
+        findPaths(node.left, paths, path + "->");
+        findPaths(node.right, paths, path + "->");
+    }
+
+    public int findLeastNumOfUniqueInts(int[] arr, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i : arr) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+        List<Map.Entry<Integer, Integer>> list = map.entrySet().stream().sorted((e1, e2) -> e1.getValue() - e2.getValue()).collect(Collectors.toList());
+        int index = 0;
+        for (Map.Entry<Integer, Integer> entry : list) {
+            int v = entry.getValue();
+            while (index < k && v >= 1) {
+                v -= 1;
+                index++;
+            }
+            entry.setValue(v);
+        }
+        int res = (int) list.stream().filter(item -> item.getValue() != 0).count();
+        return res;
+    }
+
+
     public static void main(String[] args) {
         TreeNode r1 = new TreeNode(6);
         r1.left = new TreeNode(2);
-        r1.left.left = new TreeNode(0);
+        //r1.left.left = new TreeNode(0);
         r1.left.right = new TreeNode(4);
 
         r1.right = new TreeNode(8);
@@ -169,8 +234,12 @@ public class LeetCode236 {
 
         LeetCode236 question = new LeetCode236();
         //System.out.println(question.lowestCommonAncestor(r1, new TreeNode(7), new TreeNode(8)).val);
+        int[] arr = {4, 3, 1, 1, 3, 3, 2};
+        int k = 3;
+        System.out.println(question.findLeastNumOfUniqueInts(arr, k));
+        //System.out.println(question.binaryTreePaths(r1));
 
-        System.out.println(question.countNodes(r1));
+        //System.out.println(question.countNodes(r1));
 
     }
 }
