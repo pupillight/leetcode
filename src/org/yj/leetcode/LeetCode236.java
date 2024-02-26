@@ -169,6 +169,7 @@ public class LeetCode236 {
         }
         path.add(node.val);
         if (node.left == null && node.right == null) {
+
             StringBuilder builder = new StringBuilder();
             for (Integer v : path) {
                 builder.append(v);
@@ -177,10 +178,12 @@ public class LeetCode236 {
             return;
         }
         if (node.left != null) {
+
             findPaths(node.left, paths, path);
             path.removeLast();
         }
         if (node.right != null) {
+
             findPaths(node.right, paths, path);
             path.removeLast();
         }
@@ -222,6 +225,89 @@ public class LeetCode236 {
     }
 
 
+    int leftSum = 0;
+
+    public int sumOfLeftLeaves(TreeNode root) {
+        sumOfLeftLeavesDfs(root);
+        return leftSum;
+    }
+
+    private void sumOfLeftLeavesDfs(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        if (node.left != null && node.left.left == null && node.left.right == null) {
+            leftSum += node.left.val;
+        }
+        sumOfLeftLeavesDfs(node.left);
+        sumOfLeftLeavesDfs(node.right);
+    }
+
+    int blValue = 0;
+    int maxDepth = Integer.MIN_VALUE;
+
+    public int findBottomLeftValue(TreeNode root) {
+
+        findBottomLeftValueDfs(root, 0);
+        return blValue;
+    }
+
+    private void findBottomLeftValueDfs(TreeNode node, int depth) {
+
+        if (node == null) {
+            return;
+        }
+        if (node.left == null && node.right == null) {
+            if (depth > maxDepth) {
+                maxDepth = depth;
+                blValue = node.val;
+            }
+        }
+        if(node.left!=null)
+        {
+            depth++;
+            findBottomLeftValueDfs(node.left, depth );
+            depth--;
+        }
+        if(node.right!=null){
+            depth++;
+            findBottomLeftValueDfs(node.right, depth );
+            depth--;
+        }
+
+
+    }
+    private void findBottomLeftValueDfs1(TreeNode node, int depth) {
+
+        if (node == null) {
+            return;
+        }
+        if (node.left == null && node.right == null) {
+            if (depth > maxDepth) {
+                maxDepth = depth;
+                blValue = node.val;
+            }
+        }
+        findBottomLeftValueDfs(node.left, depth + 1);
+        findBottomLeftValueDfs(node.right, depth + 1);
+
+    }
+
+
+
+        public static int sumArray(int[] arr) {
+            int sum = 0;
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] == 6 && (i + 1) < arr.length && arr[i + 1] == 7) {
+                    i++; // Skip 6 and 7
+                } else {
+                    sum += arr[i];
+                }
+            }
+            return sum;
+        }
+
+
     public static void main(String[] args) {
         TreeNode r1 = new TreeNode(6);
         r1.left = new TreeNode(2);
@@ -234,11 +320,15 @@ public class LeetCode236 {
 
         LeetCode236 question = new LeetCode236();
         //System.out.println(question.lowestCommonAncestor(r1, new TreeNode(7), new TreeNode(8)).val);
-        int[] arr = {4, 3, 1, 1, 3, 3, 2};
-        int k = 3;
-        System.out.println(question.findLeastNumOfUniqueInts(arr, k));
-        //System.out.println(question.binaryTreePaths(r1));
+        //int[] arr = {4, 3, 1, 1, 3, 3, 2};
+        //int k = 3;
+        //System.out.println(question.findLeastNumOfUniqueInts(arr, k));
+        System.out.println(question.binaryTreePaths(r1));
 
+
+        int[] arr = {1, 2, 3, 4,6,7,5};
+        int result = sumArray(arr);
+        System.out.println(result); // Output: 15
         //System.out.println(question.countNodes(r1));
 
     }
