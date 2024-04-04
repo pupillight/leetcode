@@ -2,7 +2,10 @@ package org.yj.leetcode;
 
 
 import java.util.*;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class LeetCode236 {
 
@@ -263,20 +266,20 @@ public class LeetCode236 {
                 blValue = node.val;
             }
         }
-        if(node.left!=null)
-        {
+        if (node.left != null) {
             depth++;
-            findBottomLeftValueDfs(node.left, depth );
+            findBottomLeftValueDfs(node.left, depth);
             depth--;
         }
-        if(node.right!=null){
+        if (node.right != null) {
             depth++;
-            findBottomLeftValueDfs(node.right, depth );
+            findBottomLeftValueDfs(node.right, depth);
             depth--;
         }
 
 
     }
+
     private void findBottomLeftValueDfs1(TreeNode node, int depth) {
 
         if (node == null) {
@@ -294,18 +297,322 @@ public class LeetCode236 {
     }
 
 
+    public static int sumArray(int[] arr) {
+        int sum = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == 6 && (i + 1) < arr.length && arr[i + 1] == 7) {
+                i++; // Skip 6 and 7
+            } else {
+                sum += arr[i];
+            }
+        }
+        return sum;
+    }
 
-        public static int sumArray(int[] arr) {
-            int sum = 0;
-            for (int i = 0; i < arr.length; i++) {
-                if (arr[i] == 6 && (i + 1) < arr.length && arr[i + 1] == 7) {
-                    i++; // Skip 6 and 7
+    public boolean isAnagram(String s, String t) {
+
+        if (s.length() != t.length()) return false;
+        int[] arr1 = new int[26];
+        int[] arr2 = new int[26];
+
+        for (char c : s.toCharArray()) {
+            arr1[c - 'a']++;
+        }
+        for (char c : t.toCharArray()) {
+            arr2[c - 'a']++;
+        }
+        for (int i = 0; i < arr1.length; i++) {
+            if (arr1[i] != arr2[i]) return false;
+        }
+        return true;
+    }
+
+    public int maximum69Number1(int num) {
+
+        int res = num;
+        String str = String.valueOf(num);
+        char[] chars = str.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            if (c == '6') {
+                chars[i] = '9';
+                break;
+            }
+        }
+        res = Integer.parseInt(String.valueOf(chars));
+
+        return res;
+    }
+
+    public int maximum69Number(int num) {
+
+        int res = num;
+        int mod = 0;
+        while (num > 0) {
+            mod = num % 10;
+            num = num / 10;
+
+        }
+        return res;
+    }
+
+    public int arrayPairSum(int[] nums) {
+
+        Arrays.sort(nums);
+
+        int sum = 0;
+        for (int i = 0; i < nums.length - 1; i = i + 2) {
+            sum += Math.min(nums[i], nums[i + 1]);
+        }
+        return sum;
+    }
+
+
+    public boolean lemonadeChange(int[] bills) {
+
+        LinkedList<Integer> stack5 = new LinkedList<>();
+        LinkedList<Integer> stack10 = new LinkedList<>();
+        LinkedList<Integer> stack20 = new LinkedList<>();
+
+        for (int i = 0; i < bills.length; i++) {
+
+            if (bills[i] == 5) {
+                stack5.add(bills[i]);
+            }
+            if (bills[i] == 10) {
+                if (stack5.isEmpty()) {
+                    return false;
+                }
+                stack5.pop();
+                stack10.add(bills[i]);
+            }
+            if (bills[i] == 20) {
+                if (!stack10.isEmpty()) {
+                    stack10.pop();
+                    if (stack5.isEmpty()) {
+                        return false;
+                    }
                 } else {
-                    sum += arr[i];
+                    if (stack5.size() < 3) {
+                        return false;
+                    }
+                    stack5.pop();
+                    stack5.pop();
+                }
+                stack5.pop();
+                stack20.add(bills[i]);
+            }
+        }
+
+        return true;
+    }
+
+    public int findContentChildren1(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int res = 0;
+        int j = 0;
+        for (int i = 0; i < g.length; i++) {
+
+            while (j < s.length) {
+                if (g[i] <= s[j]) {
+                    res++;
+                    j++;
+                    break;
+                }
+                j++;
+            }
+
+        }
+        return res;
+    }
+
+    public int findContentChildren(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int res = 0;
+        int j = 0;
+        for (int i = 0; i < s.length; i++) {
+            if (j < g.length && g[j] <= s[i]) {
+                j++;
+                res++;
+
+            }
+        }
+        return res;
+    }
+
+    public int[] diStringMatch1(String s) {
+
+        int l = 0;
+        int r = s.length();
+
+        List<Integer> list = new ArrayList<>();
+        for (char c : s.toCharArray()) {
+            if (c == 'I') {
+                list.add(l);
+                l++;
+            } else if (c == 'D') {
+                list.add(r);
+                r--;
+            }
+        }
+        if (l == r) {
+            list.add(l);
+        }
+        System.out.println(list);
+        int[] res = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
+    public int[] diStringMatch(String s) {
+
+        int l = 0;
+        int r = s.length();
+        int[] res = new int[s.length() + 1];
+        int index = 0;
+        for (char c : s.toCharArray()) {
+            if (c == 'I') {
+                res[index++] = l;
+                l++;
+            } else if (c == 'D') {
+                res[index++] = r;
+                r--;
+            }
+        }
+        res[index] = l;
+        return res;
+    }
+
+
+    public int largestPerimeter(int[] nums) {
+        Arrays.sort(nums);
+        int res = 0;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            for (int j = i - 1; j >= 1; j--) {
+                int sum = nums[j] + nums[j - 1];
+                if (sum > nums[i]) {
+                    res = sum + nums[i];
+                    return res;
                 }
             }
-            return sum;
         }
+        return res;
+    }
+
+    public int findContentChildren2(int[] g, int[] s) {
+
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int j = g.length - 1;
+        int res = 0;
+        for (int i = s.length - 1; i >= 0; i--) {
+            while (j >= 0 && s[i] >= g[j]) {
+                res++;
+                j--;
+            }
+
+        }
+        return res;
+    }
+
+    public String maximumOddBinaryNumber(String s) {
+        int count = (int) s.chars().filter(c -> c == '1').count();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (count > 1) {
+                builder.append('1');
+                count--;
+            } else {
+                builder.append('0');
+            }
+        }
+        builder.append('1');
+        return builder.toString();
+
+    }
+
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+
+        Set<Integer> set = new HashSet<>();
+
+        if (nums.length <= k) {
+            for (int i = 0; i < nums.length; i++) {
+                if (set.contains(nums[i])) {
+                    return true;
+                }
+                set.add(nums[i]);
+            }
+        }
+        for (int i = 0; i < nums.length - k; i++) {
+            for (int j = i; j <= i + k; j++) {
+                if (set.contains(nums[j])) {
+                    return true;
+                }
+                set.add(nums[j]);
+            }
+            set.clear();
+        }
+        return false;
+    }
+
+    public boolean containsNearbyDuplicate1(int[] nums, int k) {
+
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i <= k && i < nums.length; i++) {
+            if (set.contains(nums[i])) {
+                return true;
+            }
+            set.add(nums[i]);
+        }
+        for (int i = k + 1; i < nums.length; i++) {
+            set.remove(nums[i - k - 1]);
+            if (set.contains(nums[i])) {
+                return true;
+            }
+            set.add(nums[i]);
+        }
+        return false;
+    }
+
+    public boolean isIsomorphicSub(String s, String t) {
+        Map<Character, Character> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char x = s.charAt(i);
+            char y = t.charAt(i);
+            if (map.containsKey(x) && map.get(x) != y) {
+                return false;
+            }
+            map.put(x, y);
+        }
+        return true;
+
+    }
+
+    public boolean isIsomorphic(String s, String t) {
+
+        return isIsomorphicSub(s, t) && isIsomorphicSub(t, s);
+
+    }
+
+    public boolean isIsomorphic1(String s, String t) {
+
+        Map<Character, Character> maps = new HashMap<>();
+        Map<Character, Character> mapt = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char x = s.charAt(i);
+            char y = t.charAt(i);
+            if ((maps.containsKey(x) && maps.get(x) != y) || (mapt.containsKey(y) && mapt.get(y) != x)) {
+                return false;
+            }
+            maps.put(x, y);
+            mapt.put(y, x);
+        }
+        return true;
+    }
 
 
     public static void main(String[] args) {
@@ -319,16 +626,35 @@ public class LeetCode236 {
         //r1.right.right = new TreeNode(9);
 
         LeetCode236 question = new LeetCode236();
+
+        System.out.println(question.isIsomorphic("badc", "baba"));
+       /* int[] nums = {2, 2};
+        //int[] nums = {1, 2, 3, 1};
+        int k = 2;
+        System.out.println(question.containsNearbyDuplicate(nums, k));*/
+
+        // System.out.println(question.maximumOddBinaryNumber("0101"));
+        // int[] nums = {1, 2, 1, 10};
+        //System.out.println(question.largestPerimeter(nums));
+        // System.out.println(question.diStringMatch("IDID"));
+       /* int[] g = {1, 2, 3};
+        int[] s = {1, 1};
+        System.out.println(question.findContentChildren1(g, s));*/
+       /* int[] bills = {5, 5, 10, 10, 20};
+        System.out.println(question.lemonadeChange(bills));*/
+        //int[] nums = {1, 4, 3, 2};
+        //System.out.println(question.arrayPairSum(nums));
+        //System.out.println(question.maximum69Number(9669));
         //System.out.println(question.lowestCommonAncestor(r1, new TreeNode(7), new TreeNode(8)).val);
         //int[] arr = {4, 3, 1, 1, 3, 3, 2};
         //int k = 3;
         //System.out.println(question.findLeastNumOfUniqueInts(arr, k));
-        System.out.println(question.binaryTreePaths(r1));
+        //System.out.println(question.binaryTreePaths(r1));
 
 
-        int[] arr = {1, 2, 3, 4,6,7,5};
-        int result = sumArray(arr);
-        System.out.println(result); // Output: 15
+        //int[] arr = {1, 2, 3, 4, 6, 7, 5};
+        //int result = sumArray(arr);
+        //System.out.println(result); // Output: 15
         //System.out.println(question.countNodes(r1));
 
     }
