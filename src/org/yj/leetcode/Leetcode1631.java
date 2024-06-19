@@ -4,30 +4,69 @@ import java.util.*;
 
 public class Leetcode1631 {
 
-    List<Integer> diffs = new ArrayList<>();
-    int minCost = Integer.MAX_VALUE;
 
     public int minimumEffortPath(int[][] heights) {
-        int row = heights.length;
-        int col = heights[0].length;
-        boolean[][] visited = new boolean[row][col];
-        List<Integer> pathValues = new LinkedList<>();
-        visited[0][0] = true;
-        pathValues.add(heights[0][0]);
+        int m = heights.length;
+        int n = heights[0].length;
 
+        List<int[]> list = new ArrayList<>();
+        UF uf = new UF(m * n);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int k = i * n + j;
+                if (i > 0) {
+                    list.add(new int[]{k - n, k, Math.abs(heights[i][j] - heights[i - 1][j])});
+                }
+                if (j > 0) {
+                    list.add(new int[]{k - 1, k, Math.abs(heights[i][j] - heights[i][j - 1])});
+                }
+            }
+        }
+        Collections.sort(list, (e1, e2) -> e1[2] - e2[2]);
 
-        dfs(heights, 0, 0, visited, pathValues);
+/*
+        int res =0;
+        for (int[] edge : list) {
+            int p= edge[0];
+            int q= edge[1];
+            res=edge[2];
+            uf.union(p, q);
+            if (uf.isConnected(0, m * n - 1)) {
+                break;
+            }
 
-        int res = Integer.MAX_VALUE;
-        Comparator<Integer> comparator = (e1, e2) -> e1 - e2;
-        System.out.println(diffs);
-        res = diffs.stream().sorted(comparator).findFirst().get();
+        }
+        return res;*/
+        int res = 0;
+
+/*        for (int j = 0; j < list.size(); j++) {
+            int[] arr = list.get(j);
+            int p = arr[0];
+            int q = arr[1];
+            res = arr[2];
+            uf.union(p, q);
+            if (uf.isConnected(0, m * n - 1)) {
+                break;
+            }
+        }*/
+        int i = 0;
+        while (!list.isEmpty() && i <list.size()) {
+            int[] arr = list.get(i);
+            int p = arr[0];
+            int q = arr[1];
+            res = arr[2];
+            uf.union(p, q);
+            if (uf.isConnected(0, m * n - 1)) {
+                break;
+            }
+            i++;
+        }
+
         return res;
-
 
     }
 
-    private void dfs(int[][] heights, int x, int y, boolean[][] visited, List<Integer> pathValues) {
+    /*private void dfs(int[][] heights, int x, int y, boolean[][] visited, List<Integer> pathValues) {
 
         if (x == heights.length - 1 && y == heights[0].length - 1) {
             int currMaxDiff = 0;
@@ -64,7 +103,7 @@ public class Leetcode1631 {
         }
 
 
-    }
+    }*/
 
     public int mySqrt1(int x) {
 
@@ -150,7 +189,7 @@ public class Leetcode1631 {
         while (i <= j) {
             int mid = i + (j - i) / 2;
             if (nums[mid] >= n) {
-                if(nums[mid-1]<n){
+                if (nums[mid - 1] < n) {
                     return mid;
                 }
                 j = mid - 1;
@@ -209,11 +248,43 @@ public class Leetcode1631 {
         // System.out.println(instance.mySqrt(9));
         //int[] piles = {3,6,7,11};
         //int h = 8;
-       // int[] piles = {312884470};
-       // int h = 968709470;
-       // System.out.println(instance.minEatingSpeed(piles, h));
+        // int[] piles = {312884470};
+        // int h = 968709470;
+        // System.out.println(instance.minEatingSpeed(piles, h));
 
     }
 
 
+    public static class UF {
+        int[] parent;
+
+        public UF(int n) {
+            parent = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+            }
+        }
+
+        public int find(int p) {
+            while (parent[p] != p) {
+                p = parent[p];
+            }
+            return p;
+        }
+
+        public boolean isConnected(int p, int q) {
+            return find(p) == find(q);
+        }
+
+        public void union(int p, int q) {
+            int pRoot = find(p);
+            int qRoot = find(q);
+            if (pRoot == qRoot) {
+                return;
+            }
+
+            parent[pRoot] = qRoot;
+
+        }
+    }
 }

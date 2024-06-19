@@ -47,67 +47,17 @@ public class LeetCode209 {
     }
 
 
-    public int minSubArrayLen(int s, int[] nums) {
-        int n = nums.length;
-        if (n == 0) {
-            return 0;
-        }
-        int ans = Integer.MAX_VALUE;
-        int[] sums = new int[n + 1];
-        // 为了方便计算，令 size = n + 1
-        // sums[0] = 0 意味着前 0 个元素的前缀和为 0
-        // sums[1] = A[0] 前 1 个元素的前缀和为 A[0]
-        // 以此类推
-        for (int i = 1; i <= n; i++) {
-            sums[i] = sums[i - 1] + nums[i - 1];
-        }
-        for (int i = 1; i <= n; i++) {
-            int target = s + sums[i - 1];
-            int bound = Arrays.binarySearch(sums, target);
-            if (bound < 0) {
-                bound = -bound - 1;
-            }
-            if (bound <= n) {
-                ans = Math.min(ans, bound - (i - 1));
+    public int minSubArrayLen(int target, int[] nums) {
+        int sum = 0, j = 0, ans = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            sum = sum + nums[i];
+            while (sum >= target) {
+                ans = Math.min(ans, i - j + 1);
+                sum = sum - nums[j];
+                j++;
             }
         }
         return ans == Integer.MAX_VALUE ? 0 : ans;
-    }
-
-
-    public int minSubArrayLen2(int target, int[] nums) {
-
-        int sum = 0;
-        int len = Integer.MAX_VALUE;
-        for (int i = 0; i < nums.length; i++) {
-            sum = 0;
-            for (int j = i; j < nums.length; j++) {
-                sum = sum + nums[j];
-                if (sum >= target) {
-                    len = Math.min(len, j - i + 1);
-                }
-
-            }
-        }
-        return len == Integer.MAX_VALUE ? 0 : len;
-
-
-    }
-
-    public int minSubArrayLen1(int target, int[] nums) {
-        int res = Integer.MAX_VALUE;
-        int l = 0, r = 0, sum = 0;
-        while (l < nums.length && r < nums.length) {
-            sum = sum + nums[r];
-            //缩小窗口
-            while (sum >= target) {
-                res = Math.min(res, r - l + 1);
-                sum = sum - nums[l];
-                l++;
-            }
-            r++;
-        }
-        return res == Integer.MAX_VALUE ? 0 : res;
     }
 
 
@@ -167,13 +117,13 @@ public class LeetCode209 {
 
     public static void main(String[] args) {
         LeetCode209 questions = new LeetCode209();
-        /*int[] array = {1, 2, 3};
-        System.out.println(questions.minSubArrayLen(3, array));
-        System.out.println(questions.minSubArrayLen1(2, array));*/
+        int[] array = {1, 1, 1, 1, 1, 1, 1, 1};
+        System.out.println(questions.minSubArrayLen(11, array));
+        //System.out.println(questions.minSubArrayLen1(2, array));
 
 
         //int[] array = {1, 2, 3, 4, 5};
-        int[] array = {1, 4, 2, 5, 3};
+        //int[] array = {1, 4, 2, 5, 3};
 
 
         //System.out.println(questions.findMiddleIndex1(array));

@@ -3,6 +3,7 @@ package org.yj.stream;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -10,94 +11,59 @@ import java.util.stream.Stream;
 public class StreamDemo {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        Employee e1 = new Employee("Peter", 45, Gender.MALE, 12000.00f);
-        Employee e2 = new Employee("Blair", 40, Gender.FEMALE, 10000.00f);
-        Employee e3 = new Employee("Alex", 35, Gender.MALE, 9000.00f);
-        Employee e4 = new Employee("Bob", 50, Gender.MALE, 15000.00f);
 
-        List<Employee> g1 = List.of(e1, e2);
-        List<Employee> g2 = List.of(e3, e4);
+ /*       String[] words= {"apple", "banana", "apple", "orange", "banana", "apple"};
+
+        System.out.println(Arrays.stream(words).collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
 
 
-        List<Employee> employees = List.of(e1, e2, e3, e4);
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 2, 4, 5, 1);
 
-        System.out.println(employees.stream().collect(Collectors.groupingBy(Employee::getGender, Collectors.mapping(Employee::getName, Collectors.toSet()))));
+        System.out.println(numbers.stream().distinct().sorted((l1, l2) -> l2 - l1).collect(Collectors.toList()));
+        System.out.println(numbers.stream().distinct().sorted(Comparator.comparingInt(Integer::intValue).reversed()).collect(Collectors.toList()));
 
+        List<String> list = Arrays.asList("apple", "banana", "orange", "kiwi", "strawberry");
 
-        System.out.println(employees.stream().collect(Collectors.toMap(Employee::getName, Employee::getSalary)));
-
-        System.out.println(employees.stream().collect(Collectors.groupingBy(Employee::getGender, Collectors.summingInt(Employee::getAge))));
-        Map map = employees.stream().collect(Collectors.groupingBy(Employee::getGender, Collectors.mapping(employee -> employee.getName(), Collectors.toSet())));
-        System.out.println(map);
-
-        Map map1 = employees.stream().collect(Collectors.groupingBy(Employee::getGender, Collectors.mapping(Employee::getSalary, Collectors.toList())));
-        System.out.println(map1);
-        //Map map=  employees.stream().collect(Collectors.partitioningBy(employee -> employee.getGender()==Gender.FEMALE));
-        //System.out.println(map);
- /*       IntSummaryStatistics statistics = employees.stream().mapToInt(employee -> employee.getAge()).summaryStatistics();
-        System.out.println(statistics);
-        System.out.println(employees.stream().collect(Collectors.summarizingDouble(e -> e.getSalary())));
-        System.out.println(employees.stream().mapToInt(employee -> employee.getAge()).reduce(0, (i, j) -> i + j));
-        IntStream.range(0, employees.size()).filter(i -> i > 2).forEach(i -> System.out.println(employees.get(i)));
-        Set<Employee> set = employees.stream().collect(Collectors.toCollection(HashSet::new));
-        System.out.println(set);
-*/
-
-        //List<List<Employee>> list = List.of(g1, g2);
-        //list.stream().flatMap(employeeList->employeeList.stream()).forEach(System.out::println);
-        //list.stream().forEach(System.out::println);
-
-        //list.stream().flatMap(item -> item.stream()).forEach(System.out::println);
-
-
-        /// Map<String, List<Employee>> map =
-
-        //Map<String, List<Employee>> map = g1.stream().collect(Collectors.groupingBy(employee -> employee.getGender().name()));
-
-
-        //System.out.println(map);
-
-        List<String> items =
-                Arrays.asList("apple", "apple", "banana",
-                        "apple", "orange", "banana", "papaya");
-
-        Map<String, Long> map2 = items.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-        System.out.println(map2);
-        map2.entrySet().stream().sorted((a, b) -> (int) (a.getValue() - b.getValue())).forEach(System.out::println);
-
-
-      /*  ExecutorService executor = Executors.newFixedThreadPool(1);
-        Callable<Integer> callable = () -> {
-            try {
-                Thread.sleep(1000);
-                System.out.println("write file ");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        System.out.println(list.stream().reduce("", (s1, s2) -> {
+            if (s1.length() >= s2.length()) {
+                return s1;
             }
-            return 0;
+            return s2;
+        }));
+        System.out.println(list.stream().max(Comparator.comparingInt(item -> item.length())).get());
+
+        List<Integer> list1 = Arrays.asList(1, 2, 3);
+        List<Integer> list2 = Arrays.asList(3, 4, 5);
+
+        System.out.println(Stream.concat(list1.stream(), list2.stream()).distinct().collect(Collectors.toList()));
+        List<String> list = Arrays.asList("Hello", " ", "world", "!");
+        System.out.println(list.stream().collect(Collectors.joining("-")));*/
+
+/*        List<String> list = Arrays.asList("apple", "banana", "orange", "kiwi");
+        char specificChar = 'a';
+
+        list.stream().filter(item->!item.contains(String.valueOf(specificChar))).collect(Collectors.toList());*/
+
+/*        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+        System.out.println(numbers.stream().collect(Collectors.partitioningBy(item -> item % 2 == 0)));*/
+
+/*        List<Integer> list = Arrays.asList(1, 12, 44, 32, 52, 81, 59, 84, 72, 37);
+
+        int k = 4;
+        System.out.println(list.stream().sorted(Comparator.comparingInt(Integer::intValue).reversed()).collect(Collectors.toList()));
+        System.out.println(list.stream().sorted(Comparator.comparingInt(Integer::intValue).reversed()).skip(k - 1).findFirst().get());*/
+
+
+        List<String> list = List.of("level", "hello", "radar", "world", "madam", "java", "Malayalam");
+
+        Predicate<String> predicate = str -> {
+
+            StringBuilder builder = new StringBuilder(str);
+            return builder.reverse().toString().equalsIgnoreCase(str);
+
         };
+        System.out.println(list.stream().filter(predicate).sorted(Comparator.comparingInt(String::length).reversed()).findFirst());
 
-        Runnable runnable = () -> {
-            try {
-                Thread.sleep(1000);
-                System.out.println("write file ");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        };
-        //Future<Integer> future = executor.submit(runnable, 1);
-
-        //Future<Integer> future = executor.submit(callable);
-
-        //if (future.isDone())
-         //  System.out.println(future.get());
-
-        executor.shutdown();
-
-       CompletableFuture<Void> future = CompletableFuture.runAsync(runnable);
-
-       future.join();*/
-        Runnable runnable=()->System.out.println(1111);
-        CompletableFuture.runAsync(runnable).thenRun(()->System.out.println(222222));
     }
 }

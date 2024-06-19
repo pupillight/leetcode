@@ -1,15 +1,16 @@
 package org.yj.stream;
 
+import java.math.BigDecimal;
+import java.net.CookieManager;
 import java.util.*;
-import java.util.function.IntFunction;
+import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class StreamTest {
 
-    List<List<Employee>> list = new ArrayList<>();
-    List<Employee> employees1 = new ArrayList<>();
-    List<Employee> employees2 = new ArrayList<>();
 
     public void init() {
         Employee employee1 = new Employee("zhangsan", 29, Gender.MALE, 9000.53f);
@@ -17,124 +18,218 @@ public class StreamTest {
         Employee employee3 = new Employee("zhaoliu", 31, Gender.FEMALE.MALE, 12000);
         Employee employee4 = new Employee("tianqi", 20, Gender.MALE, 7000.50f);
 
-        employees1.add(employee1);
-        employees1.add(employee2);
-        list.add(employees1);
 
-        employees2.add(employee3);
-        employees2.add(employee4);
-        list.add(employees2);
     }
 
     public void execute() {
         init();
         //employees1.stream().filter(e -> e.getAge()<=20).forEach(e->System.out.println(e));
-       // employees1.stream().filter(e -> e.getAge() > 20).forEach(System.out::println);
+        // employees1.stream().filter(e -> e.getAge() > 20).forEach(System.out::println);
         //String str = "hello world";
 
-        list.stream().flatMap(employeeList -> employeeList.stream()).collect(Collectors.toList()).forEach(System.out::println);
+        // list.stream().flatMap(employeeList -> employeeList.stream()).collect(Collectors.toList()).forEach(System.out::println);
 
-        list.stream().flatMapToInt(employeeList -> employeeList.stream().mapToInt(e->e.getAge())).forEach(System.out::println);
+        // list.stream().flatMapToInt(employeeList -> employeeList.stream().mapToInt(e->e.getAge())).forEach(System.out::println);
     }
 
     public static void main(String[] args) {
         StreamTest streamTest = new StreamTest();
-
         //streamTest.init();
-        streamTest.execute();
+        //streamTest.execute();
 
+        List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
+        // System.out.println(list.stream().sorted().findFirst().get());
 
-    /*
-        Employee employee1 = new Employee("zhangsan", 29, "male", 9000.53f);
-        Employee employee2 = new Employee("lisi", 45, "female", 10000.00f);
-        Employee employee3 = new Employee("zhaoliu", 31, "female", 12000);
-        Employee employee4 = new Employee("tianqi", 20, "male", 7000.50f);
-        *//*List<Employee> employees =List.of(employee1,employee2,employee3,employee4);
-        Stream.of(employees).;*//*
-        Stream<Employee> stream = Stream.of(employee1, employee2, employee3, employee4);
+        List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> list2 = Arrays.asList(4, 5, 6, 7, 8, 9, 10);
 
-        String[] names =stream.map(employee -> employee.getName()).toArray(size->new String[size]);*/
+        //System.out.println(list1.stream().filter(item -> list2.contains(item)).collect(Collectors.toList()));
+        // System.out.println(list.stream().anyMatch(e->e<5));
+        //list.stream().filter(item->item%2==0).collect(Collectors.toList()).forEach(System.out::println);
 
-
-
-
-
-
-
-//        stream.collect(Collectors.toMap(employee -> employee.getName(),employee -> employee.getSalary()))
-//                .forEach((k,v)->System.out.println(k+"="+v));
-        //Map<String,List<Employee>> map=stream.collect(Collectors.groupingBy(employee -> employee.getGender()));
-
-        //IntSummaryStatistics stats = stream.collect(Collectors.summarizingInt(e->e.getAge()));
+        // list.stream().map(item->item*item).collect(Collectors.toList()).forEach(System.out::println);
 /*
-        Map<String, List<Employee>> map1 = stream.collect(Collectors.groupingBy(employee -> employee.getGender()));
+        List<Integer> list2= new ArrayList<>();
+        System.out.println(list.stream().reduce(0, (a, b) -> {
+
+            list2.add(b*b);
+            return b*b ;
+        }));
+        System.out.println(list2);*/
+
+
+        // IntStream.range(0,5).forEach(item->System.out.println(list.get(item)));
+
+        //List<String> fruits= Arrays.asList("kiwi","banana","apple","banana","grape",null);
+        // System.out.println(fruits.stream().filter(Objects::nonNull).collect(Collectors.toList()));
+        //System.out.println(fruits.stream().mapToInt(item -> item.length()).min().getAsInt());
+        //System.out.println(fruits.stream().map(String::toUpperCase).distinct().sorted().collect(Collectors.toList()));
+        Employee employee0 = new Employee("zhangsan", 29, Gender.MALE, 9000.53f);
+        Employee employee1 = new Employee("zhangsan", 29, Gender.FEMALE, 9000.53f);
+        Employee employee2 = new Employee("lisi", 45, Gender.FEMALE, 10000.00f);
+        Employee employee3 = new Employee("zhaoliu", 31, Gender.MALE, 12000);
+        Employee employee4 = new Employee("tianqi", 20, Gender.MALE, 7000.50f);
+
+        List<Employee> employees = new ArrayList<>();
+        employees.add(employee0);
+        employees.add(employee1);
+        employees.add(employee2);
+        employees.add(employee3);
+        employees.add(employee4);
+
+
+        //Map map= employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), HashMap<Gender,List<Employee>>::new ,Collectors.toList()));
+        Map map = employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), TreeMap::new, Collectors.toList()));
+        System.out.println(map);
+/*        System.out.println(Stream.concat(Stream.of(employee0), Stream.of(employee1, employee2)).collect(Collectors.toList()));
+
+        System.out.println(employees.stream().map(employee -> employee.getName()).collect(Collectors.toList()));
+        System.out.println(employees.stream().collect(Collectors.toMap(employee -> employee.getName(), v -> 1, Integer::sum)));
+        Map map = employees.stream().collect(Collectors.toMap(employee -> employee.getName(), employee -> employee.getGender(), (first, second) -> second));
+        System.out.println(map);*/
+
+        //System.out.println(employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), Collectors.mapping(employee -> employee.getName(),Collectors.toList()))));
+        //System.out.println(employees.stream().collect(Collectors.groupingBy(Employee::getName, Collectors.toList())));
+        //System.out.println(employees.stream().collect(Collectors.toMap(employee -> employee.getName(), employee -> employee.getAge())));
+        //System.out.println(employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), Collectors.maxBy((e1, e2) -> e1.getAge() - e2.getAge()))));
+        //System.out.println(employees.stream().collect(Collectors.toMap(employee -> employee.getName(), employee -> employee.getAge())));
+        //System.out.println(employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(),Collectors.toList())));
+        // System.out.println(employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), Collectors.mapping(employee -> employee.getName(), Collectors.toList()))));
+
+
+        // System.out.println(employees.stream().collect(Collectors.groupingBy(Employee::getGender, Collectors.mapping(employee -> employee.getName(), Collectors.toList()))));
+        //Map map = employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), Collectors.averagingInt(employee->employee.getAge())));
+        // Map map = employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), Collectors.summarizingInt(employee->employee.getAge())));
+        // System.out.println(map);
+
+       /* List<String> items =
+                Arrays.asList("apple", "apple", "banana",
+                        "apple", "orange", "banana", "papaya");
+        Map<String, Long> map = items.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        map.entrySet().stream().sorted((e1,e2)-> (int) (e1.getValue() - e2.getValue())).forEach(System.out::println);*/
+        List<Item> items = Arrays.asList(
+                new Item("apple", 10, new BigDecimal("9.99")),
+                new Item("banana", 20, new BigDecimal("19.99")),
+                new Item("orang", 10, new BigDecimal("29.99")),
+                new Item("watermelon", 10, new BigDecimal("29.99")),
+                new Item("papaya", 20, new BigDecimal("9.99")),
+                new Item("apple", 10, new BigDecimal("9.99")),
+                new Item("banana", 10, new BigDecimal("19.99")),
+                new Item("apple", 20, new BigDecimal("19.99"))
+        );
+
+
+        System.out.println(items.stream()
+                .filter(item -> item.getQty() > 10)
+                .peek(item -> System.out.println("filter1" + item))
+                .filter(item -> item.getPrice().compareTo(BigDecimal.valueOf(10.00)) > 0)
+                .peek(item -> System.out.println("filter2" + item))
+                .collect(Collectors.toList()));
+
+
+        System.out.println(items.stream().collect(Collectors.groupingBy(item -> item.getName(), Collectors.mapping(item -> item.getQty(), Collectors.toList()))));
+      /* Map map1 =items.stream().collect(Collectors.toMap(item -> item.getName(), n -> 1, Integer::sum, TreeMap::new));
         System.out.println(map1);
 
-        Map<String, DoubleSummaryStatistics> map2 = stream.collect(Collectors.
-        groupingBy(employee -> employee.getGender(), Collectors.summarizingDouble(e -> e.getSalary())));
-        System.out.println(map2);*/
+        System.out.println(items.stream().collect(Collectors.toMap(item -> item.getName(), n -> 1, Integer::sum)));
+        System.out.println(items.stream().collect(Collectors.groupingBy(item -> item.getQty(), Collectors.counting())));
+        Map res = items.stream().collect(Collectors.groupingBy(Item::getQty, TreeMap::new,Collectors.mapping(item -> item.getName(),Collectors.toList())));
 
-//        Map<String, Double> map3 = stream.collect(Collectors.groupingBy(employee -> employee.getGender(), Collectors.averagingDouble(e -> e.getAge())));
-//        System.out.println(map3);
+        System.out.println(res);
+        System.out.println(items.stream().collect(Collectors.groupingBy(item -> item.getName(), Collectors.maxBy(Comparator.comparing(Item::getPrice)))));*/
+        //System.out.println(items.stream().collect(Collectors.groupingBy(item -> item.getName(), Collectors.summingInt(item -> item.getQty()))));
+        // System.out.println(items.stream().collect(Collectors.groupingBy(item -> item.getName(), Collectors.summingDouble(item -> item.getPrice().doubleValue()))));
+        // System.out.println(items.stream().collect(Collectors.groupingBy(Item::getName, Collectors.mapping(item -> item.getPrice(), Collectors.toList()))));
+        //System.out.println(items.stream().collect(Collectors.groupingBy(Item::getName, Collectors.summingInt(item->item.getQty()))));
 
-       // System.out.println(stream.mapToInt(employee -> employee.getAge()).reduce(0, (n1, n2) -> Integer.max(n1, n2)));
-
-
-/*        IntSummaryStatistics stats = stream.mapToInt(employee -> employee.getAge()).summaryStatistics();
-        System.out.println(stats.getAverage());
-
-        System.out.println(stats.getMax());
-        System.out.println(stats.getMin());
-        System.out.println(stats.getSum());
-        System.out.println(stats.getCount());*/
-
-        //System.out.println(stream.map(employee -> employee.getAge()).reduce(0, (n1, n2) ->Math.max(n1,n2)));
-
-
-        // Map<String,List<Employee>> map =stream.collect(Collectors.groupingBy(e->e.getGender()));
-        //Map<String, Double> map = stream.collect(Collectors.groupingBy(e -> e.getGender(), Collectors.averagingDouble(e -> e.getAge())));
-        //map.forEach((k, v) -> System.out.println(k + ":" + v));
-        //System.out.println(stream.mapToDouble(employee -> employee.getSalary()).reduce(0.0, Double::sum));
-//38001.0302734375
-        // System.out.println(stream.map(employee -> employee.getName()).collect(Collectors.joining("-")));
-
-        //DoubleSummaryStatistics stats = stream.collect(Collectors.summarizingDouble(Employee::getSalary));
-        //System.out.println(stats.getSum());
-
-
-        //stream.collect(Collectors.groupingBy(e -> new Character(e.))
-//        streamTest.init();
-//        streamTest.list.stream().
-//                map(employeeList -> employeeList.size()).forEach(System.out::println);
-//
-//
-//        streamTest.list.stream().
-//                flatMap(employeeList -> employeeList.stream()).forEach(System.out::println);
-        //        .toArray(size->new String[size]))
-        //.forEach(System.out::println);
-        //flatMap(employeeList -> employeeList.stream()).forEach(System.out::println);
-
-        // .map(employee -> employee.getName())
-        //.toArray(size->new String[size]);
+        // System.out.println(items.stream().collect(Collectors.groupingBy(Item::getName,Collectors.toList())));
+        //Map map=items.stream().collect(Collectors.groupingBy(Item::getPrice, TreeMap::new, Collectors.mapping(item -> item.getName(), Collectors.toList())));
+        // System.out.println(map);
+        //System.out.println();
 
 
 
-/*
-
-        String text = "Perter ,Alex ,Bob,Eric";
-        String[] names =Stream.of(text.split(",")).map(name -> name.trim().toUpperCase()).toArray(size -> new String[size]);
-*/
 
 
+/*        List<String> words =
+                Arrays.asList("apple", "apple", "banana",
+                        "apple", "orange", "banana", "papaya");
 
-        //nums.stream().peek(e -> System.out.println(e)).map(e -> e * 2).forEach(System.out::println);
+        System.out.println(words.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
+        System.out.println(words.stream().collect(Collectors.toMap(Function.identity(), v -> 1, Integer::sum)));
+        //System.out.println(words.stream().collect(Collectors.toMap(Function.identity(), v -> 1L, Long::sum)));
 
-/*
-        System.out.println( nums.stream().allMatch(num->num%2==0));
-        System.out.println(nums.stream().anyMatch(n -> n % 2 == 0));
-        System.out.println(nums.stream().noneMatch(n -> n % 3 == 0));*/
+        System.out.println(words.stream().reduce( (a, b) -> b).orElse(null));
+        System.out.println(words.stream().collect(Collectors.joining("-")));*/
+
+
+        List<String> words =
+                Arrays.asList("apple", "apple", "banana",
+                        "apple", "orange", "banana", "papaya");
+
+
+        System.out.println(words.stream().flatMap(word -> Arrays.stream(word.split(""))).collect(Collectors.toList()));
+
+        System.out.println(words.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
+        List<List<Integer>> listOfLists = Arrays.asList(
+                Arrays.asList(1, 2, 3),
+                Arrays.asList(4, 5),
+                Arrays.asList(6, 7, 8)
+        );
+
+        System.out.println(listOfLists.stream().flatMap(item -> item.stream()).mapToInt(item -> item).sum());
+
+        System.out.println(Stream.iterate(0, n -> n + 1).skip(5).limit(10).collect(Collectors.toList()));
+        System.out.println(Stream.generate(() -> 1).limit(10).collect(Collectors.toList()));
+
     }
 
+    static class Item {
 
+        private String name;
+        private int qty;
+        private BigDecimal price;
+
+        public Item(String name, int qty, BigDecimal price) {
+            this.name = name;
+            this.qty = qty;
+            this.price = price;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getQty() {
+            return qty;
+        }
+
+        public void setQty(int qty) {
+            this.qty = qty;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public void setPrice(BigDecimal price) {
+            this.price = price;
+        }
+
+        @Override
+        public String toString() {
+            return "Item{" +
+                    "name='" + name + '\'' +
+                    ", qty=" + qty +
+                    ", price=" + price +
+                    '}';
+        }
+//constructors, getter/setters
+    }
 }
