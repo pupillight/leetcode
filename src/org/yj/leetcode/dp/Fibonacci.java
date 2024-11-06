@@ -1,4 +1,4 @@
-package org.yj.dp;
+package org.yj.leetcode.dp;
 
 public class Fibonacci {
 

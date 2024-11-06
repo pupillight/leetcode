@@ -1,6 +1,4 @@
-package org.yj.dp;
-
-import java.util.Arrays;
+package org.yj.leetcode.dp;
 
 public class DPQuestions {
 

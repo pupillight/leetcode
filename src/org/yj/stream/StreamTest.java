@@ -44,6 +44,11 @@ public class StreamTest {
         List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5);
         List<Integer> list2 = Arrays.asList(4, 5, 6, 7, 8, 9, 10);
 
+        list1.stream().filter(item->item>3).forEach(System.out::println);
+
+        System.out.println(list1.stream().collect(Collectors.summingInt(item -> item)));
+
+        System.out.println(list1.stream().reduce( (a, b) -> a + b));
         //System.out.println(list1.stream().filter(item -> list2.contains(item)).collect(Collectors.toList()));
         // System.out.println(list.stream().anyMatch(e->e<5));
         //list.stream().filter(item->item%2==0).collect(Collectors.toList()).forEach(System.out::println);
@@ -70,7 +75,6 @@ public class StreamTest {
         Employee employee2 = new Employee("lisi", 45, Gender.FEMALE, 10000.00f);
         Employee employee3 = new Employee("zhaoliu", 31, Gender.MALE, 12000);
         Employee employee4 = new Employee("tianqi", 20, Gender.MALE, 7000.50f);
-
         List<Employee> employees = new ArrayList<>();
         employees.add(employee0);
         employees.add(employee1);
@@ -78,6 +82,8 @@ public class StreamTest {
         employees.add(employee3);
         employees.add(employee4);
 
+        System.out.println(employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), Collectors.averagingDouble(employee->employee.getAge().doubleValue()))));
+        System.out.println(employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(),Collectors.maxBy(Comparator.comparingInt(employee->employee.getAge())))));
 
         //Map map= employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), HashMap<Gender,List<Employee>>::new ,Collectors.toList()));
         Map map = employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), TreeMap::new, Collectors.toList()));

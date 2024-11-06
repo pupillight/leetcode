@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class LeetCode1976 {
 
-    List<Node>[] adj;
+   /* List<Node>[] adj;
     boolean[] visited;
     //List<Integer> costs;
     Map<Integer, Integer> map;
@@ -58,7 +58,7 @@ public class LeetCode1976 {
             }
         }
 
-    }
+    }*/
 
     public static void main(String[] args) {
         LeetCode1976 instance = new LeetCode1976();
@@ -68,11 +68,12 @@ public class LeetCode1976 {
         int[][] roads = {{0, 6, 7}, {0, 1, 2}, {1, 2, 3}, {1, 3, 3}, {6, 3, 3}, {3, 5, 1}, {6, 5, 1}, {2, 5, 1}, {0, 4, 5}, {4, 6, 2}};
 
 
-        System.out.println(instance.countPaths(n, roads));
+       //
+        // System.out.println(instance.countPaths(n, roads));
     }
 }
 
-class Node {
+/*class Node {
     int start;
     int end;
     int weight;
@@ -82,4 +83,4 @@ class Node {
         this.end = end;
         this.weight = weight;
     }
-}
+}*/

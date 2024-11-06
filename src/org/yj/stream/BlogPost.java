@@ -17,6 +17,21 @@ class Tuple {
     BlogPostType type;
     String author;
 
+    public BlogPostType getType() {
+        return type;
+    }
+
+    public void setType(BlogPostType type) {
+        this.type = type;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     public Tuple(BlogPostType type, String author) {
         this.type = type;
@@ -30,6 +45,20 @@ class Tuple {
                 ", author='" + author + '\'' +
                 '}';
     }
+
+    @Override
+    public int hashCode() {
+        return this.author.length()+this.type.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Tuple tuple = (Tuple) obj;
+        if (tuple.getAuthor().equals(this.author) && tuple.getType() == this.type) {
+            return true;
+        }
+        return false;
+    }
 }
 
 public class BlogPost {
@@ -37,7 +66,7 @@ public class BlogPost {
     private String author;
     private BlogPostType type;
     private int likes;
-
+    private Tuple tuple;
     public String getTitle() {
         return title;
     }
@@ -75,6 +104,15 @@ public class BlogPost {
         this.author = author;
         this.type = type;
         this.likes = likes;
+        this.tuple =new Tuple(type,author);
+    }
+
+    public Tuple getTuple() {
+        return tuple;
+    }
+
+    public void setTuple(Tuple tuple) {
+        this.tuple = tuple;
     }
 
     @Override
@@ -109,16 +147,19 @@ public class BlogPost {
         BlogPost p22 = new BlogPost("title5", "author2", BlogPostType.GUIDE, 2);
         BlogPost p33 = new BlogPost("title6", "author3", BlogPostType.GUIDE, 3);
 
-        List<BlogPost> posts = List.of(p1, p2, p3, p4,p11, p22, p33);
+        List<BlogPost> posts = List.of(p1, p2, p3, p4, p11, p22, p33);
+        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getType(), Collectors.maxBy(Comparator.comparingInt(item->item.likes)))));
+        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getType(), Collectors.groupingBy(item->item.getAuthor(),Collectors.mapping(item->item.getTitle(),Collectors.toList())))));
+        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getType(), Collectors.counting())));
+        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getType(), Collectors.mapping(item->item.title,Collectors.toList()))));
+        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getType(), Collectors.groupingBy(item -> item.getAuthor(), Collectors.mapping(item -> item.getTitle(), Collectors.toSet())))));
 
-        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getType(), Collectors.groupingBy(item->item.getAuthor(),Collectors.mapping(item->item.getTitle(),Collectors.toSet())))));
 
-
-        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> new Tuple(item.type, item.author),Collectors.counting())));
-        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getType(), Collectors.mapping(item->item.getAuthor(),Collectors.toList()))));
-        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getAuthor(),Collectors.counting())));
-        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getAuthor(), Collectors.mapping(item -> item.getTitle(), Collectors.toSet()))));
-        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getAuthor(), Collectors.groupingBy(element -> element.getType(),Collectors.mapping(element->element.getTitle(),Collectors.toSet())))));
+        System.out.println(posts.stream().collect(Collectors.groupingBy(BlogPost::getTuple, Collectors.counting())));
+//        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getType(), Collectors.mapping(item->item.getAuthor(),Collectors.toList()))));
+//        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getAuthor(),Collectors.counting())));
+//        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getAuthor(), Collectors.mapping(item -> item.getTitle(), Collectors.toSet()))));
+//        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.getAuthor(), Collectors.groupingBy(element -> element.getType(),Collectors.mapping(element->element.getTitle(),Collectors.toSet())))));
         // System.out.println(posts.stream().collect(Collectors.toMap(item -> item.getTitle(), Function.identity())));
 
 /*        System.out.println(posts.stream().collect(Collectors.groupingBy(item -> item.title, Collectors.groupingBy(item -> item.type))));

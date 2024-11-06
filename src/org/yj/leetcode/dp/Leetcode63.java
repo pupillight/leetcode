@@ -1,7 +1,4 @@
-package org.yj.dp;
-
-import java.util.HashMap;
-import java.util.Map;
+package org.yj.leetcode.dp;
 
 public class Leetcode63 {
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {

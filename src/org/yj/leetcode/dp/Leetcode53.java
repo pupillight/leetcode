@@ -1,8 +1,8 @@
-package org.yj.dp;
-
-import org.yj.application.data.collections.Map;
+package org.yj.leetcode.dp;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Leetcode53 {
     public int maxSubArray1(int[] nums) {
@@ -40,19 +40,19 @@ public class Leetcode53 {
     }
 
     public int maxSubArray3(int[] nums) {
-        int res = Integer.MIN_VALUE;
-        int len = nums.length;
-        int sum = 0;
-        for (int i = 0; i < len; i++) {
-            sum = 0;
+        if (nums.length == 1) return nums[0];
+        int preSum = 0;
+        int minPreSum = 0;
 
-            for (int j = i; j < len; j++) {
-                sum += nums[j];
-                res = Math.max(res, sum);
-            }
-
+        int ans = Integer.MIN_VALUE;
+        for (int num : nums) {
+            preSum += num;
+            ans = Math.max(ans, preSum - minPreSum);
+            minPreSum = Math.min(minPreSum, preSum);
         }
-        return res;
+
+        return ans;
+
     }
 
     public int maxSubArray(int[] nums) {
@@ -165,19 +165,95 @@ public class Leetcode53 {
 
     }
 
+    public int maximumCostSubstring1(String s, String chars, int[] vals) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < vals.length; i++) {
+            map.put(chars.charAt(i), vals[i]);
+        }
+        int[] dp = new int[s.length() + 1];
+        dp[0] = 0;
+        int ans = 0;
+        for (int i = 1; i <= s.length(); i++) {
+            char c = s.charAt(i - 1);
+            int v = map.getOrDefault(c, c - 'a' + 1);
+            if (dp[i - 1] <= 0) {
+                dp[i] = v;
+            } else {
+                dp[i] = dp[i - 1] + v;
+            }
+            ans = Math.max(ans, dp[i]);
+        }
+        return ans;
+    }
+
+    public int maximumCostSubstring(String s, String chars, int[] vals) {
+        int[] arr = new int[26];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = i + 1;
+        }
+        for (int i = 0; i < vals.length; i++) {
+            int val = vals[i];
+            char c = chars.charAt(i);
+            arr[c - 'a'] = val;
+        }
+        int[] dp = new int[s.length()+1];
+        int ans = 0;
+        dp[0] = 0;
+
+        for (int i = 1; i <= s.length(); i++) {
+            char c = s.charAt(i-1);
+            if (dp[i - 1] <= 0) {
+                dp[i]=arr[c-'a'];
+            }else{
+                dp[i] = dp[i-1]+arr[c-'a'];
+            }
+            ans = Math.max(ans,dp[i]);
+        }
+        return ans;
+        /*Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < vals.length; i++) {
+            map.put(chars.charAt(i), vals[i]);
+        }
+        //char[] arr =s.toCharArray();
+        int[] arr = new int[s.length()];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = map.getOrDefault(s.charAt(i), s.charAt(i) - 'a' + 1);
+        }
+
+        int[] dp = new int[arr.length];
+        dp[0] = arr[0];
+        int ans = 0;
+        ans = Math.max(ans, dp[0]);
+        for (int i = 1; i < arr.length; i++) {
+            if (dp[i - 1] <= 0) {
+                dp[i] = arr[i];
+            } else {
+                dp[i] = dp[i - 1] + arr[i];
+            }
+            ans = Math.max(ans, dp[i]);
+        }
+
+        return ans;*/
+    }
+
     public static void main(String[] args) {
 
         Leetcode53 instance = new Leetcode53();
         //int[] nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
         // int[] nums = {-2};
-        //int[] nums = {-2};
+        int[] nums = {-2, -1};
         //System.out.println(instance.maxSubArray(nums));
-        //System.out.println(instance.maxSubArray3(nums))
+        //System.out.println(instance.maxSubArray3(nums));
         //instance.sort(nums);
 
         //instance.mergeSortedArray(new int[]{2, 6}, new int[]{1, 3});
-        int[] nums = {-2, 9, -3, 4};
-        instance.mergeSort(nums);
+        // int[] nums = {-2, 9, -3, 4};
+        // instance.mergeSort(nums);
+
+        String s = "okyytyj";
+        String chars = "uafndmokwztrjphgle";
+        int[] vals = {189, -229, 860, 782, -194, -582, -743, 966, 777, 90, 526, -806, -992, 845, -997, 340, 80, 705};
+        System.out.println(instance.maximumCostSubstring(s, chars, vals));
 
     }
 }

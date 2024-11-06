@@ -4,13 +4,21 @@ package org.yj.stream;
 public class Employee implements Comparable<Employee> {
 
     private String name;
-    private int age;
+
+
+
+    private Integer age;
     private float salary;
     private Gender gender;
 
 
 
     public Employee() {
+    }
+
+    public Employee(String name , int age){
+        this.name = name;
+        this.age = age;
     }
 
     public void increase(){
@@ -30,12 +38,11 @@ public class Employee implements Comparable<Employee> {
     public void setName(String name) {
         this.name = name;
     }
-
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
