@@ -70,17 +70,17 @@ public class LeetCode39 {
 
         int len = nums.length;
         Set<Integer> set = new HashSet<>();
-        int[] arr= new int[len+1];
+        int[] arr = new int[len + 1];
         for (int i = len - 1; i > 0; i--) {
             set.add(nums[i]);
 
-            arr[i]=set.size();
+            arr[i] = set.size();
         }
 
         set.clear();
         for (int i = 0; i < len; i++) {
             set.add(nums[i]);
-            res[i] = set.size()-arr[i+1];
+            res[i] = set.size() - arr[i + 1];
         }
 
         return res;
@@ -102,6 +102,44 @@ public class LeetCode39 {
             set2.clear();
         }
         return res;
+    }
+
+    public int findContentChildren1(int[] g, int[] s) {
+
+        Arrays.sort(g);
+        Arrays.sort(s);
+
+        int res = 0;
+        int i = 0, j = 0;
+
+        while (i < s.length && j < g.length) {
+            if (s[i] >= g[j]) {
+                res++;
+                j++;
+            }
+            i++;
+        }
+        return res;
+    }
+
+    public int findContentChildren(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int res = 0;
+        int j = 0;
+        for (int i = 0; i < g.length; i++) {
+            while (j < s.length) {
+                if (g[i] <= s[j]) {
+                    res++;
+                    j++;
+                    break;
+                }
+                j++;
+            }
+
+        }
+        return res;
+
     }
 
     public static void main(String[] args) {

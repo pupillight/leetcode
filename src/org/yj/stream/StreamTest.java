@@ -29,7 +29,11 @@ public class StreamTest {
 
         // list.stream().flatMap(employeeList -> employeeList.stream()).collect(Collectors.toList()).forEach(System.out::println);
 
+<<<<<<< HEAD
         // list.stream().flatMapToInt(employeeList -> employeeList.stream().mapToInt(e->e.getAge())).forEach(System.out::println);
+=======
+        list.stream().flatMapToInt(employeeList -> employeeList.stream().mapToInt(e -> e.getAge())).forEach(System.out::println);
+>>>>>>> 130e6cc (kkkk)
     }
 
     public static void main(String[] args) {
@@ -49,6 +53,7 @@ public class StreamTest {
         System.out.println(list1.stream().mapToInt(Integer::intValue).sum());
         System.out.println(list1.stream().collect(Collectors.summingInt(item -> item)));
 
+<<<<<<< HEAD
         System.out.println(list1.stream().reduce( 0,(a, b) -> a + b));
         //System.out.println(list1.stream().filter(item -> list2.contains(item)).collect(Collectors.toList()));
         // System.out.println(list.stream().anyMatch(e->e<5));
@@ -129,6 +134,11 @@ public class StreamTest {
                 new Item("banana", 10, new BigDecimal("19.99")),
                 new Item("apple", 20, new BigDecimal("19.99"))
         );
+=======
+//        stream.collect(Collectors.toMap(employee -> employee.getName(),employee -> employee.getSalary()))
+//                .forEach((k,v)->System.out.println(k+"="+v));
+        //Map<String,List<Employee>> map=stream.collect(Collectors.groupingBy(employee -> employee.getGender()));
+>>>>>>> 130e6cc (kkkk)
 
 
 /*
@@ -141,9 +151,13 @@ public class StreamTest {
 */
 
 
+<<<<<<< HEAD
        // System.out.println(items.stream().collect(Collectors.groupingBy(item -> item.getName(), Collectors.mapping(item -> item.getQty(), Collectors.toList()))));
       /* Map map1 =items.stream().collect(Collectors.toMap(item -> item.getName(), n -> 1, Integer::sum, TreeMap::new));
         System.out.println(map1);
+=======
+        // System.out.println(stream.mapToInt(employee -> employee.getAge()).reduce(0, (n1, n2) -> Integer.max(n1, n2)));
+>>>>>>> 130e6cc (kkkk)
 
         System.out.println(items.stream().collect(Collectors.toMap(item -> item.getName(), n -> 1, Integer::sum)));
         System.out.println(items.stream().collect(Collectors.groupingBy(item -> item.getQty(), Collectors.counting())));
@@ -176,10 +190,22 @@ public class StreamTest {
         System.out.println(words.stream().reduce( (a, b) -> b).orElse(null));
         System.out.println(words.stream().collect(Collectors.joining("-")));*/
 
+        List<String> words = Arrays.asList("hello", "world", "stream");
+        ;
+        Optional<String> str = words.stream().reduce((acc, word) ->{
+            System.out.println(acc);
+            System.out.println(word);
+            System.out.println("-------");
+            return  acc.isEmpty() ? word : acc + "," + word;
+        });
 
+<<<<<<< HEAD
 /*        List<String> words =
                 Arrays.asList("apple", "apple", "banana",
                         "apple", "orange", "banana", "papaya");
+=======
+        System.out.println(str.get());
+>>>>>>> 130e6cc (kkkk)
 
 
         System.out.println(words.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting())));
@@ -193,10 +219,14 @@ public class StreamTest {
                 Arrays.asList(6, 7, 8)
         );
 
+<<<<<<< HEAD
         System.out.println(listOfLists.stream().flatMap(item -> item.stream()).mapToInt(item -> item).sum());
 
         System.out.println(Stream.iterate(0, n -> n + 1).skip(5).limit(10).collect(Collectors.toList()));
         System.out.println(Stream.generate(() -> 1).limit(10).collect(Collectors.toList()));*/
+=======
+        //nums.stream().peek(e -> System.out.println(e)).map(e -> e * 2).forEach(System.out::println);
+>>>>>>> 130e6cc (kkkk)
 
     }
 
