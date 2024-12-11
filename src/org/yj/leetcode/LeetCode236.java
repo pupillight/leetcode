@@ -259,6 +259,7 @@ public class LeetCode236 {
             path.removeLast();
         }
         if (node.right != null) {
+
             findPaths(node.right, paths, path);
             path.removeLast();
         }
@@ -300,7 +301,10 @@ public class LeetCode236 {
     }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ea2dea5 (pull rebase)
     int leftSum = 0;
 
     public int sumOfLeftLeaves(TreeNode root) {
@@ -339,6 +343,7 @@ public class LeetCode236 {
                 blValue = node.val;
             }
         }
+<<<<<<< HEAD
         if (node.left != null) {
             depth++;
             findBottomLeftValueDfs(node.left, depth);
@@ -347,12 +352,26 @@ public class LeetCode236 {
         if (node.right != null) {
             depth++;
             findBottomLeftValueDfs(node.right, depth);
+=======
+        if(node.left!=null)
+        {
+            depth++;
+            findBottomLeftValueDfs(node.left, depth );
+            depth--;
+        }
+        if(node.right!=null){
+            depth++;
+            findBottomLeftValueDfs(node.right, depth );
+>>>>>>> ea2dea5 (pull rebase)
             depth--;
         }
 
 
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> ea2dea5 (pull rebase)
     private void findBottomLeftValueDfs1(TreeNode node, int depth) {
 
         if (node == null) {
@@ -370,6 +389,7 @@ public class LeetCode236 {
     }
 
 
+<<<<<<< HEAD
     public static int sumArray(int[] arr) {
         int sum = 0;
         for (int i = 0; i < arr.length; i++) {
@@ -686,6 +706,20 @@ public class LeetCode236 {
         }
         return true;
     }
+=======
+
+        public static int sumArray(int[] arr) {
+            int sum = 0;
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] == 6 && (i + 1) < arr.length && arr[i + 1] == 7) {
+                    i++; // Skip 6 and 7
+                } else {
+                    sum += arr[i];
+                }
+            }
+            return sum;
+        }
+>>>>>>> ea2dea5 (pull rebase)
 
 
     public static void main(String[] args) {
@@ -735,6 +769,7 @@ public class LeetCode236 {
         //System.out.println(question.maximum69Number(9669));
 =======
         System.out.println(question.minDepth(r1));
+<<<<<<< HEAD
 >>>>>>> 130e6cc (kkkk)
         //System.out.println(question.lowestCommonAncestor(r1, new TreeNode(7), new TreeNode(8)).val);
 <<<<<<< HEAD
@@ -755,6 +790,8 @@ public class LeetCode236 {
 
         //System.out.println(question.removePalindromeSub("ababb"));
 >>>>>>> 130e6cc (kkkk)*/
+=======
+>>>>>>> ea2dea5 (pull rebase)
 
 
     }
