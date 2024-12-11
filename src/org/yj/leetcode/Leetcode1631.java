@@ -3,9 +3,89 @@ package org.yj.leetcode;
 import java.util.*;
 
 public class Leetcode1631 {
-
-
     public int minimumEffortPath(int[][] heights) {
+        int row = heights.length;
+        int col = heights[0].length;
+        boolean[][] visited = new boolean[row][col];
+        int dists[][] = new int[row][col];
+        for (int[] dist : dists) {
+            Arrays.fill(dist, Integer.MAX_VALUE);
+        }
+        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        Comparator<int[]> comparator = (arr1, arr2) -> arr1[2] - arr2[2];
+        PriorityQueue<int[]> queue = new PriorityQueue<>(comparator);
+        queue.add(new int[]{0, 0, 0});
+        dists[0][0] =0;
+        while (!queue.isEmpty()) {
+            int[] p = queue.poll();
+            int i = p[0];
+            int j = p[1];
+            int v = p[2];
+            if( visited[i][j]){
+                continue;
+            }
+            visited[i][j]=true;
+            for (int[] dir : dirs) {
+                int x = i + dir[0];
+                int y = j + dir[1];
+                if (x >= 0 && x < row && y >= 0 && y < col ) {
+                    int diff = Math.abs(heights[i][j] - heights[x][y]);// 路径长度
+                    int currDist =Math.max(v,diff);
+                    if (currDist < dists[x][y]) {
+                        dists[x][y] = currDist;
+                        queue.add(new int[]{x, y, dists[x][y]});
+                    }
+                }
+            }
+        }
+
+        return dists[row - 1][col - 1];
+    }
+
+    private boolean f(int[][] heights, int v, int i, int j) {
+        int row = heights.length;
+        int col = heights[0].length;
+        boolean[][] visited = new boolean[row][col];
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.offer(new int[]{i, j});
+        visited[i][j] = true;
+        while (!queue.isEmpty()) {
+            int[] p = queue.poll();
+            int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+            for (int[] dir : dirs) {
+                int x = p[0] + dir[0];
+                int y = p[1] + dir[1];
+                if (x < 0 || x >= row || y < 0 || y >= col || visited[x][y]) {
+                    continue;
+                }
+                int diff = Math.abs(heights[p[0]][p[1]] - heights[x][y]);
+                if (diff > v) {
+                    continue;
+                }
+                queue.add(new int[]{x, y});
+                visited[x][y] = true;
+            }
+        }
+        return visited[row - 1][col - 1] == true;
+    }
+
+    public int minimumEffortPath2(int[][] heights) {
+        int l = 0;
+        int r = 1000000;
+        while (l <= r) {
+            int mid = (l + r) / 2;
+
+            if (!f(heights, mid, 0, 0)) {
+                l = mid + 1;
+
+            } else {
+                r = mid - 1;
+            }
+        }
+        return l;
+    }
+
+    public int minimumEffortPath1(int[][] heights) {
         int m = heights.length;
         int n = heights[0].length;
 
@@ -23,34 +103,9 @@ public class Leetcode1631 {
             }
         }
         Collections.sort(list, (e1, e2) -> e1[2] - e2[2]);
-
-/*
-        int res =0;
-        for (int[] edge : list) {
-            int p= edge[0];
-            int q= edge[1];
-            res=edge[2];
-            uf.union(p, q);
-            if (uf.isConnected(0, m * n - 1)) {
-                break;
-            }
-
-        }
-        return res;*/
         int res = 0;
-
-/*        for (int j = 0; j < list.size(); j++) {
-            int[] arr = list.get(j);
-            int p = arr[0];
-            int q = arr[1];
-            res = arr[2];
-            uf.union(p, q);
-            if (uf.isConnected(0, m * n - 1)) {
-                break;
-            }
-        }*/
         int i = 0;
-        while (!list.isEmpty() && i <list.size()) {
+        while (!list.isEmpty() && i < list.size()) {
             int[] arr = list.get(i);
             int p = arr[0];
             int q = arr[1];
@@ -66,44 +121,6 @@ public class Leetcode1631 {
 
     }
 
-    /*private void dfs(int[][] heights, int x, int y, boolean[][] visited, List<Integer> pathValues) {
-
-        if (x == heights.length - 1 && y == heights[0].length - 1) {
-            int currMaxDiff = 0;
-            for (int i = 1; i < pathValues.size(); i++) {
-                int diff = Math.abs(pathValues.get(i) - pathValues.get(i - 1));
-                currMaxDiff = Math.max(currMaxDiff, diff);
-            }
-
-            minCost = currMaxDiff;
-            diffs.add(currMaxDiff);
-            return;
-        }
-        int[][] direction = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-        for (int i = 0; i < direction.length; i++) {
-            int nextX = x + direction[i][0];
-            int nextY = y + direction[i][1];
-            if (nextX >= 0 && nextX < heights.length && nextY >= 0 && nextY < heights[0].length && !visited[nextX][nextY]) {
-
-                if (minCost != Integer.MAX_VALUE) {
-                    int cost = Math.abs(heights[x][y] - heights[nextX][nextY]);
-                    if (minCost < cost) {
-                        return;
-                    }
-                }
-                //diff = Math.max(diff, Math.abs(heights[x][y] - heights[nextX][nextY]));
-
-                visited[nextX][nextY] = true;
-                int v = heights[nextX][nextY];
-                pathValues.add(v);
-                dfs(heights, nextX, nextY, visited, pathValues);
-                visited[nextX][nextY] = false;
-                pathValues.remove(pathValues.size() - 1);
-            }
-        }
-
-
-    }*/
 
     public int mySqrt1(int x) {
 
@@ -240,11 +257,13 @@ public class Leetcode1631 {
 
         Leetcode1631 instance = new Leetcode1631();
         //int[][] heights = {{1, 2, 3}, {3, 8, 4}, {5, 3, 5}};
-        //int[][] heights = {{1, 2, 2}, {3, 8, 2}, {5, 3, 5}};
-        //System.out.println(instance.minimumEffortPath(heights));
-        int[] nums = {1, 3, 4, 5, 5, 5, 7};
+        int[][] heights = {{1, 2, 2}, {3, 8, 2}, {5, 3, 5}};
+
+        System.out.println(instance.minimumEffortPath(heights));
+        System.out.println(instance.minimumEffortPath1(heights));
+        //int[] nums = {1, 3, 4, 5, 5, 5, 7};
         //System.out.println(instance.firstSmallerVersion(nums, 4));
-        System.out.println(instance.firstBiggerVersion(nums, 4));
+        // System.out.println(instance.firstBiggerVersion(nums, 4));
         // System.out.println(instance.mySqrt(9));
         //int[] piles = {3,6,7,11};
         //int h = 8;

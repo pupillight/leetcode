@@ -31,18 +31,18 @@ public class Leetcode712 {
 
     public boolean isInterleave(String s1, String s2, String s3) {
 
-        if(s1.length() ==0 && s2.length()==0  && s3.length()==0){
+        if (s1.length() == 0 && s2.length() == 0 && s3.length() == 0) {
             return true;
         }
-        if(s1.length() +s2.length() !=s3.length()){
+        if (s1.length() + s2.length() != s3.length()) {
             return false;
         }
         int l = commonSubstr(s1, s3);
         int r = commonSubstr(s2, s3);
-        if(l==0 && r==s3.length() ){
-                return true;
+        if (l == 0 && r == s3.length()) {
+            return true;
         }
-        if(r==0 && l==s3.length() ){
+        if (r == 0 && l == s3.length()) {
             return true;
         }
         if (l + r == s3.length()) {
@@ -68,10 +68,31 @@ public class Leetcode712 {
         return dp[m][n];
     }
 
+    public int maxUncrossedLines(int[] nums1, int[] nums2) {
+        int m = nums1.length;
+        int n = nums2.length;
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (nums1[i - 1] == nums2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+                }
+            }
+        }
+        int ans = dp[m][n];
+        return ans;
+    }
+
+
     public static void main(String[] args) {
         Leetcode712 instance = new Leetcode712();
         String word1 = "sea", word2 = "eat";
 
-        System.out.println(instance.minimumDeleteSum(word1, word2));
+       // System.out.println(instance.minimumDeleteSum(word1, word2));
+       int[] nums1 = {1,4,2};
+       int[] nums2 = {1,2,4};
+        System.out.println(instance.maxUncrossedLines(nums1, nums2));
     }
 }

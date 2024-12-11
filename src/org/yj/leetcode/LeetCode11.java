@@ -1,6 +1,24 @@
 package org.yj.leetcode;
 
 public class LeetCode11 {
+    public int findPoisonedDuration(int[] timeSeries, int duration) {
+
+        int len = timeSeries.length;
+        int ans = 0;
+        int last=0;
+        last = timeSeries[0]+duration-1;
+        ans= duration;
+        for (int i = 1; i < len; i++) {
+
+          if(last< timeSeries[i]){
+              ans+=duration;
+          }else{
+              ans+=timeSeries[i]- timeSeries[i-1];
+          }
+          last= timeSeries[i]+duration-1;
+        }
+        return ans;
+    }
 
 
     public static void main(String[] args) {

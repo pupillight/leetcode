@@ -75,14 +75,24 @@ public class CompletableDemo1 {
         //-----------------------------------allOf anyOf----------------------------------
 
 
-        CompletableFuture<String> f1 = CompletableFuture.supplyAsync(() -> "hello");
-        CompletableFuture<String> f2 = CompletableFuture.supplyAsync(() -> "beautiful");
-        CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "world")
-                .thenCombine(CompletableFuture.supplyAsync(()->"!"),(r1,r2)->r1+r2);
+        CompletableFuture<Void> f1 = CompletableFuture.runAsync(() -> System.out.println("hello"));
+        CompletableFuture<Void> f2 = CompletableFuture.runAsync(() -> System.out.println("world"));
+        CompletableFuture<Void> f3= CompletableFuture.runAsync(()->{
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("!");
+        });
 
+        CompletableFuture.allOf(f1,f2,f3).get();
+        /*CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "world")
+                .thenCombine(CompletableFuture.supplyAsync(()->"!"),(r1,r2)->r1+r2);
+        System.out.println(f3.get());*/
         //System.out.println(f3.join());
-        CompletableFuture future= CompletableFuture.allOf(f1, f2);
-        System.out.println(future.join());
+       // CompletableFuture future= CompletableFuture.allOf(f1, f2);
+       // System.out.println(future.get());
 
         //List<String> list =
         //System.out.println(Stream.of(f1, f2, f3).map(future -> future.join()).collect(Collectors.joining(" ")));

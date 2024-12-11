@@ -196,18 +196,18 @@ public class Leetcode53 {
             char c = chars.charAt(i);
             arr[c - 'a'] = val;
         }
-        int[] dp = new int[s.length()+1];
+        int[] dp = new int[s.length() + 1];
         int ans = 0;
         dp[0] = 0;
 
         for (int i = 1; i <= s.length(); i++) {
-            char c = s.charAt(i-1);
+            char c = s.charAt(i - 1);
             if (dp[i - 1] <= 0) {
-                dp[i]=arr[c-'a'];
-            }else{
-                dp[i] = dp[i-1]+arr[c-'a'];
+                dp[i] = arr[c - 'a'];
+            } else {
+                dp[i] = dp[i - 1] + arr[c - 'a'];
             }
-            ans = Math.max(ans,dp[i]);
+            ans = Math.max(ans, dp[i]);
         }
         return ans;
         /*Map<Character, Integer> map = new HashMap<>();
@@ -236,12 +236,53 @@ public class Leetcode53 {
         return ans;*/
     }
 
+    public int maxSubarraySum(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+
+        int max = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(nums[i], dp[i-1]+nums[i]);
+
+           /* if(dp[i-1]>0){
+                dp[i]= dp[i-1]+nums[i];
+            }else {
+                dp[i]= nums[i];
+            }
+            max = Math.max(max,dp[i]);*/
+        }
+        return dp[nums.length-1];
+    }
+
+    public int maxSubarraySumCircular(int[] nums) {
+
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int min = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (dp[i - 1] < 0) {
+                dp[i] = dp[i - 1] + nums[i];
+            } else {
+                dp[i] = nums[i];
+            }
+            min = Math.min(min, dp[i]);
+        }
+        int res = Arrays.stream(nums).sum() - min;
+        return res;
+    }
+
     public static void main(String[] args) {
 
         Leetcode53 instance = new Leetcode53();
+
+        //int[] nums = {-2,1,-3,4,-1,2,1,-5,4};
+
+        //System.out.println(instance.maxSubarraySum(nums));
+
+
         //int[] nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
         // int[] nums = {-2};
-        int[] nums = {-2, -1};
+        //int[] nums = {-2, -1};
         //System.out.println(instance.maxSubArray(nums));
         //System.out.println(instance.maxSubArray3(nums));
         //instance.sort(nums);
@@ -250,10 +291,14 @@ public class Leetcode53 {
         // int[] nums = {-2, 9, -3, 4};
         // instance.mergeSort(nums);
 
-        String s = "okyytyj";
+/*        String s = "okyytyj";
         String chars = "uafndmokwztrjphgle";
         int[] vals = {189, -229, 860, 782, -194, -582, -743, 966, 777, 90, 526, -806, -992, 845, -997, 340, 80, 705};
-        System.out.println(instance.maximumCostSubstring(s, chars, vals));
+        System.out.println(instance.maximumCostSubstring(s, chars, vals));*/
+
+
+        int[] nums = {1, -2, -3, -2};
+        System.out.println(instance.maxSubarraySumCircular(nums));
 
     }
 }

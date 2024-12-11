@@ -18,7 +18,26 @@ public class CompletableFutureTest {
         try {
             executorService = Executors.newFixedThreadPool(10);
 
-            CompletableFuture<Void> f0 = CompletableFuture.runAsync(() -> {
+           CompletableFuture<String> f1= CompletableFuture.supplyAsync(()->{
+                return "a";
+            }).thenApply(a-> a+"b");
+
+            //CompletableFuture<String> f2= f1.thenCombine(CompletableFuture.supplyAsync(()->"c"),(s1,s2)->s1+s2);
+
+            //System.out.println(f2.get());
+            CompletableFuture<String> f2= CompletableFuture.supplyAsync(()->"c").thenCombine(CompletableFuture.supplyAsync(()->"d"),(s1,s2)->s1+s2);
+
+            System.out.println(f1.thenCombine(f2, (s1, s2) -> s1 + s2));
+
+
+/*            CompletableFuture<Integer> fc = CompletableFuture.supplyAsync(() -> {
+                int t = new Random().nextInt(10);
+                System.out.println(t);
+                return t;
+            }).thenApply(t -> t * 2);
+
+            System.out.println(fc.get().intValue());*/
+           /* CompletableFuture<Void> f0 = CompletableFuture.runAsync(() -> {
                 System.out.println("0000");
             });
 
@@ -30,7 +49,7 @@ public class CompletableFutureTest {
             CompletableFuture.allOf(f0, f1).thenRun(() -> System.out.println("done")).join();
             //System.out.println(f1.get());
             //System.out.println(f1.join());
-            //Thread.sleep(2000);
+            //Thread.sleep(2000);*/
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

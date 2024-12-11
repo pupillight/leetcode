@@ -46,9 +46,10 @@ public class StreamTest {
 
         list1.stream().filter(item->item>3).forEach(System.out::println);
 
+        System.out.println(list1.stream().mapToInt(Integer::intValue).sum());
         System.out.println(list1.stream().collect(Collectors.summingInt(item -> item)));
 
-        System.out.println(list1.stream().reduce( (a, b) -> a + b));
+        System.out.println(list1.stream().reduce( 0,(a, b) -> a + b));
         //System.out.println(list1.stream().filter(item -> list2.contains(item)).collect(Collectors.toList()));
         // System.out.println(list.stream().anyMatch(e->e<5));
         //list.stream().filter(item->item%2==0).collect(Collectors.toList()).forEach(System.out::println);
@@ -82,12 +83,15 @@ public class StreamTest {
         employees.add(employee3);
         employees.add(employee4);
 
-        System.out.println(employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), Collectors.averagingDouble(employee->employee.getAge().doubleValue()))));
-        System.out.println(employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(),Collectors.maxBy(Comparator.comparingInt(employee->employee.getAge())))));
 
+        System.out.println(employees.stream().collect(Collectors.groupingBy(Employee::getGender, Collectors.averagingDouble(Employee::getAge))));
+        System.out.println(employees.stream().collect(Collectors.groupingBy(Employee::getGender, Collectors.mapping(Employee::getName, Collectors.toList()))));
+
+        Map<Integer,Integer> map = new HashMap();
+        map.entrySet().stream().sorted((e1,e2)->e1.getValue() -e2.getValue()).collect(Collectors.toList());
+        List<Map.Entry<Integer,Integer>> lista  = new ArrayList(map.entrySet());
+        Collections.sort(lista, Map.Entry.comparingByValue());
         //Map map= employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), HashMap<Gender,List<Employee>>::new ,Collectors.toList()));
-        Map map = employees.stream().collect(Collectors.groupingBy(employee -> employee.getGender(), TreeMap::new, Collectors.toList()));
-        System.out.println(map);
 /*        System.out.println(Stream.concat(Stream.of(employee0), Stream.of(employee1, employee2)).collect(Collectors.toList()));
 
         System.out.println(employees.stream().map(employee -> employee.getName()).collect(Collectors.toList()));
@@ -127,15 +131,17 @@ public class StreamTest {
         );
 
 
+/*
         System.out.println(items.stream()
                 .filter(item -> item.getQty() > 10)
                 .peek(item -> System.out.println("filter1" + item))
                 .filter(item -> item.getPrice().compareTo(BigDecimal.valueOf(10.00)) > 0)
                 .peek(item -> System.out.println("filter2" + item))
                 .collect(Collectors.toList()));
+*/
 
 
-        System.out.println(items.stream().collect(Collectors.groupingBy(item -> item.getName(), Collectors.mapping(item -> item.getQty(), Collectors.toList()))));
+       // System.out.println(items.stream().collect(Collectors.groupingBy(item -> item.getName(), Collectors.mapping(item -> item.getQty(), Collectors.toList()))));
       /* Map map1 =items.stream().collect(Collectors.toMap(item -> item.getName(), n -> 1, Integer::sum, TreeMap::new));
         System.out.println(map1);
 
@@ -171,15 +177,17 @@ public class StreamTest {
         System.out.println(words.stream().collect(Collectors.joining("-")));*/
 
 
-        List<String> words =
+/*        List<String> words =
                 Arrays.asList("apple", "apple", "banana",
                         "apple", "orange", "banana", "papaya");
 
 
-        System.out.println(words.stream().flatMap(word -> Arrays.stream(word.split(""))).collect(Collectors.toList()));
+        System.out.println(words.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting())));
+        System.out.println("------");*/
+       // System.out.println(words.stream().flatMap(word -> Arrays.stream(word.split(""))).collect(Collectors.toList()));
 
-        System.out.println(words.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
-        List<List<Integer>> listOfLists = Arrays.asList(
+       // System.out.println(words.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
+/*        List<List<Integer>> listOfLists = Arrays.asList(
                 Arrays.asList(1, 2, 3),
                 Arrays.asList(4, 5),
                 Arrays.asList(6, 7, 8)
@@ -188,7 +196,7 @@ public class StreamTest {
         System.out.println(listOfLists.stream().flatMap(item -> item.stream()).mapToInt(item -> item).sum());
 
         System.out.println(Stream.iterate(0, n -> n + 1).skip(5).limit(10).collect(Collectors.toList()));
-        System.out.println(Stream.generate(() -> 1).limit(10).collect(Collectors.toList()));
+        System.out.println(Stream.generate(() -> 1).limit(10).collect(Collectors.toList()));*/
 
     }
 
