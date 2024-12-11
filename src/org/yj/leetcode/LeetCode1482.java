@@ -7,5 +7,6 @@ public class LeetCode1482 {
 
     public static void main(String[] args) {
 
+        System.out.println("--------");
     }
 }
