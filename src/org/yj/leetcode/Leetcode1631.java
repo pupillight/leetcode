@@ -253,10 +253,26 @@ public class Leetcode1631 {
         return hours;
     }
 
+
+    public int findMax(int[] nums) {
+        int index = 0;
+        int max = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            if (max < nums[i]) {
+                max = nums[i];
+                index = i;
+            }
+        }
+        System.out.println(max);
+        return index;
+    }
+
     public static void main(String[] args) {
 
         Leetcode1631 instance = new Leetcode1631();
         //int[][] heights = {{1, 2, 3}, {3, 8, 4}, {5, 3, 5}};
+
         int[][] heights = {{1, 2, 2}, {3, 8, 2}, {5, 3, 5}};
 
         System.out.println(instance.minimumEffortPath(heights));
@@ -264,6 +280,15 @@ public class Leetcode1631 {
         //int[] nums = {1, 3, 4, 5, 5, 5, 7};
         //System.out.println(instance.firstSmallerVersion(nums, 4));
         // System.out.println(instance.firstBiggerVersion(nums, 4));
+
+        //int[][] heights = {{1, 2, 2}, {3, 8, 2}, {5, 3, 5}};
+        //System.out.println(instance.minimumEffortPath(heights));
+        int[] nums = {1, 3, 4, -5, 9, -7, 7};
+
+        System.out.println(instance.findMax(nums));
+        //System.out.println(instance.firstSmallerVersion(nums, 4));
+        //System.out.println(instance.firstBiggerVersion(nums, 4));
+
         // System.out.println(instance.mySqrt(9));
         //int[] piles = {3,6,7,11};
         //int h = 8;
