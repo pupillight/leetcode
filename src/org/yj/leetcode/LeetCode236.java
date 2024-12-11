@@ -130,7 +130,11 @@ public class LeetCode236 {
     }
 
 
+<<<<<<< HEAD
     public int countNodes(TreeNode root) {
+=======
+   /* public int countNodes1(TreeNode root) {
+>>>>>>> 5c4b557 (git rebase main)
         if (root == null) {
             return 0;
         }
@@ -157,6 +161,74 @@ public class LeetCode236 {
         int res = l + r + 1;
         return res;
     }
+<<<<<<< HEAD
+=======
+*/
+
+    int count = 0;
+
+    public int removePalindromeSub(String s) {
+        int res = removePalindromeSub(s, 0, s.length() - 1);
+        return res;
+    }
+
+    private boolean isPalind(String s, int l, int r) {
+        while (l < r) {
+            if (s.charAt(l) != s.charAt(r)) {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+
+
+    public int removePalindromeSub(String s, int l, int r) {
+        if (l > r) {
+            return 0;
+        }
+        if (isPalind(s, l, r)) {
+            count++;
+            return 1;
+        }
+
+        int left = 0;
+        int right = 0;
+        left = removePalindromeSub(s, l + 1, r);
+        right = removePalindromeSub(s, l, r - 1);
+        return Math.max(left, right);
+
+/*        boolean res = isPalind(s, l + 1, r) || isPalind(s, l, r - 1);
+
+        if (res) {
+            count = count + 2;
+            return 2;
+        } else {
+            int left = 0;
+            int right = 0;
+            left += removePalindromeSub(s, l + 1, r);
+            right += removePalindromeSub(s, l, r - 1);
+            return Math.max(left, right)+1;
+        }*/
+
+
+    }
+
+
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = minDepth(root.left);
+        int right = minDepth(root.right);
+        if (root.left == null || root.right == null) {
+            return Math.max(left, right) + 1;
+        } else {
+            return Math.min(left, right) + 1;
+        }
+    }
+>>>>>>> 5c4b557 (git rebase main)
 
 
     public List<String> binaryTreePaths(TreeNode root) {
@@ -620,9 +692,18 @@ public class LeetCode236 {
         r1.left = new TreeNode(2);
         //r1.left.left = new TreeNode(0);
         r1.left.right = new TreeNode(4);
+<<<<<<< HEAD
 
         r1.right = new TreeNode(8);
         r1.right.left = new TreeNode(7);
+=======
+        r1.left.left = new TreeNode(0);
+        r1.left.left.left = new TreeNode(4);
+        //r1.left.right = new TreeNode(4);
+
+        //r1.right = new TreeNode(8);
+        //r1.right.left = new TreeNode(7);
+>>>>>>> 5c4b557 (git rebase main)
         //r1.right.right = new TreeNode(9);
 
         LeetCode236 question = new LeetCode236();
@@ -657,6 +738,25 @@ public class LeetCode236 {
         //System.out.println(result); // Output: 15
         //System.out.println(question.countNodes(r1));
 
+
+        System.out.println(question.isIsomorphic("badc", "baba"));
+       /* int[] nums = {2, 2};
+        //int[] nums = {1, 2, 3, 1};
+        int k = 2;
+        System.out.println(question.containsNearbyDuplicate(nums, k));*/
+
+        // System.out.println(question.maximumOddBinaryNumber("0101"));
+        // int[] nums = {1, 2, 1, 10};
+        //System.out.println(question.largestPerimeter(nums));
+        // System.out.println(question.diStringMatch("IDID"));
+       /* int[] g = {1, 2, 3};
+        int[] s = {1, 1};
+        System.out.println(question.findContentChildren1(g, s));*/
+       /* int[] bills = {5, 5, 10, 10, 20};
+        System.out.println(question.lemonadeChange(bills));*/
+        //int[] nums = {1, 4, 3, 2};
+        //System.out.println(question.arrayPairSum(nums));
+        //System.out.println(question.maximum69Number(9669));
     }
 }
 
