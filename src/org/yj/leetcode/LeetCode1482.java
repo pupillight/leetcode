@@ -9,7 +9,7 @@ public class LeetCode1482 {
 
         System.out.println("11111111");
         System.out.println("22222222");
-        System.out.println("55555555");
+        System.out.println("77777777");
 
     }
 }
